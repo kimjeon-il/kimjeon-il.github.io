@@ -2830,6 +2830,52 @@ dialog[open] .modal-art {
   color: var(--ui-muted) !important;
 }
 
+/* Canonical dropdown widths. Search-scope dropdowns stay intentionally compact. */
+@media (min-width: 1181px) {
+  #productDropdownFilters,
+  #gearDropdownFilters,
+  #equipmentDropdownFilters {
+    width: max-content !important;
+    max-width: 100% !important;
+    grid-template-columns: none !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: minmax(0, var(--filter-dropdown-width, 12.25rem)) !important;
+    gap: var(--filter-dropdown-gap, 10px) !important;
+  }
+
+  #productDropdownFilters > .catalog-dropdown:not([hidden]),
+  #gearDropdownFilters > .catalog-dropdown:not([hidden]),
+  #equipmentDropdownFilters > .catalog-dropdown:not([hidden]) {
+    width: var(--filter-dropdown-width, 12.25rem) !important;
+    min-width: 0 !important;
+    max-width: var(--filter-dropdown-width, 12.25rem) !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .release-dropdowns:not([data-overview-controls]) {
+    grid-template-columns: repeat(2, minmax(0, var(--filter-dropdown-width, 12.25rem))) minmax(16rem, 1fr) !important;
+  }
+
+  .release-dropdowns[data-overview-controls] {
+    width: max-content !important;
+    max-width: 100% !important;
+    grid-template-columns: repeat(2, minmax(0, var(--filter-dropdown-width, 12.25rem))) !important;
+  }
+
+  .release-dropdown {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+.catalog-dropdown:not(.search-scope) > .catalog-dropdown-menu {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+}
+
 .overview-visual {
   position: relative !important;
   min-height: 310px !important;
@@ -3466,19 +3512,19 @@ button.menu-button {
   body.menu-open .mobile-drawer {
     position: fixed;
     inset: 0 auto 0 0;
-    width: min(calc(100dvw - 18px), 440px);
+    width: min(calc(100dvw - 14px), 440px);
     height: 100dvh;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
     flex-direction: column;
-    gap: 18px;
-    padding: 18px 18px 24px;
+    gap: 14px;
+    padding: 14px 14px 20px;
     border: 1px solid color-mix(in srgb, var(--ui-line) 82%, transparent);
     border-left: 0;
     border-radius: 0 22px 22px 0;
     background: color-mix(in srgb, var(--ui-surface) 94%, white 6%);
     color: var(--ui-text);
-    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.08);
+    box-shadow: none;
     overflow-x: hidden;
     overflow-y: hidden;
     z-index: 120;
@@ -3544,14 +3590,13 @@ button.menu-button {
 
   .mobile-drawer-section {
     display: grid;
-    gap: 6px;
+    gap: 8px;
     padding: 8px;
-    border-bottom: 1px solid var(--ui-line);
+    border: 0;
     border-radius: 14px;
-  }
-
-  .mobile-drawer-section:last-child {
-    border-bottom: 0;
+    background: color-mix(in srgb, var(--ui-control) 42%, transparent);
+    outline: 1px solid color-mix(in srgb, var(--ui-line) 54%, transparent);
+    outline-offset: -1px;
   }
 
   .mobile-primary,
@@ -3591,9 +3636,11 @@ button.menu-button {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2px;
-    margin-left: 10px;
-    padding-left: 12px;
-    border-left: 1px solid color-mix(in srgb, var(--ui-line) 86%, transparent);
+    margin: 0;
+    padding: 6px;
+    border: 0;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--ui-surface) 72%, transparent);
   }
 
   .mobile-secondary button {
@@ -3603,7 +3650,7 @@ button.menu-button {
     align-items: center;
     justify-content: flex-start;
     padding: 0 12px;
-    border-radius: 10px;
+    border-radius: 8px;
     background: transparent;
     color: var(--ui-muted);
     font-weight: 400;
@@ -3613,7 +3660,7 @@ button.menu-button {
 
   .mobile-secondary button:hover,
   .mobile-secondary button:focus-visible {
-    background: var(--ui-control-hover);
+    background: color-mix(in srgb, var(--ui-control) 72%, transparent);
     color: var(--ui-text);
   }
 }
