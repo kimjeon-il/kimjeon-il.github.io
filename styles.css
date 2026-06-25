@@ -2852,6 +2852,36 @@ dialog[open] .modal-art {
   }
 }
 
+@media (min-width: 901px) and (max-width: 1180px) {
+  #productDropdownFilters,
+  #gearDropdownFilters,
+  #equipmentDropdownFilters {
+    width: max-content !important;
+    max-width: 100% !important;
+    grid-template-columns: repeat(2, minmax(0, var(--filter-dropdown-width, 12.25rem))) !important;
+    justify-content: start !important;
+    justify-items: stretch !important;
+    gap: var(--filter-dropdown-gap, 10px) !important;
+  }
+
+  #productDropdownFilters > .catalog-dropdown:not([hidden]),
+  #gearDropdownFilters > .catalog-dropdown:not([hidden]),
+  #equipmentDropdownFilters > .catalog-dropdown:not([hidden]) {
+    width: var(--filter-dropdown-width, 12.25rem) !important;
+    min-width: 0 !important;
+    max-width: var(--filter-dropdown-width, 12.25rem) !important;
+  }
+
+  .toy-panel[data-toy-panel="product"] .toolbar > .unified-search .search-box,
+  .toy-panel[data-toy-panel="bey"] .toolbar > .unified-search .search-box,
+  .toy-panel[data-toy-panel="equipment"] .toolbar > .unified-search .search-box {
+    width: min(420px, 100%) !important;
+    min-width: 280px !important;
+    max-width: 420px !important;
+    flex: 0 1 420px !important;
+  }
+}
+
 @media (min-width: 901px) {
   .release-dropdowns:not([data-overview-controls]) {
     grid-template-columns: repeat(2, minmax(0, var(--filter-dropdown-width, 12.25rem))) minmax(16rem, 1fr) !important;
@@ -2874,6 +2904,41 @@ dialog[open] .modal-art {
   width: 100% !important;
   min-width: 100% !important;
   max-width: 100% !important;
+}
+
+.unified-search .global-search-box {
+  height: var(--search-box-height, 48px) !important;
+  padding: 0 16px 0 8px !important;
+  gap: 10px !important;
+}
+
+.unified-search .global-search-box .search-icon {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 18px !important;
+  margin-left: 0 !important;
+}
+
+@media (max-width: 560px) {
+  .catalog-dropdowns,
+  .release-dropdowns {
+    justify-content: center !important;
+    justify-items: center !important;
+  }
+
+  .catalog-dropdowns > .catalog-dropdown:not(.search-scope),
+  .release-dropdowns > .release-dropdown:not(.search-scope) {
+    width: min(100%, var(--filter-dropdown-width, 12.25rem)) !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    justify-self: center !important;
+  }
+
+  .release-dropdowns > .release-search-box {
+    width: 100% !important;
+    max-width: none !important;
+    justify-self: stretch !important;
+  }
 }
 
 .overview-visual {
