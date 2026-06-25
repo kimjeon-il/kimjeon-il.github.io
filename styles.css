@@ -32,13 +32,15 @@ textarea,
 
 
 .catalog-dropdowns {
-  flex: 1 1 auto !important;
+  flex: 0 0 auto !important;
+  width: max-content !important;
   min-width: 0 !important;
+  max-width: 100% !important;
   display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, var(--catalog-dropdown-width, 12.25rem))) !important;
+  grid-template-columns: repeat(4, minmax(0, var(--filter-dropdown-width, var(--catalog-dropdown-width, 12.25rem)))) !important;
   align-items: flex-start !important;
   justify-content: start !important;
-  gap: 12px 14px !important;
+  gap: var(--filter-dropdown-gap, 10px) !important;
 }
 
 .catalog-dropdown {
@@ -54,9 +56,9 @@ textarea,
 }
 
 .catalog-dropdown summary {
-  height: 48px !important;
-  min-height: 48px !important;
-  max-height: 48px !important;
+  height: var(--filter-dropdown-height, 48px) !important;
+  min-height: var(--filter-dropdown-height, 48px) !important;
+  max-height: var(--filter-dropdown-height, 48px) !important;
   padding: 0 14px !important;
   display: flex !important;
   align-items: center !important;
@@ -248,7 +250,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   width: min(420px, 100%) !important;
   min-width: 280px !important;
   max-width: 420px !important;
-  height: 48px !important;
+  height: var(--search-box-height, 48px) !important;
   padding: 0 16px 0 8px !important;
   display: flex !important;
   align-items: center !important;
@@ -425,6 +427,16 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   flex: 0 1 420px !important;
 }
 
+.toy-panel[data-toy-panel="product"] .toolbar > .unified-search,
+.toy-panel[data-toy-panel="bey"] .toolbar > .unified-search,
+.toy-panel[data-toy-panel="equipment"] .toolbar > .unified-search {
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 0 0 auto !important;
+  flex: 0 0 auto !important;
+  align-self: flex-start !important;
+}
+
 @media (max-width: 1180px) {
   .catalog-dropdowns {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -472,6 +484,15 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   .global-search-box {
     width: 100% !important;
     max-width: none !important;
+    flex: 0 0 auto !important;
+  }
+
+  .toy-panel[data-toy-panel="product"] .toolbar > .unified-search,
+  .toy-panel[data-toy-panel="bey"] .toolbar > .unified-search,
+  .toy-panel[data-toy-panel="equipment"] .toolbar > .unified-search {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
     flex: 0 0 auto !important;
   }
 }
@@ -1932,12 +1953,16 @@ footer p {
   max-width: 100% !important;
   margin: 0 auto var(--modal-flow-gap) !important;
   display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, var(--catalog-dropdown-width, 12.25rem))) minmax(16rem, 1fr) !important;
+  grid-template-columns: repeat(2, minmax(0, var(--filter-dropdown-width, var(--catalog-dropdown-width, 12.25rem)))) minmax(16rem, 1fr) !important;
   align-items: flex-start !important;
-  gap: 10px !important;
+  gap: var(--filter-dropdown-gap, 10px) !important;
   justify-content: start !important;
   position: relative !important;
   z-index: 5 !important;
+}
+
+.release-dropdowns[data-overview-controls] {
+  grid-template-columns: repeat(2, minmax(0, var(--filter-dropdown-width, var(--catalog-dropdown-width, 12.25rem)))) !important;
 }
 
 .release-dropdown {
@@ -2498,6 +2523,10 @@ dialog[open] .modal-art {
   --ui-menu-width: 112px;
   --ui-item-width: 96px;
   --ui-gap: 12px;
+  --filter-dropdown-width: 12.25rem;
+  --filter-dropdown-height: 48px;
+  --filter-dropdown-gap: 10px;
+  --search-box-height: 48px;
   --catalog-dropdown-width: 12.25rem;
   --bg: var(--ui-bg);
   --panel: var(--ui-surface);

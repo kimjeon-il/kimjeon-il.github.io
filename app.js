@@ -553,6 +553,8 @@ const items = [
 const globalSearch = document.querySelector("#globalSearchInput");
 const globalSearchScope = document.querySelector("#globalSearchScope");
 const overviewSearchScope = document.querySelector("#overviewSearchScope");
+const unifiedSearch = document.querySelector(".unified-search");
+const unifiedSearchHome = document.querySelector("#unifiedSearchHome");
 const globalSearchScopeValue = () => globalSearchScope?.dataset.scope || "all";
 const overviewSearchScopeValue = () => overviewSearchScope?.dataset.scope || "all";
 const dropdownSummaryText = button => button?.dataset.summaryLabel || button?.textContent.trim() || "";
@@ -2816,9 +2818,20 @@ function closeDetail() {
 document.querySelector("#modalClose").addEventListener("click", closeDetail);
 modal.addEventListener("click", e => { if (e.target === modal) closeDetail(); });
 
+const syncUnifiedSearchPlacement = section => {
+  if (!unifiedSearch || !unifiedSearchHome) return;
+  const targetToolbar = ["product", "bey", "equipment"].includes(section)
+    ? document.querySelector(`.toy-panel[data-toy-panel="${section}"] .toolbar`)
+    : null;
+  const targetParent = targetToolbar || unifiedSearchHome.parentElement;
+  if (!targetParent) return;
+  if (targetToolbar) targetToolbar.appendChild(unifiedSearch);
+  else unifiedSearchHome.after(unifiedSearch);
+};
 const activateToyPanel = section => {
   document.querySelectorAll(".toy-panel").forEach(panel => panel.classList.toggle("active", panel.dataset.toyPanel === section));
   document.body.classList.toggle("is-overview", section === "overview");
+  syncUnifiedSearchPlacement(section);
 };
 const syncMobileDrawer = section => {
   mobileDrawer?.querySelectorAll("[data-mobile-section]").forEach(button => {
