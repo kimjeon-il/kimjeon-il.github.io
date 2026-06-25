@@ -54,7 +54,9 @@ textarea,
 }
 
 .catalog-dropdown summary {
-  min-height: 44px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
   padding: 0 14px !important;
   display: flex !important;
   align-items: center !important;
@@ -1930,7 +1932,7 @@ footer p {
   max-width: 100% !important;
   margin: 0 auto var(--modal-flow-gap) !important;
   display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 10.75rem)) minmax(16rem, 1fr) !important;
+  grid-template-columns: repeat(2, minmax(0, var(--catalog-dropdown-width, 12.25rem))) minmax(16rem, 1fr) !important;
   align-items: flex-start !important;
   gap: 10px !important;
   justify-content: start !important;
