@@ -2546,10 +2546,8 @@ function bindModalStepButtons(options = {}) {
     else openDetail(targetId, options.item || {});
   }));
 }
-function modalTitle(text, options = {}) {
-  const classes = ["modal-name"];
-  if (options.lines === 2) classes.push("modal-title-two-line");
-  return `<h3 class="${classes.join(" ")}">${text}</h3>`;
+function modalTitle(text) {
+  return `<h3 class="modal-name">${text}</h3>`;
 }
 function detailHeading(item, options = {}) {
   if (["track", "bottom", "4dbottom"].includes(item.type)) {
@@ -2563,7 +2561,7 @@ function detailHeading(item, options = {}) {
   if (item.type === "bey") {
     const combo = partCategory(item);
     const name = itemDisplayName(item, options.region);
-    return modalTitle(combo ? `${name} ${combo}` : name, { lines: 2 });
+    return modalTitle(combo ? `${name} ${combo}` : name);
   }
   return modalTitle(itemDisplayName(item, options.region));
 }
@@ -2612,7 +2610,7 @@ function openDetail(id, options = {}) {
   if (item.model || item.modelKey) requestAnimationFrame(initModelViewer);
 }
 function productHeader(item, region = activeReleaseRegion) {
-  return modalTitle(productDisplayName(item, region), { lines: 2 });
+  return modalTitle(productDisplayName(item, region));
 }
 function productMetaSlot() {
   return `<div class="modal-info-slot product-meta-slot single-line-info-slot"></div>`;
@@ -2726,7 +2724,7 @@ function openProductBeyPoolDetail(id, options = {}) {
   document.querySelector("#modalContent").innerHTML = `<div class="modal-inner">
     <div class="modal-art product-modal-art"></div>
     <div class="modal-info lineup-modal-info"><button class="modal-back icon-back-button" type="button" data-back-product-id="${item.id}"${releaseBackAttr}${regionBackAttr} aria-label="제품으로 돌아가기">←</button>
-    ${modalScrollArea(`${modalTitle(`${productDisplayName(item, options.region || activeReleaseRegion)} 등장 베이`, { lines: 2 })}
+    ${modalScrollArea(`${modalTitle(`${productDisplayName(item, options.region || activeReleaseRegion)} 등장 베이`)}
     <div class="modal-body-block">${productBeyPool(item, options.region || activeReleaseRegion)}</div>`)}</div></div>`;
   document.querySelector(".modal-back")?.addEventListener("click", event => {
     const backOptions = event.currentTarget.dataset.backRelease ? { backRelease: true } : {};

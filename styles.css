@@ -1483,6 +1483,7 @@ dialog[open] {
   --modal-gutter: 45px;
   --modal-close-offset: 18px;
   --modal-scrollbar-inset: calc(var(--modal-close-offset) + 16px);
+  --modal-scrollbar-x-shift: 4px;
   --modal-scroll-start: calc(var(--modal-close-offset) + 42px + 8px);
 }
 
@@ -1550,11 +1551,11 @@ dialog[open] .modal-info:not(.overview-release-info) {
 
 dialog[open] .modal-scroll-area {
   box-sizing: border-box !important;
-  width: 100% !important;
+  width: calc(100% + var(--modal-scrollbar-x-shift, 0px)) !important;
   height: calc(100% - var(--modal-scroll-start)) !important;
   min-height: 0 !important;
-  margin: var(--modal-scroll-start) 0 0 !important;
-  padding: 0 0 40px !important;
+  margin: var(--modal-scroll-start) calc(var(--modal-scrollbar-x-shift, 0px) * -1) 0 0 !important;
+  padding: 0 var(--modal-scrollbar-x-shift, 0px) 40px 0 !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
@@ -1638,30 +1639,23 @@ dialog[open] .modal-close {
 
 dialog[open] .modal-name {
   --modal-title-line-height: 1.15em;
-  --modal-title-lines: 1;
-  --modal-title-gap-overlap: 0em;
+  --modal-title-lines: 2;
   width: var(--modal-body-width) !important;
   display: flex !important;
   align-items: baseline !important;
+  align-content: flex-start !important;
   flex-wrap: wrap !important;
   column-gap: 10px !important;
   row-gap: 2px !important;
-  margin: 0 auto var(--modal-flow-gap) !important;
+  height: calc(var(--modal-title-line-height) * var(--modal-title-lines)) !important;
+  max-height: calc(var(--modal-title-line-height) * var(--modal-title-lines)) !important;
+  margin: 0 auto calc(var(--modal-flow-gap) - var(--modal-title-line-height)) !important;
   font-size: clamp(1.75rem, 2.4vw, 2.25rem) !important;
   font-weight: 900 !important;
   line-height: 1.15 !important;
   color: var(--ui-text) !important;
   word-break: keep-all !important;
-}
-
-dialog[open] .modal-title-two-line {
-  --modal-title-lines: 2;
-  --modal-title-gap-overlap: var(--modal-title-line-height);
-  height: calc(var(--modal-title-line-height) * var(--modal-title-lines)) !important;
-  max-height: calc(var(--modal-title-line-height) * var(--modal-title-lines)) !important;
   overflow: hidden !important;
-  align-content: center !important;
-  margin-bottom: calc(var(--modal-flow-gap) - var(--modal-title-gap-overlap)) !important;
 }
 
 
@@ -2945,8 +2939,11 @@ dialog[open] .modal-art {
 
 .overview-title-row .modal-name {
   width: auto !important;
+  height: auto !important;
+  max-height: none !important;
   margin: 0 !important;
   flex: 0 1 auto !important;
+  overflow: visible !important;
 }
 
 .overview-parts {
