@@ -1506,7 +1506,7 @@ dialog[open] {
   --modal-gutter: 45px;
   --modal-close-offset: 18px;
   --modal-scrollbar-inset: calc(var(--modal-close-offset) + 16px);
-  --modal-scrollbar-x-shift: 4px;
+  --modal-scrollbar-x-shift: 6px;
   --modal-scroll-start: calc(var(--modal-close-offset) + 42px + 8px);
 }
 
