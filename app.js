@@ -575,6 +575,7 @@ const activeToyPanel = () => document.querySelector(".toy-panel.active");
 const toTop = document.querySelector("#toTop");
 const menuButton = document.querySelector("#menuButton");
 const mobileDrawer = document.querySelector("#mobileDrawer");
+const mobileDrawerClose = document.querySelector(".mobile-drawer-close");
 const typeLabels = { bey: "베이", face: "페이스", wheel: "휠", clearwheel: "클리어휠", lightwheel: "라이트휠", metalwheel: "메탈휠", track: "트랙", bottom: "버텀", "4dbottom": "4D버텀", stoneface: "스톤페이스", chromewheel: "크롬휠", crystalwheel: "크리스탈휠" };
 const tagLabels = { ATTACK: "공격형", DEFENSE: "방어형", STAMINA: "지구형", BALANCE: "균형형", "RIGHT SPIN": "우회전", "LEFT SPIN": "좌회전", "DUAL SPIN": "양회전", FACE: "페이스", STONEFACE: "스톤페이스", WHEEL: "휠", CLEARWHEEL: "클리어휠", LIGHTWHEEL: "라이트휠", METALWHEEL: "메탈휠", CHROMEWHEEL: "크롬휠", CRYSTALWHEEL: "크리스탈휠", TRACK: "트랙", BOTTOM: "버텀", "4DBOTTOM": "4D버텀", LOW: "낮은 높이", HIGH: "높은 높이" };
 const structureLabels = { basic: "4단 구조 시스템", hybrid: "하이브리드 시스템", "4d": "4D 시스템", synchrome: "싱크롬 시스템" };
@@ -1565,6 +1566,7 @@ const embeddedModels = { BO_B: "ZyANCg0KdXNlbXRsIEJPX0JhLnBuZw0KDQp2IDUuMDk4MzMg
 const modalTags = item => visibleModalTags(item).map(t => `<span>${tagLabels[t] || t}</span>`).join("");
 const modalTagGroup = (tags, className = "") => tags ? `<div class="${["modal-tags", className].filter(Boolean).join(" ")}">${tags}</div>` : "";
 const modalInfoSlot = (description = "", tags = "", className = "") => `<div class="${["modal-info-slot", className].filter(Boolean).join(" ")}"><div class="modal-slot-tags">${tags || ""}</div><p class="modal-description">${description || ""}</p></div>`;
+const modalScrollArea = content => `<div class="modal-scroll-area">${content}</div>`;
 function beyModalTags(item) {
   const categories = visibleModalTags(item).map(t => tagLabels[t] || t).filter(Boolean);
   return modalTagGroup(categories.map(label => `<span>${label}</span>`).join(""), "bey-modal-tags");
@@ -1873,6 +1875,7 @@ function openOverviewStructureDetail() {
   const content = document.querySelector("#modalContent");
   content.innerHTML = `<div class="modal-inner overview-structure-modal">
     <div class="modal-info overview-modal-info">
+      <div class="modal-scroll-area">
       <div class="overview-title-row">
         <h3 class="modal-name overview-modal-name"></h3>
         <div data-overview-controls-slot></div>
@@ -1880,6 +1883,7 @@ function openOverviewStructureDetail() {
       <div class="modal-info-slot">
         <div class="modal-slot-tags overview-parts"></div>
         <p class="modal-description overview-modal-desc"></p>
+      </div>
       </div>
     </div>
     <div class="modal-art overview-modal-art">
@@ -1928,6 +1932,7 @@ function openOverviewTypeDetail() {
       </div>
     </div>
       <div class="modal-info overview-modal-info">
+      <div class="modal-scroll-area">
       <div class="overview-title-row">
         <h3 class="modal-name overview-modal-name">타입과 회전 방향</h3>
       </div>
@@ -1951,6 +1956,7 @@ function openOverviewTypeDetail() {
             </ul>
           </section>
         </div>
+      </div>
       </div>
     </div>
   </div>`;
@@ -2428,8 +2434,9 @@ function openDetail(id, options = {}) {
   const stepItems = visibleGearItems().some(entry => entry.id === item.id) ? visibleGearItems() : items;
   document.querySelector("#modalContent").innerHTML = `${modalStepButtons(stepItems, item.id, "item")}<div class="modal-inner">
     <div class="modal-art">${modalArt(item)}</div>
-    <div class="modal-info ${item.type === "bey" ? "bey-modal-info" : "part-modal-info"}">${detailHeading(item, options)}
-    ${slot}<div class="modal-body-block">${body}</div>${detailBackButton(options.backId, options.backProductId, options.backRelease, options.region)}</div></div>`;
+    <div class="modal-info ${item.type === "bey" ? "bey-modal-info" : "part-modal-info"}">
+    ${modalScrollArea(`${detailHeading(item, options)}
+    ${slot}<div class="modal-body-block">${body}</div>`)}${detailBackButton(options.backId, options.backProductId, options.backRelease, options.region)}</div></div>`;
   bindModalStepButtons({ item: options });
   document.querySelector(".modal-back")?.addEventListener("click", event => {
     const backRelease = Boolean(event.currentTarget.dataset.backRelease);
@@ -2576,8 +2583,8 @@ function openProductBeyPoolDetail(id, options = {}) {
   document.querySelector("#modalContent").innerHTML = `<div class="modal-inner">
     <div class="modal-art product-modal-art"></div>
     <div class="modal-info lineup-modal-info"><button class="modal-back icon-back-button" type="button" data-back-product-id="${item.id}"${releaseBackAttr}${regionBackAttr} aria-label="제품으로 돌아가기">←</button>
-    <h3 class="modal-name">${productDisplayName(item, options.region || activeReleaseRegion)} 등장 베이</h3>
-    <div class="modal-body-block">${productBeyPool(item, options.region || activeReleaseRegion)}</div></div></div>`;
+    ${modalScrollArea(`<h3 class="modal-name">${productDisplayName(item, options.region || activeReleaseRegion)} 등장 베이</h3>
+    <div class="modal-body-block">${productBeyPool(item, options.region || activeReleaseRegion)}</div>`)}</div></div>`;
   document.querySelector(".modal-back")?.addEventListener("click", event => {
     const backOptions = event.currentTarget.dataset.backRelease ? { backRelease: true } : {};
     if (options.region) backOptions.region = options.region;
@@ -2611,9 +2618,9 @@ function openProductDetail(id, options = {}) {
   document.querySelector("#modalContent").innerHTML = `${modalStepButtons(stepItems, item.id, "product")}<div class="modal-inner">
     <div class="modal-art product-modal-art"></div>
     <div class="modal-info product-modal-info">
-    ${productHeader(item, region)}
+    ${modalScrollArea(`${productHeader(item, region)}
     ${productMetaSlot()}
-    <div class="modal-body-block">${productComposition(item, region)}</div>${backButton}</div></div>`;
+    <div class="modal-body-block">${productComposition(item, region)}</div>`)}${backButton}</div></div>`;
   bindModalStepButtons({ product: { ...options, region: stepRegion } });
   document.querySelector(".modal-back")?.addEventListener("click", event => {
     const backRelease = Boolean(event.currentTarget.dataset.backRelease);
@@ -2643,8 +2650,8 @@ function openEquipmentDetail(id, options = {}) {
   const stepItems = visibleEquipmentItems().some(entry => entry.id === item.id) ? visibleEquipmentItems() : equipmentItems.slice().sort((a, b) => equipmentSortOrder(a) - equipmentSortOrder(b) || a.name.localeCompare(b.name, "ko"));
   document.querySelector("#modalContent").innerHTML = `${modalStepButtons(stepItems, item.id, "equipment")}<div class="modal-inner">
     <div class="modal-art"></div>
-    <div class="modal-info"><h3 class="modal-name">${itemDisplayName(item, options.region)}</h3>
-    ${modalInfoSlot(item.desc || "", "")}${backButton}</div></div>`;
+    <div class="modal-info">${modalScrollArea(`<h3 class="modal-name">${itemDisplayName(item, options.region)}</h3>
+    ${modalInfoSlot(item.desc || "", "")}`)}${backButton}</div></div>`;
   bindModalStepButtons({ equipment: options });
   document.querySelector(".modal-back")?.addEventListener("click", event => {
     openProductDetail(event.currentTarget.dataset.backProductId, {
@@ -2680,6 +2687,7 @@ const syncMobileDrawer = section => {
 const setMenuOpen = open => {
   document.body.classList.toggle("menu-open", open);
   menuButton?.setAttribute("aria-expanded", String(open));
+  menuButton?.setAttribute("aria-label", open ? "메뉴 열림" : "메뉴 열기");
   mobileDrawer?.setAttribute("aria-hidden", String(!open));
   if (open) syncMobileDrawer(activeToyPanel()?.dataset.toyPanel || "overview");
 };
@@ -2742,6 +2750,11 @@ menuButton?.addEventListener("click", event => {
   event.stopPropagation();
   setMenuOpen(!document.body.classList.contains("menu-open"));
 });
+mobileDrawerClose?.addEventListener("click", event => {
+  event.preventDefault();
+  setMenuOpen(false);
+  menuButton?.focus();
+});
 mobileDrawer?.addEventListener("click", event => {
   const sectionButton = event.target.closest("[data-mobile-section]");
   const proxyButton = event.target.closest("[data-mobile-click]");
@@ -2761,6 +2774,9 @@ mobileDrawer?.addEventListener("click", event => {
 });
 window.addEventListener("resize", () => {
   if (window.innerWidth > 980) setMenuOpen(false);
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && document.body.classList.contains("menu-open")) setMenuOpen(false);
 });
 document.addEventListener("click", event => {
   if (!event.target.closest(".topbar") && !event.target.closest(".mobile-drawer")) setMenuOpen(false);

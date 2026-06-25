@@ -150,7 +150,7 @@ textarea,
 .catalog-dropdown-menu,
 .modal-section-scroll,
 .release-table-scroll,
-dialog[open] .modal-info:not(.overview-release-info),
+dialog[open] .modal-scroll-area,
 .mobile-drawer-nav {
   scrollbar-width: thin !important;
   scrollbar-color: var(--ui-line) transparent !important;
@@ -159,7 +159,7 @@ dialog[open] .modal-info:not(.overview-release-info),
 .catalog-dropdown-menu::-webkit-scrollbar,
 .modal-section-scroll::-webkit-scrollbar,
 .release-table-scroll::-webkit-scrollbar,
-dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar,
+dialog[open] .modal-scroll-area::-webkit-scrollbar,
 .mobile-drawer-nav::-webkit-scrollbar {
   width: 8px !important;
   height: 8px !important;
@@ -168,7 +168,7 @@ dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar,
 .catalog-dropdown-menu::-webkit-scrollbar-button,
 .modal-section-scroll::-webkit-scrollbar-button,
 .release-table-scroll::-webkit-scrollbar-button,
-dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-button,
+dialog[open] .modal-scroll-area::-webkit-scrollbar-button,
 .mobile-drawer-nav::-webkit-scrollbar-button {
   display: none !important;
   width: 0 !important;
@@ -176,18 +176,10 @@ dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-button,
   background: transparent !important;
 }
 
-dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-button:vertical:start:decrement {
-  display: block !important;
-  width: 8px !important;
-  height: calc(var(--modal-close-offset) + 42px) !important;
-  border: 0 !important;
-  background: transparent !important;
-}
-
 .catalog-dropdown-menu::-webkit-scrollbar-track,
 .modal-section-scroll::-webkit-scrollbar-track,
 .release-table-scroll::-webkit-scrollbar-track,
-dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-track,
+dialog[open] .modal-scroll-area::-webkit-scrollbar-track,
 .mobile-drawer-nav::-webkit-scrollbar-track {
   background: transparent !important;
 }
@@ -195,7 +187,7 @@ dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-track,
 .catalog-dropdown-menu::-webkit-scrollbar-thumb,
 .modal-section-scroll::-webkit-scrollbar-thumb,
 .release-table-scroll::-webkit-scrollbar-thumb,
-dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-thumb,
+dialog[open] .modal-scroll-area::-webkit-scrollbar-thumb,
 .mobile-drawer-nav::-webkit-scrollbar-thumb {
   min-height: 36px !important;
   border: 2px solid transparent !important;
@@ -207,7 +199,7 @@ dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-thumb,
 .catalog-dropdown-menu::-webkit-scrollbar-thumb:hover,
 .modal-section-scroll::-webkit-scrollbar-thumb:hover,
 .release-table-scroll::-webkit-scrollbar-thumb:hover,
-dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-thumb:hover,
+dialog[open] .modal-scroll-area::-webkit-scrollbar-thumb:hover,
 .mobile-drawer-nav::-webkit-scrollbar-thumb:hover {
   background: color-mix(in srgb, var(--ui-line) 86%, var(--ui-text) 14%) !important;
   background-clip: content-box !important;
@@ -216,7 +208,7 @@ dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-thumb:ho
 .catalog-dropdown-menu::-webkit-scrollbar-corner,
 .modal-section-scroll::-webkit-scrollbar-corner,
 .release-table-scroll::-webkit-scrollbar-corner,
-dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-corner,
+dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
 .mobile-drawer-nav::-webkit-scrollbar-corner {
   background: transparent !important;
 }
@@ -1491,6 +1483,7 @@ dialog[open] {
   --modal-gutter: 45px;
   --modal-close-offset: 18px;
   --modal-scrollbar-inset: calc(var(--modal-close-offset) + 16px);
+  --modal-scroll-start: calc(var(--modal-close-offset) + 42px + 8px);
 }
 
 #detailModal[open] {
@@ -1548,13 +1541,24 @@ dialog[open] .modal-info:not(.overview-release-info) {
   --modal-body-width: min(100%, 520px);
   --modal-flow-gap: 16px;
   overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  margin-inline: var(--modal-scrollbar-inset) !important;
+  width: calc(100% - (var(--modal-scrollbar-inset) * 2)) !important;
+  padding: 0 6px !important;
+  display: block !important;
+}
+
+dialog[open] .modal-scroll-area {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: calc(100% - var(--modal-scroll-start)) !important;
+  min-height: 0 !important;
+  margin: var(--modal-scroll-start) 0 0 !important;
+  padding: 0 0 40px !important;
+  overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
   scrollbar-gutter: stable both-edges !important;
-  margin-inline: var(--modal-scrollbar-inset) !important;
-  width: calc(100% - (var(--modal-scrollbar-inset) * 2)) !important;
-  padding: 40px 6px !important;
-  display: block !important;
 }
 
 @media (min-width: 901px) {
@@ -1562,7 +1566,7 @@ dialog[open] .modal-info:not(.overview-release-info) {
     align-self: stretch !important;
     height: 100% !important;
     margin-inline: var(--modal-scrollbar-inset) !important;
-    padding: 40px 6px !important;
+    padding: 0 6px !important;
   }
 }
 
@@ -1578,6 +1582,7 @@ dialog[open] .modal-close {
     --modal-gutter: 6px;
     --modal-close-offset: 18px;
     --modal-scrollbar-inset: calc(var(--modal-close-offset) + 16px);
+    --modal-scroll-start: calc(var(--modal-close-offset) + 42px + 8px);
   }
 
   dialog[open] .modal-inner {
@@ -1592,10 +1597,6 @@ dialog[open] .modal-close {
     overflow: hidden !important;
   }
 
-  dialog[open] .modal-info:not(.overview-release-info)::-webkit-scrollbar-button:vertical:start:decrement {
-    height: calc(var(--modal-close-offset) + 42px) !important;
-  }
-
   dialog[open] .modal-art {
     height: 100% !important;
     min-height: 0 !important;
@@ -1607,10 +1608,10 @@ dialog[open] .modal-close {
   dialog[open] .modal-info:not(.overview-release-info) {
     height: 100% !important;
     overflow-x: hidden !important;
-    overflow-y: auto !important;
+    overflow-y: hidden !important;
     margin-inline: var(--modal-scrollbar-inset) !important;
     width: calc(100% - (var(--modal-scrollbar-inset) * 2)) !important;
-    padding: 40px var(--modal-gutter) !important;
+    padding: 0 var(--modal-gutter) !important;
   }
 
   dialog[open] .modal-close {
@@ -1630,7 +1631,7 @@ dialog[open] .modal-close {
   }
 
   dialog[open] .modal-info:not(.overview-release-info) {
-    padding: 40px var(--modal-gutter) !important;
+    padding: 0 var(--modal-gutter) !important;
   }
 }
 
@@ -3245,8 +3246,7 @@ dialog[open] .modal-art {
 }
 
 /* Current navigation and overview structure layout. */
-body.is-overview .topbar .nav,
-body.is-overview .topbar .menu-button {
+body.is-overview .topbar .nav {
   display: none !important;
 }
 
@@ -3338,41 +3338,13 @@ button.menu-button {
     display: none !important;
   }
 
-  body.menu-open:not(.is-overview)::before {
+  body.menu-open::before {
     display: none !important;
   }
 
-  body.menu-open:not(.is-overview) {
+  body.menu-open {
     overflow-x: hidden !important;
     overflow-y: scroll !important;
-  }
-
-  body.menu-open:not(.is-overview) .menu-button,
-  body.menu-open:not(.is-overview) button.menu-button {
-    position: fixed !important;
-    top: 18px !important;
-    left: 18px !important;
-    right: auto !important;
-    z-index: 130 !important;
-    background: var(--ui-control-active) !important;
-    transform: none !important;
-  }
-
-  body.menu-open:not(.is-overview) .menu-button span {
-    opacity: 0 !important;
-  }
-
-  body.menu-open:not(.is-overview) .menu-button::before,
-  body.menu-open:not(.is-overview) .menu-button::after {
-    top: 21px !important;
-  }
-
-  body.menu-open:not(.is-overview) .menu-button::before {
-    transform: rotate(45deg) !important;
-  }
-
-  body.menu-open:not(.is-overview) .menu-button::after {
-    transform: rotate(-45deg) !important;
   }
 
 }
@@ -3399,44 +3371,95 @@ button.menu-button {
 }
 
 @media (max-width: 980px) {
-  body.menu-open:not(.is-overview) .topbar .nav {
+  body.menu-open .topbar .nav {
     display: none !important;
   }
 
-  body.menu-open:not(.is-overview) .mobile-drawer {
+  body.menu-open .mobile-drawer {
     position: fixed;
     inset: 0 auto 0 0;
-    width: min(calc(100dvw - 18px), 560px);
+    width: min(calc(100dvw - 18px), 440px);
     height: 100dvh;
-    display: flex;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
     flex-direction: column;
-    padding: 88px 32px 36px;
-    border: 0;
-    border-right: 1px solid var(--ui-line);
-    border-radius: 0 28px 28px 0;
-    background: var(--ui-surface);
+    gap: 18px;
+    padding: 18px 18px 24px;
+    border: 1px solid color-mix(in srgb, var(--ui-line) 82%, transparent);
+    border-left: 0;
+    border-radius: 0 22px 22px 0;
+    background: color-mix(in srgb, var(--ui-surface) 94%, white 6%);
     color: var(--ui-text);
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.08);
     overflow-x: hidden;
     overflow-y: hidden;
     z-index: 120;
   }
 
+  .mobile-drawer-header {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 0 0 12px;
+  }
+
+  .mobile-drawer-header strong {
+    color: var(--ui-text);
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .mobile-drawer-close {
+    appearance: none;
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--ui-control-text);
+    box-shadow: none;
+    font-family: inherit;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color .16s ease, color .16s ease;
+  }
+
+  .mobile-drawer-close:hover,
+  .mobile-drawer-close:focus-visible {
+    background: var(--ui-control-hover);
+    color: var(--ui-control-text-active);
+  }
+
   .mobile-drawer-nav {
     display: grid;
-    gap: 26px;
+    align-content: start;
+    gap: 12px;
     min-height: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    padding-right: 12px;
-    margin-right: 8px;
+    padding-right: 8px;
+    margin-right: -4px;
     scrollbar-gutter: stable;
   }
 
   .mobile-drawer-section {
     display: grid;
-    gap: 10px;
-    padding-bottom: 24px;
+    gap: 6px;
+    padding: 8px;
     border-bottom: 1px solid var(--ui-line);
+    border-radius: 14px;
   }
 
   .mobile-drawer-section:last-child {
@@ -3457,15 +3480,16 @@ button.menu-button {
 
   .mobile-primary {
     width: 100%;
-    min-height: 46px;
+    min-height: 42px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 0 14px;
-    border-radius: var(--ui-radius);
+    padding: 0 12px;
+    border-radius: 10px;
     background: transparent;
     color: var(--ui-text);
-    font-weight: 700;
+    font-weight: 750;
+    transition: background-color .16s ease, color .16s ease;
   }
 
   .mobile-primary:hover,
@@ -3479,9 +3503,9 @@ button.menu-button {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2px;
-    margin-left: 14px;
-    padding-left: 18px;
-    border-left: 1px solid var(--ui-line);
+    margin-left: 10px;
+    padding-left: 12px;
+    border-left: 1px solid color-mix(in srgb, var(--ui-line) 86%, transparent);
   }
 
   .mobile-secondary button {
@@ -3490,12 +3514,13 @@ button.menu-button {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 0 10px;
-    border-radius: var(--ui-radius);
+    padding: 0 12px;
+    border-radius: 10px;
     background: transparent;
     color: var(--ui-muted);
     font-weight: 400;
     text-align: left;
+    transition: background-color .16s ease, color .16s ease;
   }
 
   .mobile-secondary button:hover,
@@ -3506,9 +3531,9 @@ button.menu-button {
 }
 
 @media (max-width: 520px) {
-  body.menu-open:not(.is-overview) .mobile-drawer {
+  body.menu-open .mobile-drawer {
     width: calc(100dvw - 14px);
-    padding: 88px 24px 34px;
+    padding: 14px 14px 20px;
   }
 }
 
