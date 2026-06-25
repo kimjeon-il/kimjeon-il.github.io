@@ -2613,19 +2613,15 @@ dialog[open] .modal-art {
 
 .overview-hero {
   position: relative !important;
-  min-height: 420px !important;
+  min-height: 360px !important;
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 430px) !important;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px) !important;
   gap: 36px !important;
   align-items: center !important;
   overflow: visible !important;
   padding: clamp(30px, 4vw, 56px) !important;
   border-radius: 28px !important;
-  background:
-    radial-gradient(circle at 82% 42%, rgba(47, 111, 214, .16), transparent 24%),
-    radial-gradient(circle at 88% 78%, rgba(214, 71, 71, .12), transparent 22%),
-    linear-gradient(120deg, transparent 0 28%, rgba(203, 213, 225, .36) 28% 29%, transparent 29%),
-    var(--ui-bg) !important;
+  background: var(--ui-bg) !important;
 }
 
 .overview-copy {
@@ -2663,58 +2659,6 @@ dialog[open] .modal-art {
   word-break: keep-all !important;
 }
 
-.overview-series {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-  margin: 18px 0 0 !important;
-}
-
-.overview-series span {
-  min-height: 34px !important;
-  display: inline-grid !important;
-  place-items: center !important;
-  padding: 0 12px !important;
-  border-radius: var(--ui-radius) !important;
-  background: var(--ui-control) !important;
-  color: var(--ui-muted) !important;
-  font-size: .9375rem !important;
-  font-weight: 600 !important;
-}
-
-.overview-series span.active {
-  background: var(--ui-accent) !important;
-  color: var(--ui-brand-text) !important;
-}
-
-.overview-actions {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 10px !important;
-  margin: 28px 0 0 !important;
-}
-
-.overview-cta {
-  min-height: 48px !important;
-  padding: 0 18px !important;
-  border: 0 !important;
-  border-radius: var(--ui-radius) !important;
-  font-size: 1rem !important;
-  font-weight: 700 !important;
-  box-shadow: none !important;
-  cursor: pointer !important;
-  transition: background-color .16s ease, color .16s ease, transform .16s ease !important;
-}
-
-.overview-cta {
-  background: var(--ui-accent) !important;
-  color: var(--ui-brand-text) !important;
-}
-
-.overview-cta:hover {
-  transform: translateY(-1px) !important;
-}
-
 .overview-search {
   width: min(760px, 100%) !important;
   min-height: 62px !important;
@@ -2722,7 +2666,7 @@ dialog[open] .modal-art {
   grid-template-columns: auto auto minmax(0, 1fr) !important;
   align-items: center !important;
   gap: 10px !important;
-  margin: 28px 0 0 !important;
+  margin: 26px 0 0 !important;
   padding: 0 14px 0 8px !important;
   border: 1px solid var(--ui-line) !important;
   border-radius: var(--ui-radius) !important;
@@ -2902,56 +2846,9 @@ dialog[open] .modal-art {
 
 .overview-visual {
   position: relative !important;
-  min-height: 310px !important;
-  border-radius: 34px !important;
-  background:
-    radial-gradient(circle, rgba(247, 249, 252, .96) 0 26%, transparent 27%),
-    conic-gradient(from 42deg, rgba(47, 111, 214, .26), rgba(214, 71, 71, .16), rgba(240, 193, 74, .2), rgba(47, 111, 214, .26)) !important;
-}
-
-.overview-core {
-  position: absolute !important;
-  inset: 72px !important;
-  display: grid !important;
-  place-items: center !important;
-  border-radius: 50% !important;
-  background: var(--ui-accent) !important;
-  color: var(--ui-brand-text) !important;
-  font-size: 2.625rem !important;
-  font-weight: 900 !important;
-}
-
-.overview-visual span {
-  position: absolute !important;
-  min-height: 38px !important;
-  display: grid !important;
-  place-items: center !important;
-  padding: 0 14px !important;
-  border-radius: var(--ui-radius) !important;
-  background: var(--ui-surface) !important;
-  color: var(--ui-text) !important;
-  font-size: .9375rem !important;
-  font-weight: 700 !important;
-}
-
-.overview-visual span:nth-of-type(1) {
-  top: 18px !important;
-  left: 42px !important;
-}
-
-.overview-visual span:nth-of-type(2) {
-  right: 24px !important;
-  top: 72px !important;
-}
-
-.overview-visual span:nth-of-type(3) {
-  left: 28px !important;
-  bottom: 50px !important;
-}
-
-.overview-visual span:nth-of-type(4) {
-  right: 52px !important;
-  bottom: 22px !important;
+  min-height: 240px !important;
+  border-radius: 28px !important;
+  background: transparent !important;
 }
 
 .overview-card-grid {
@@ -3348,7 +3245,7 @@ dialog[open] .modal-art {
   }
 
   .overview-visual {
-    min-height: 260px !important;
+    display: none !important;
   }
 
   .overview-card-grid {
@@ -3380,15 +3277,6 @@ dialog[open] .modal-art {
     border-radius: var(--ui-radius) !important;
   }
 
-
-  .overview-visual {
-    min-height: 230px !important;
-  }
-
-  .overview-core {
-    inset: 62px !important;
-    font-size: 2rem !important;
-  }
 }
 
 @media (max-width: 900px) {
