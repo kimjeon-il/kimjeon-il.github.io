@@ -1351,6 +1351,49 @@ dialog[open] #modalClose.modal-close {
   cursor: default !important;
 }
 
+.modal-tags > .modal-tag-info {
+  appearance: none !important;
+  cursor: pointer !important;
+}
+
+.modal-tags > .modal-tag-info:hover,
+.modal-tags > .modal-tag-info:focus-visible,
+.modal-tags > .modal-tag-info[aria-expanded="true"] {
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+  outline: 1px solid var(--ui-line) !important;
+  outline-offset: 0 !important;
+}
+
+.modal-tag-popover {
+  position: fixed;
+  z-index: 2000;
+  width: min(280px, calc(100dvw - 28px));
+  padding: 12px 14px;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-radius);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  box-shadow: none;
+  pointer-events: none;
+}
+
+.modal-tag-popover strong {
+  display: block;
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.modal-tag-popover p {
+  margin: 0;
+  color: var(--ui-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
 /* Latest responsive popover sizing. */
 dialog[open] {
   position: fixed !important;
@@ -1408,7 +1451,7 @@ dialog[open] .modal-inner {
   min-height: 0 !important;
   max-height: var(--modal-h) !important;
   display: grid !important;
-  grid-template-columns: minmax(260px, 38%) minmax(0, 1fr) !important;
+  grid-template-columns: minmax(220px, 32%) minmax(0, 1fr) !important;
   overflow: hidden !important;
   margin: 0 !important;
   border: 0 !important;
@@ -1481,7 +1524,7 @@ dialog[open] .modal-close {
     height: var(--modal-h) !important;
     max-height: var(--modal-h) !important;
     grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: minmax(180px, 38%) minmax(0, 1fr) !important;
+    grid-template-rows: minmax(140px, 30%) minmax(0, 1fr) !important;
     overflow: hidden !important;
   }
 
@@ -1944,6 +1987,14 @@ dialog[open] .overview-anime-info .overview-title-row {
   gap: 10px !important;
 }
 
+dialog[open] .overview-anime-info .anime-episode-title-row {
+  margin-top: 42px !important;
+}
+
+dialog[open] .overview-anime-info .anime-episode-title-row .overview-release-title {
+  min-width: 0 !important;
+}
+
 .overview-release-title {
   margin: 0 !important;
   color: var(--ui-text) !important;
@@ -2126,29 +2177,6 @@ dialog[open] .overview-anime-info .modal-body-block {
   border-radius: 0 !important;
   background: transparent !important;
   cursor: default !important;
-}
-
-.overview-anime-episode-detail {
-  padding: 14px !important;
-  border-radius: var(--ui-radius) !important;
-  background: var(--ui-control) !important;
-}
-
-.overview-anime-episode-detail h4,
-.overview-anime-episode-detail p {
-  margin: 0 !important;
-}
-
-.overview-anime-episode-detail h4 {
-  color: var(--ui-text) !important;
-  font-size: 1rem !important;
-  font-weight: 800 !important;
-}
-
-.overview-anime-episode-detail p {
-  margin-top: 8px !important;
-  color: var(--ui-text) !important;
-  line-height: 1.55 !important;
 }
 
 dialog[open] .overview-release-info .release-table-section {
@@ -2378,19 +2406,35 @@ dialog[open] .overview-release-info .release-table-section {
   }
 }
 
+@container (max-width: 430px) {
+  .anime-episode-table th:nth-child(3),
+  .anime-episode-table td:nth-child(3) {
+    display: none !important;
+  }
+
+  .anime-episode-table th:nth-child(2),
+  .anime-episode-table td:nth-child(2) {
+    width: auto !important;
+  }
+
+  .anime-episode-table tbody td:nth-child(2) {
+    border-radius: 0 var(--ui-radius) var(--ui-radius) 0 !important;
+  }
+}
+
 @media (max-width: 900px) {
-  .modal-section-scroll:not(.release-table-scroll) {
+  .modal-section-scroll:not(.release-table-scroll):not(.anime-episode-table-scroll) {
     max-height: min(248px, 34dvh) !important;
   }
 }
 
 @media (max-width: 560px) {
-  .modal-section-scroll:not(.release-table-scroll) {
-    max-height: min(220px, 30dvh) !important;
+  dialog[open] .overview-anime-info .anime-episode-title-row {
+    margin-top: 34px !important;
   }
 
-  .overview-anime-episodes {
-    height: auto !important;
+  .modal-section-scroll:not(.release-table-scroll):not(.anime-episode-table-scroll) {
+    max-height: min(220px, 30dvh) !important;
   }
 }
 
@@ -2815,6 +2859,8 @@ dialog[open] .modal-art {
 .overview-guide-tabs button,
 .overview-series-segment,
 .overview-system-chip {
+  width: 100% !important;
+  min-width: 0 !important;
   min-height: 34px !important;
   padding: 0 12px !important;
   display: inline-flex !important;
@@ -2827,6 +2873,8 @@ dialog[open] .modal-art {
   font: inherit !important;
   font-size: .95rem !important;
   font-weight: 700 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
   box-shadow: none !important;
   cursor: pointer !important;
 }
@@ -2889,8 +2937,8 @@ dialog[open] .modal-art {
 .overview-anime-tabs,
 .overview-guide-tabs {
   padding: 4px !important;
-  display: inline-flex !important;
-  align-items: center !important;
+  display: grid !important;
+  align-items: stretch !important;
   gap: 4px !important;
   border-radius: var(--ui-radius) !important;
   background: var(--ui-control) !important;
@@ -3933,6 +3981,8 @@ dialog[open] .modal-art {
 }
 
 .overview-system-chip {
+  width: auto !important;
+  flex: 0 0 auto !important;
   min-width: 0 !important;
   min-height: 34px !important;
   padding: 0 12px !important;
@@ -4146,7 +4196,7 @@ dialog[open] .modal-art {
   }
 
   .overview-system-chip {
-    flex: 1 1 calc(50% - 6px) !important;
+    flex: 0 0 auto !important;
   }
 }
 
