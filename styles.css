@@ -1,4 +1,4 @@
-﻿* { box-sizing: border-box; }
+* { box-sizing: border-box; }
 @font-face {
   font-family: "Pretendard Variable";
   font-style: normal;
@@ -8,6 +8,8 @@
 }
 
 html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
   font-family: "Pretendard Variable", "Pretendard", "Noto Sans KR", system-ui, sans-serif;
   font-synthesis: none;
@@ -31,7 +33,6 @@ textarea,
 .nav-link.active::after {
   display: none !important;
 }
-
 
 .catalog-dropdowns {
   flex: 0 0 auto !important;
@@ -97,7 +98,7 @@ textarea,
   text-align: center !important;
   text-overflow: ellipsis !important;
   color: var(--ui-text) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
 }
@@ -229,9 +230,9 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   align-items: center !important;
   justify-content: center !important;
   background: transparent !important;
-  color: var(--ui-control-text) !important;
+  color: var(--ui-muted) !important;
   font: inherit !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 500 !important;
   text-align: center !important;
   white-space: nowrap !important;
@@ -242,7 +243,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
 .catalog-dropdown-menu button:hover,
 .catalog-dropdown-menu button:focus-visible,
 .catalog-dropdown-menu button.active {
-  background: var(--ui-control-active) !important;
+  background: var(--ui-control-hover) !important;
   color: var(--ui-control-text-active) !important;
   outline: 0 !important;
 }
@@ -256,7 +257,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   padding: 0 16px 0 8px !important;
   display: flex !important;
   align-items: center !important;
-  gap: 10px !important;
+  gap: 8px !important;
   border: 1px solid var(--ui-line) !important;
   border-radius: var(--ui-radius) !important;
   background: var(--ui-surface) !important;
@@ -274,7 +275,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   background: transparent !important;
   color: var(--ui-control-text-active) !important;
   font: inherit !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
 }
 
 .search-box .search-icon,
@@ -296,7 +297,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   height: 11px !important;
   border: 2px solid var(--ui-accent) !important;
   border-radius: 50% !important;
-  border-color: var(--ui-control-text) !important;
+  border-color: var(--ui-muted) !important;
 }
 
 .search-box .search-icon::after,
@@ -308,7 +309,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   width: 7px !important;
   height: 2px !important;
   border-radius: 999px !important;
-  background: var(--ui-accent) !important;
+  background: var(--ui-muted) !important;
   transform: rotate(45deg) !important;
   transform-origin: left center !important;
 }
@@ -387,7 +388,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   text-align: center !important;
   text-overflow: clip !important;
   color: var(--ui-text) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
 }
@@ -448,16 +449,16 @@ footer {
 }
 
 body {
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
 }
 
 .topbar {
-  position: sticky !important;
+  position: static !important;
   top: 0 !important;
   z-index: 80 !important;
-  height: 72px !important;
-  min-height: 72px !important;
-  padding: 0 6vw !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -465,22 +466,33 @@ body {
   overflow: visible !important;
 }
 
+body.has-topbar .topbar {
+  position: sticky !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  padding: 0 6vw !important;
+}
+
 .nav {
   position: static !important;
-  display: flex !important;
+  display: none !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 10px !important;
+  gap: 8px !important;
   height: 100% !important;
   min-width: 0 !important;
   overflow: visible !important;
   transform: none !important;
 }
 
+body.has-topbar .nav {
+  display: flex !important;
+}
+
 .nav-group {
   position: relative !important;
-  width: 90px !important;
-  min-width: 90px !important;
+  width: 108px !important;
+  min-width: 108px !important;
   height: 44px !important;
   display: flex !important;
   justify-content: center !important;
@@ -547,7 +559,7 @@ body {
 .section-heading h2 {
   margin: 0 !important;
   color: var(--ui-text) !important;
-  font-size: clamp(2.375rem, 4vw, 3.5rem) !important;
+  font-size: var(--font-title) !important;
   font-weight: 900 !important; line-height: 1.02 !important;
 }
 
@@ -576,21 +588,21 @@ body {
   transform: none !important;
 }
 
-.gear-grid{
+.catalog-grid{
   display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 14px !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 12px !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
 }
 
-.gear-card,
+.catalog-card,
 .product-card{
-  min-height: 315px !important;
-  padding: 20px !important;
+  min-height: 176px !important;
+  padding: 16px !important;
   border: 1px solid var(--ui-line) !important;
-  border-radius: 22px !important;
+  border-radius: 16px !important;
   background: var(--ui-surface) !important;
   background-image: none !important;
   color: var(--ui-control-text-active) !important;
@@ -638,7 +650,7 @@ body {
 @media (max-width: 560px) {
   
 
-  .topbar {
+  body.has-topbar .topbar {
     padding-inline: 5vw !important;
   }
 }
@@ -658,7 +670,7 @@ body {
   justify-content: space-between !important;
 }
 
-.gear-card,
+.catalog-card,
 .product-card{
   position: relative !important;
   isolation: isolate !important;
@@ -666,9 +678,9 @@ body {
 }
 
 
-.gear-card .card-top,
+.catalog-card .card-top,
 .product-card .card-top,
-.gear-card .card-name,
+.catalog-card .card-name,
 .product-card .card-name{
   position: relative !important;
   z-index: 2 !important;
@@ -685,7 +697,7 @@ button.icon-back-button,
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 1.375rem !important;
+  font-size: var(--font-xl) !important;
   font-weight: 700 !important;
   line-height: 1 !important; text-indent: 0 !important;
   white-space: nowrap !important;
@@ -706,7 +718,7 @@ dialog[open] .icon-back-button{
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
-  color: var(--ui-control-text) !important;
+  color: var(--ui-muted) !important;
   box-shadow: none !important;
   filter: none !important;
   transform: none !important;
@@ -719,7 +731,7 @@ dialog[open] #modalClose.modal-close:not(:hover){
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
-  color: var(--ui-control-text) !important;
+  color: var(--ui-muted) !important;
   box-shadow: none !important;
 }
 
@@ -752,9 +764,9 @@ dialog[open] #modalClose.modal-close:hover{
   outline: 0 !important;
   border-radius: 12px !important;
   background: transparent !important;
-  color: var(--ui-control-text) !important;
+  color: var(--ui-muted) !important;
   box-shadow: none !important;
-  font-size: 1.375rem !important;
+  font-size: var(--font-xl) !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-indent: 0 !important;
@@ -778,10 +790,10 @@ dialog[open] #modalClose.modal-close:hover{
   transform: translateY(0) !important;
 }
 /* Canonical card system - latest UI source of truth. */
-.gear-grid{
+.catalog-grid{
   display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 14px !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 12px !important;
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -790,16 +802,16 @@ dialog[open] #modalClose.modal-close:hover{
   box-shadow: none !important;
 }
 
-.gear-card,
+.catalog-card,
 .product-card{
   position: relative !important;
   isolation: isolate !important;
-  min-height: 315px !important;
-  padding: 20px !important;
+  min-height: 176px !important;
+  padding: 16px !important;
   display: flex !important;
   flex-direction: column !important;
   border: 1px solid var(--ui-line) !important;
-  border-radius: 22px !important;
+  border-radius: 16px !important;
   background: var(--ui-surface) !important;
   background-image: none !important;
   color: var(--ui-control-text-active) !important;
@@ -812,15 +824,15 @@ dialog[open] #modalClose.modal-close:hover{
     transform 0.18s ease !important;
 }
 
-.gear-card::before,
-.gear-card::after,
+.catalog-card::before,
+.catalog-card::after,
 .product-card::before,
 .product-card::after{
   display: none !important;
 }
 
 .card-top,
-.gear-card .card-top,
+.catalog-card .card-top,
 .product-card .card-top{
   position: relative !important;
   z-index: 3 !important;
@@ -831,55 +843,109 @@ dialog[open] #modalClose.modal-close:hover{
   gap: 12px !important;
   margin: 0 !important;
   color: var(--ui-muted) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
   line-height: 1.2 !important; opacity: 1 !important;
 }
 
 .card-name,
-.gear-card .card-name,
+.catalog-card .card-name,
 .product-card .card-name{
   position: relative !important;
   z-index: 3 !important;
   margin: auto 0 4px !important;
   color: var(--ui-control-text-active) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
-  line-height: 1.18 !important; opacity: 1 !important;
+  line-height: 1.18 !important;
+  display: flex !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  word-break: keep-all !important;
+  overflow-wrap: anywhere !important;
+  opacity: 1 !important;
+}
+
+.catalog-card-badge {
+  flex: 0 0 auto !important;
+  max-width: 100% !important;
+  padding: 3px 8px !important;
+  border-radius: 8px !important;
+  background: var(--ui-control-hover) !important;
+  color: var(--ui-control-text-active) !important;
+  font-size: var(--font-md) !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+}
+
+.catalog-card:hover .catalog-card-badge,
+.catalog-card:focus-visible .catalog-card-badge,
+.product-card:hover .catalog-card-badge,
+.product-card:focus-visible .catalog-card-badge {
+  background: var(--ui-control-hover) !important;
+  color: var(--ui-control-text-active) !important;
+}
+
+.catalog-card-title {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  color: var(--ui-control-text-active) !important;
 }
 .card-en,
 .card-full-en,
 .card-full-ko,
-.gear-card .card-en,
-.gear-card .card-full-en,
-.gear-card .card-full-ko,
+.catalog-card .card-en,
+.catalog-card .card-full-en,
+.catalog-card .card-full-ko,
 .product-card .card-en,
 .product-card .card-full-en,
 .product-card .card-full-ko{
   position: relative !important;
   z-index: 3 !important;
   color: var(--ui-muted) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 600 !important;
   line-height: 1.25 !important; opacity: 1 !important;
 }
 
 
 @media (max-width: 1180px) {
-  .gear-grid{
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  .catalog-grid{
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
 }
 
 @media (max-width: 850px) {
-  .gear-grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  .catalog-grid{
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
 
 @media (max-width: 560px) {
-  .gear-grid{
-    grid-template-columns: 1fr !important;
+  .catalog-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .catalog-card,
+  .product-card{
+    min-height: 154px !important;
+    padding: 12px !important;
+  }
+
+  .catalog-card .card-top,
+  .product-card .card-top,
+  .catalog-card .card-name,
+  .product-card .card-name,
+  .catalog-card .card-en,
+  .catalog-card .card-full-en,
+  .catalog-card .card-full-ko,
+  .product-card .card-en,
+  .product-card .card-full-en,
+  .product-card .card-full-ko{
+    font-size: var(--font-sm) !important;
   }
 }
 
@@ -917,9 +983,9 @@ dialog[open] #modalClose.modal-close:hover{
 }
 
 .nav-link {
-  width: 90px !important;
-  min-width: 90px !important;
-  max-width: 90px !important;
+  width: 108px !important;
+  min-width: 108px !important;
+  max-width: 108px !important;
   height: 44px !important;
   min-height: 44px !important;
   max-height: 44px !important;
@@ -929,7 +995,7 @@ dialog[open] #modalClose.modal-close:hover{
   justify-content: center !important;
   border: 0 !important;
   outline: 0 !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-align: center !important;
@@ -939,6 +1005,14 @@ dialog[open] #modalClose.modal-close:hover{
   color: var(--ui-muted) !important;
 }
 
+.nav-link-pending,
+.nav-link:disabled,
+.nav-link[aria-disabled="true"] {
+  color: color-mix(in srgb, var(--ui-muted) 58%, transparent) !important;
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
 .nav-link:hover,
 .nav-link:focus-visible {
   background: var(--ui-control-hover) !important;
@@ -946,7 +1020,7 @@ dialog[open] #modalClose.modal-close:hover{
 }
 
 .nav-link.active {
-  background: var(--ui-control-active) !important;
+  background: var(--ui-control-hover) !important;
   color: var(--ui-control-text-active) !important;
 }
 
@@ -976,7 +1050,7 @@ dialog[open] #modalClose.modal-close:hover{
   color: var(--ui-muted) !important;
   border: 0 !important;
   outline: 0 !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-align: center !important;
@@ -1000,7 +1074,7 @@ dialog[open] #modalClose.modal-close:hover{
   padding: 0 !important;
   border: 0 !important;
   outline: 0 !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-align: center !important;
@@ -1013,7 +1087,7 @@ dialog[open] #modalClose.modal-close:hover{
 
 .nav-filter-menu .sub-filter.active,
 .nav-filter-menu .sub-filter[aria-selected="true"] {
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-align: center !important;
@@ -1024,7 +1098,7 @@ dialog[open] #modalClose.modal-close:hover{
 
 .nav-filter-menu .sub-filter.active:hover,
 .nav-filter-menu .sub-filter[aria-selected="true"]:hover {
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-align: center !important;
@@ -1039,7 +1113,7 @@ dialog[open] #modalClose.modal-close:hover{
 }
 
 .catalog-section,
-.topbar {
+body.has-topbar .topbar {
   padding-left: var(--page-gutter) !important;
   padding-right: var(--page-gutter) !important;
 }
@@ -1054,28 +1128,28 @@ dialog[open] #modalClose.modal-close:hover{
 
 .section-heading,
 .toolbar,
-.gear-grid{
+.catalog-grid{
   max-width: var(--page-max) !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
 /* Gentle interactions for cards and popover links, without shadows. */
-.gear-card:hover,
+.catalog-card:hover,
 .product-card:hover{
   transform: translateY(-2px) !important;
-  background: var(--ui-surface-hover) !important;
+  background: var(--ui-control) !important;
   border-color: var(--ui-line) !important;
 }
 
-.gear-card:active,
+.catalog-card:active,
 .product-card:active{
   transform: translateY(0) scale(0.995) !important;
 }
 
 
 .modal-art {
-  background: var(--ui-art-bg) !important;
+  background: var(--ui-section-bg) !important;
   background-image: none !important;
   position: relative !important;
 }
@@ -1088,13 +1162,13 @@ dialog[open] #modalClose.modal-close:hover{
 .card-top,
 .card-top span,
 .card-top span:last-child,
-.gear-card .card-top,
-.gear-card .card-top span,
-.gear-card .card-top span:last-child,
+.catalog-card .card-top,
+.catalog-card .card-top span,
+.catalog-card .card-top span:last-child,
 .product-card .card-top,
 .product-card .card-top span,
 .product-card .card-top span:last-child{
-  color: var(--ui-card-meta) !important;
+  color: var(--ui-muted) !important;
 }
 /* Match modal close button with back button style. */
 #modalClose,
@@ -1117,10 +1191,10 @@ dialog[open] #modalClose.modal-close {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
-  color: var(--ui-control-text) !important;
+  color: var(--ui-muted) !important;
   box-shadow: none !important;
   filter: none !important;
-  font-size: 1.375rem !important;
+  font-size: var(--font-xl) !important;
   font-weight: 700 !important;
   line-height: 1 !important; text-indent: 0 !important;
   transform: none !important;
@@ -1128,51 +1202,69 @@ dialog[open] #modalClose.modal-close {
 }
 
 .modal-step {
-  position: absolute !important;
-  top: 50% !important;
+  position: fixed !important;
+  top: calc((var(--modal-vh, 100vh) - var(--modal-h, min(620px, calc(100vh - 48px)))) / 2 + (var(--modal-h, min(620px, calc(100vh - 48px))) / 2)) !important;
+  bottom: auto !important;
   z-index: 260 !important;
-  width: 46px !important;
-  min-width: 46px !important;
-  height: 46px !important;
-  min-height: 46px !important;
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 42px !important;
+  min-height: 42px !important;
   padding: 0 !important;
-  border: 1px solid color-mix(in srgb, var(--ui-line) 82%, transparent) !important;
-  border-radius: 12px !important;
+  border: 0 !important;
+  border-radius: var(--ui-radius) !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: color-mix(in srgb, var(--ui-surface) 88%, transparent) !important;
-  color: var(--ui-control-text) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  backdrop-filter: blur(12px) !important;
+  background: transparent !important;
+  color: var(--ui-muted) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
   box-shadow: none !important;
-  font-size: 1.9rem !important;
-  font-weight: 500 !important;
   line-height: 1 !important;
-  text-indent: 0 !important;
   transform: translateY(-50%) !important;
-  transition: background-color .16s ease, border-color .16s ease, color .16s ease !important;
+  transition: background-color .16s ease, color .16s ease, border-color .16s ease, transform .16s ease !important;
 }
 
-.modal-step::before {
+.modal-step::before,
+.modal-step::after {
+  content: "" !important;
   display: block !important;
-  transform: translateY(-2px) !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 12px !important;
+  height: 2px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: currentColor !important;
+  transform-origin: center !important;
 }
 
 .modal-step-prev::before {
-  content: "‹" !important;
+  transform: translate(-50%, -50%) translateY(-4px) rotate(-45deg) !important;
+}
+
+.modal-step-prev::after {
+  transform: translate(-50%, -50%) translateY(4px) rotate(45deg) !important;
 }
 
 .modal-step-next::before {
-  content: "›" !important;
+  transform: translate(-50%, -50%) translateY(-4px) rotate(45deg) !important;
+}
+
+.modal-step-next::after {
+  transform: translate(-50%, -50%) translateY(4px) rotate(-45deg) !important;
 }
 
 .modal-step-prev {
-  left: calc(50dvw - (min(980px, calc(100dvw - 48px)) / 2) - 46px) !important;
+  left: calc((var(--modal-vw, 100vw) - var(--modal-w, min(980px, calc(100vw - 48px)))) / 2 + 16px) !important;
+  right: auto !important;
 }
 
 .modal-step-next {
-  right: calc(50dvw - (min(980px, calc(100dvw - 48px)) / 2) - 46px) !important;
+  left: calc((var(--modal-vw, 100vw) + var(--modal-w, min(980px, calc(100vw - 48px)))) / 2 - 58px) !important;
+  right: auto !important;
 }
 
 .modal-step:hover,
@@ -1182,57 +1274,6 @@ dialog[open] #modalClose.modal-close {
   color: var(--ui-control-text-active) !important;
 }
 
-@media (max-width: 1072px) {
-  .modal-step {
-    width: 42px !important;
-    min-width: 42px !important;
-    height: 42px !important;
-    min-height: 42px !important;
-    top: auto !important;
-    bottom: calc(50dvh - (min(620px, calc(100dvh - 48px)) / 2) + 22px) !important;
-    border: 0 !important;
-    background: transparent !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    font-size: 1.375rem !important;
-    font-weight: 700 !important;
-    transform: none !important;
-  }
-
-  .modal-step::before {
-    transform: none !important;
-  }
-
-  .modal-step-prev::before {
-    content: "←" !important;
-  }
-
-  .modal-step-next::before {
-    content: "→" !important;
-  }
-
-  .modal-step-prev {
-    left: calc(50dvw - (min(980px, calc(100dvw - 48px)) / 2) + (min(980px, calc(100dvw - 48px)) * 0.38) + 42px) !important;
-  }
-
-  .modal-step-next {
-    right: calc(50dvw - (min(980px, calc(100dvw - 48px)) / 2) + 42px) !important;
-  }
-}
-
-@media (max-width: 900px) {
-  .modal-step {
-    bottom: 22px !important;
-  }
-
-  .modal-step-prev {
-    left: 34px !important;
-  }
-
-  .modal-step-next {
-    right: 34px !important;
-  }
-}
 /* Catalog heading keeps only the title; remove reserved copy/eyebrow space. */
 .toy-panel[data-toy-panel="catalog"] .section-heading {
   min-height: 0 !important;
@@ -1283,7 +1324,7 @@ dialog[open] #modalClose.modal-close {
 
 .toy-panel[data-toy-panel] .section-heading h2 {
   margin: 0 !important;
-  font-size: clamp(2.625rem, 4.2vw, 3.625rem) !important;
+  font-size: var(--font-title) !important;
 }
 
 .toy-panel[data-toy-panel] .result-count {
@@ -1310,9 +1351,9 @@ dialog[open] #modalClose.modal-close {
   }
 }
 /* Hide English/sub labels on cards only; keep modal labels intact. */
-.gear-card .card-en,
-.gear-card .card-full-en,
-.gear-card .card-full-ko,
+.catalog-card .card-en,
+.catalog-card .card-full-en,
+.catalog-card .card-full-ko,
 .product-card .card-en,
 .product-card .card-full-en,
 .product-card .card-full-ko{
@@ -1340,9 +1381,9 @@ dialog[open] #modalClose.modal-close {
   border: 0 !important;
   border-radius: 12px !important;
   background: var(--ui-control) !important;
-  color: var(--ui-tag-text) !important;
+  color: var(--ui-text) !important;
   font: inherit !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 400 !important;
   line-height: 1 !important;
   white-space: nowrap !important;
@@ -1353,22 +1394,25 @@ dialog[open] #modalClose.modal-close {
 
 .modal-tags > .modal-tag-info {
   appearance: none !important;
+  border: 1px solid transparent !important;
+  box-sizing: border-box !important;
   cursor: pointer !important;
 }
 
 .modal-tags > .modal-tag-info:hover,
 .modal-tags > .modal-tag-info:focus-visible,
 .modal-tags > .modal-tag-info[aria-expanded="true"] {
-  background: var(--ui-surface) !important;
-  color: var(--ui-text) !important;
-  outline: 1px solid var(--ui-line) !important;
+  background: var(--ui-control-hover) !important;
+  color: var(--ui-control-text-active) !important;
+  border-color: color-mix(in srgb, var(--ui-line) 78%, var(--ui-text) 22%) !important;
+  outline: 0 !important;
   outline-offset: 0 !important;
 }
 
 .modal-tag-popover {
   position: fixed;
   z-index: 2000;
-  width: min(280px, calc(100dvw - 28px));
+  width: min(280px, calc(100vw - 28px));
   padding: 12px 14px;
   border: 1px solid var(--ui-line);
   border-radius: var(--ui-radius);
@@ -1381,7 +1425,7 @@ dialog[open] #modalClose.modal-close {
 .modal-tag-popover strong {
   display: block;
   margin: 0 0 6px;
-  font-size: 0.95rem;
+  font-size: var(--font-sm);
   font-weight: 700;
   line-height: 1.2;
 }
@@ -1389,8 +1433,9 @@ dialog[open] #modalClose.modal-close {
 .modal-tag-popover p {
   margin: 0;
   color: var(--ui-muted);
-  font-size: 0.9rem;
+  font-size: var(--font-sm);
   line-height: 1.55;
+  white-space: pre-line;
   word-break: keep-all;
 }
 
@@ -1401,15 +1446,19 @@ dialog[open] {
   margin: 0 !important;
   border: 0 !important;
   outline: 0 !important;
-  width: 100dvw !important;
-  max-width: 100dvw !important;
-  height: 100dvh !important;
-  max-height: 100dvh !important;
+  width: var(--modal-viewport-width, 100vw) !important;
+  max-width: none !important;
+  height: var(--modal-viewport-height, 100vh) !important;
+  max-height: none !important;
   padding: 0 !important;
   overflow: hidden !important;
   display: grid !important;
   place-items: center !important;
-  background: rgba(17, 24, 39, 0.58) !important;
+  background: transparent !important;
+  --modal-vw: var(--modal-viewport-width, 100vw);
+  --modal-vh: var(--modal-viewport-height, 100vh);
+  --modal-w: min(980px, calc(var(--modal-vw) - 48px));
+  --modal-h: min(620px, calc(var(--modal-vh) - 48px));
   --modal-gutter: 45px;
   --modal-close-offset: 18px;
   --modal-scrollbar-inset: calc(var(--modal-close-offset) + 16px);
@@ -1417,33 +1466,50 @@ dialog[open] {
   --modal-scroll-start: calc(var(--modal-close-offset) + 42px + 8px);
 }
 
+body.is-modal-open {
+  position: fixed !important;
+  left: var(--modal-lock-left, 0px) !important;
+  right: auto !important;
+  top: var(--modal-scroll-lock-top, 0px) !important;
+  width: var(--modal-lock-width, 100%) !important;
+  overflow: hidden !important;
+}
+
+.modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: var(--modal-viewport-width, 100vw) !important;
+  height: var(--modal-viewport-height, 100vh) !important;
+  z-index: 0 !important;
+  background: rgba(17, 24, 39, 0.58) !important;
+  pointer-events: auto !important;
+}
+
 #detailModal[open] {
   overflow: hidden !important;
 }
 
 #modalContent {
+  --modal-vw: var(--modal-viewport-width, 100vw);
+  --modal-vh: var(--modal-viewport-height, 100vh);
+  position: relative !important;
+  z-index: 1 !important;
   overflow: visible !important;
   max-width: 100% !important;
   max-height: 100% !important;
 }
 
-html,
-body {
-  scrollbar-gutter: stable !important;
-}
-
-body:has(dialog[open]) {
-  overflow-y: scroll !important;
-}
-
 dialog[open]::backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  width: var(--modal-viewport-width, 100vw) !important;
+  height: var(--modal-viewport-height, 100vh) !important;
   background: transparent !important;
 }
 
 dialog[open] .modal-inner {
-  --modal-w: min(980px, calc(100dvw - 48px));
-  --modal-h: min(620px, calc(100dvh - 48px));
   position: relative !important;
+  z-index: 1 !important;
   width: var(--modal-w) !important;
   min-width: 0 !important;
   max-width: var(--modal-w) !important;
@@ -1468,7 +1534,7 @@ dialog[open] .modal-info {
   max-height: 100% !important;
 }
 
-dialog[open] .modal-info:not(.overview-release-info):not(.overview-anime-info) {
+dialog[open] .modal-info:not(.category-release-info):not(.category-anime-info) {
   --modal-body-width: min(100%, 520px);
   --modal-flow-gap: 16px;
   overflow-x: hidden !important;
@@ -1493,7 +1559,7 @@ dialog[open] .modal-scroll-area {
 }
 
 @media (min-width: 901px) {
-  dialog[open] .modal-info:not(.overview-release-info):not(.overview-anime-info) {
+  dialog[open] .modal-info:not(.category-release-info):not(.category-anime-info) {
     align-self: stretch !important;
     height: 100% !important;
     margin-inline: var(--modal-scrollbar-inset) !important;
@@ -1503,13 +1569,15 @@ dialog[open] .modal-scroll-area {
 
 dialog[open] .modal-close {
   position: absolute !important;
-  top: calc(50dvh - (min(620px, calc(100dvh - 48px)) / 2) + var(--modal-close-offset)) !important;
-  right: calc(50dvw - (min(980px, calc(100dvw - 48px)) / 2) + var(--modal-close-offset)) !important;
+  top: calc((var(--modal-vh) - var(--modal-h)) / 2 + var(--modal-close-offset)) !important;
+  right: calc((var(--modal-vw) - var(--modal-w)) / 2 + var(--modal-close-offset)) !important;
   z-index: 300 !important;
 }
 
 @media (max-width: 900px) {
   dialog[open] {
+    --modal-w: calc(var(--modal-vw) - 28px);
+    --modal-h: calc(var(--modal-vh) - 28px);
     --modal-gutter: 6px;
     --modal-close-offset: 18px;
     --modal-scrollbar-inset: calc(var(--modal-close-offset) + 16px);
@@ -1517,8 +1585,6 @@ dialog[open] .modal-close {
   }
 
   dialog[open] .modal-inner {
-    --modal-w: calc(100dvw - 28px);
-    --modal-h: calc(100dvh - 28px);
     width: var(--modal-w) !important;
     max-width: var(--modal-w) !important;
     height: var(--modal-h) !important;
@@ -1536,7 +1602,7 @@ dialog[open] .modal-close {
     border-bottom: 0 !important;
   }
 
-  dialog[open] .modal-info:not(.overview-release-info):not(.overview-anime-info) {
+  dialog[open] .modal-info:not(.category-release-info):not(.category-anime-info) {
     height: 100% !important;
     overflow-x: hidden !important;
     overflow-y: hidden !important;
@@ -1546,22 +1612,25 @@ dialog[open] .modal-close {
   }
 
   dialog[open] .modal-close {
-    top: calc(50dvh - ((100dvh - 28px) / 2) + var(--modal-close-offset)) !important;
-    right: calc(50dvw - ((100dvw - 28px) / 2) + var(--modal-close-offset)) !important;
+    top: calc((var(--modal-vh) - var(--modal-h)) / 2 + var(--modal-close-offset)) !important;
+    right: calc((var(--modal-vw) - var(--modal-w)) / 2 + var(--modal-close-offset)) !important;
   }
 }
 
 @media (max-width: 460px) {
+  dialog[open] {
+    --modal-w: calc(var(--modal-vw) - 18px);
+    --modal-h: calc(var(--modal-vh) - 18px);
+  }
+
   dialog[open] .modal-inner {
-    --modal-w: calc(100dvw - 18px);
-    --modal-h: calc(100dvh - 18px);
     width: var(--modal-w) !important;
     max-width: var(--modal-w) !important;
     height: var(--modal-h) !important;
     max-height: var(--modal-h) !important;
   }
 
-  dialog[open] .modal-info:not(.overview-release-info):not(.overview-anime-info) {
+  dialog[open] .modal-info:not(.category-release-info):not(.category-anime-info) {
     padding: 0 var(--modal-gutter) !important;
   }
 }
@@ -1580,7 +1649,7 @@ dialog[open] .modal-name {
   height: calc(var(--modal-title-line-height) * var(--modal-title-lines)) !important;
   max-height: calc(var(--modal-title-line-height) * var(--modal-title-lines)) !important;
   margin: 0 auto calc(var(--modal-flow-gap) - var(--modal-title-line-height)) !important;
-  font-size: clamp(1.75rem, 2.4vw, 2.25rem) !important;
+  font-size: var(--font-title) !important;
   font-weight: 900 !important;
   line-height: 1.15 !important;
   color: var(--ui-text) !important;
@@ -1612,7 +1681,7 @@ dialog[open] .modal-name {
   min-height: 0 !important;
   margin: 0 !important;
   color: var(--ui-text) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 400 !important;
   line-height: 1.5 !important;
   overflow: hidden !important;
@@ -1638,8 +1707,7 @@ dialog[open] .modal-name {
 }
 
 /* Final top/bottom bar rhythm. */
-.topbar,
-footer {
+body.has-topbar .topbar {
   min-height: 72px !important;
   height: 72px !important;
   padding-top: 0 !important;
@@ -1657,33 +1725,18 @@ footer {
   min-height: 88px !important;
   height: auto !important;
   padding: 12px 6vw !important;
-}
-
-footer p {
-  margin: 0 !important;
-  padding: 8px 12px !important;
-  border-radius: var(--ui-radius) !important;
-  background: var(--ui-control) !important;
-  color: var(--ui-muted) !important;
-  font-size: .9375rem !important;
-  font-weight: 600 !important;
-  line-height: 1.45 !important;
-  text-align: right !important;
-  word-break: keep-all !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
 }
 
 @media (max-width: 520px) {
   footer {
-    min-height: 0 !important;
+    min-height: 88px !important;
     display: grid !important;
     justify-items: center !important;
     gap: 10px !important;
     padding: 16px 20px 18px !important;
-  }
-
-  footer p {
-    max-width: 100% !important;
-    text-align: center !important;
   }
 }
 
@@ -1751,7 +1804,7 @@ footer p {
 .mounted-title {
   margin: 0 0 8px !important;
   color: var(--ui-text) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
   padding: 0 10px !important;
@@ -1875,7 +1928,7 @@ footer p {
   background: transparent !important;
   color: var(--ui-muted) !important;
   font: inherit !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 600 !important;
   line-height: 1 !important;
   cursor: pointer !important;
@@ -1883,14 +1936,14 @@ footer p {
 
 .release-region-tabs button:hover,
 .release-region-tabs button:focus-visible {
-  background: var(--ui-control) !important;
-  color: var(--ui-text) !important;
+  background: var(--ui-control-hover) !important;
+  color: var(--ui-control-text-active) !important;
 }
 
 .release-region-tabs button.active,
 .release-region-tabs button[aria-selected="true"] {
-  background: var(--ui-control) !important;
-  color: var(--ui-text) !important;
+  background: var(--ui-control-hover) !important;
+  color: var(--ui-control-text-active) !important;
 }
 
 @media (max-width: 764px) {
@@ -1929,7 +1982,7 @@ footer p {
     width: 100% !important;
   }
 
-  dialog[open] .overview-release-info .overview-title-row {
+  dialog[open] .category-release-info .overview-title-row {
     flex-wrap: wrap !important;
     align-items: center !important;
   }
@@ -1953,18 +2006,18 @@ footer p {
   min-height: 0 !important;
 }
 
-dialog[open] .modal-inner.overview-release-modal {
+dialog[open] .modal-inner.category-release-modal {
   grid-template-columns: minmax(0, 1fr) !important;
   grid-template-rows: minmax(0, 1fr) !important;
 }
 
-dialog[open] .modal-inner.overview-anime-modal {
+dialog[open] .modal-inner.category-anime-modal {
   grid-template-columns: minmax(0, 1fr) !important;
   grid-template-rows: minmax(0, 1fr) !important;
 }
 
-dialog[open] .overview-release-info,
-dialog[open] .overview-anime-info {
+dialog[open] .category-release-info,
+dialog[open] .category-anime-info {
   --modal-body-width: 100% !important;
   --modal-flow-gap: 16px !important;
   --release-content-inset: 40px !important;
@@ -1977,8 +2030,8 @@ dialog[open] .overview-anime-info {
   padding: 40px 0 !important;
 }
 
-dialog[open] .overview-release-info .overview-title-row,
-dialog[open] .overview-anime-info .overview-title-row {
+dialog[open] .category-release-info .overview-title-row,
+dialog[open] .category-anime-info .overview-title-row {
   width: calc(100% - (var(--release-content-inset) * 2)) !important;
   margin: 0 auto var(--modal-flow-gap) !important;
   display: flex !important;
@@ -1987,58 +2040,58 @@ dialog[open] .overview-anime-info .overview-title-row {
   gap: 10px !important;
 }
 
-dialog[open] .overview-anime-info .anime-episode-title-row {
+dialog[open] .category-anime-info .anime-episode-title-row {
   margin-top: 42px !important;
 }
 
-dialog[open] .overview-anime-info .anime-episode-title-row .overview-release-title {
+dialog[open] .category-anime-info .anime-episode-title-row .category-title {
   min-width: 0 !important;
 }
 
-.overview-release-title {
+.category-title {
   margin: 0 !important;
   color: var(--ui-text) !important;
-  font-size: clamp(1.75rem, 2.4vw, 2.25rem) !important;
+  font-size: var(--font-title) !important;
   font-weight: 900 !important;
   line-height: 1 !important;
   word-break: keep-all !important;
 }
 
-dialog[open] .overview-release-info .modal-body-block,
-dialog[open] .overview-anime-info .modal-body-block {
+dialog[open] .category-release-info .modal-body-block,
+dialog[open] .category-anime-info .modal-body-block {
   min-height: 0 !important;
   height: 100% !important;
 }
 
-dialog[open] .overview-anime-info .modal-body-block {
+dialog[open] .category-anime-info .modal-body-block {
   display: flex !important;
   flex-direction: column !important;
   gap: var(--modal-flow-gap) !important;
 }
 
-.overview-anime-tabs {
+.category-anime-tabs {
   width: calc(100% - (var(--release-content-inset) * 2)) !important;
   margin: 0 auto !important;
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
 
-.overview-anime-tabs button {
+.category-anime-tabs button {
   min-width: 0 !important;
   min-height: 38px !important;
-  font-size: .9375rem !important;
+  font-size: var(--font-sm) !important;
 }
 
-.overview-anime-tabs button:hover,
-.overview-anime-tabs button:focus-visible,
-.overview-anime-tabs button.active,
-.overview-anime-tabs button[aria-selected="true"] {
-  background: var(--ui-surface) !important;
-  color: var(--ui-text) !important;
+.category-anime-tabs button:hover,
+.category-anime-tabs button:focus-visible,
+.category-anime-tabs button.active,
+.category-anime-tabs button[aria-selected="true"] {
+  background: var(--ui-control-hover) !important;
+  color: var(--ui-control-text-active) !important;
   box-shadow: none !important;
 }
 
-.overview-anime-panel {
+.category-anime-panel {
   box-sizing: border-box !important;
   width: 100% !important;
   min-height: 0 !important;
@@ -2047,21 +2100,21 @@ dialog[open] .overview-anime-info .modal-body-block {
   overflow: auto !important;
 }
 
-.overview-anime-panel[data-overview-anime-panel="episodes"] {
+.category-anime-panel[data-category-anime-panel="episodes"] {
   overflow: hidden !important;
 }
 
-.overview-anime-empty {
+.category-anime-empty {
   margin: 0 !important;
   min-height: 120px !important;
   display: grid !important;
   place-items: center !important;
-  color: var(--ui-control-text) !important;
-  font-size: 1rem !important;
+  color: var(--ui-muted) !important;
+  font-size: var(--font-md) !important;
 }
 
-.overview-anime-facts,
-.overview-anime-character-list {
+.category-anime-facts,
+.category-anime-character-list {
   width: min(100%, 640px) !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -2070,8 +2123,8 @@ dialog[open] .overview-anime-info .modal-body-block {
   list-style: none !important;
 }
 
-.overview-anime-facts li,
-.overview-anime-character-list li {
+.category-anime-facts li,
+.category-anime-character-list li {
   min-width: 0 !important;
   display: grid !important;
   gap: 6px !important;
@@ -2079,22 +2132,22 @@ dialog[open] .overview-anime-info .modal-body-block {
   border-bottom: 1px solid var(--ui-line) !important;
 }
 
-.overview-anime-facts li span,
-.overview-anime-character-list li small {
-  color: var(--ui-control-text) !important;
-  font-size: .9375rem !important;
+.category-anime-facts li span,
+.category-anime-character-list li small {
+  color: var(--ui-muted) !important;
+  font-size: var(--font-sm) !important;
   font-weight: 500 !important;
 }
 
-.overview-anime-facts li b,
-.overview-anime-character-list li b {
+.category-anime-facts li b,
+.category-anime-character-list li b {
   min-width: 0 !important;
   color: var(--ui-text) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
 }
 
-.overview-anime-episodes {
+.category-anime-episodes {
   min-height: 0 !important;
   height: 100% !important;
   display: flex !important;
@@ -2102,7 +2155,7 @@ dialog[open] .overview-anime-info .modal-body-block {
   gap: 14px !important;
 }
 
-.overview-anime-episodes .release-dropdowns {
+.category-anime-episodes .release-dropdowns {
   width: 100% !important;
   margin: 0 !important;
 }
@@ -2122,7 +2175,7 @@ dialog[open] .overview-anime-info .modal-body-block {
   overflow-y: auto !important;
 }
 
-.overview-anime-episodes[data-anime-table-mode="fit"] .anime-episode-table-scroll {
+.category-anime-episodes[data-anime-table-mode="fit"] .anime-episode-table-scroll {
   flex: 0 1 auto !important;
 }
 
@@ -2179,7 +2232,7 @@ dialog[open] .overview-anime-info .modal-body-block {
   cursor: default !important;
 }
 
-dialog[open] .overview-release-info .release-table-section {
+dialog[open] .category-release-info .release-table-section {
   width: var(--modal-body-width) !important;
   margin: 0 auto !important;
   box-sizing: border-box !important;
@@ -2278,8 +2331,8 @@ dialog[open] .overview-release-info .release-table-section {
   right: 4px !important;
   width: 14px !important;
   transform: translateY(-50%) !important;
-  color: var(--ui-control-text) !important;
-  font-size: .82rem !important;
+  color: var(--ui-muted) !important;
+  font-size: var(--font-xs) !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-align: center !important;
@@ -2333,7 +2386,7 @@ dialog[open] .overview-release-info .release-table-section {
   padding: 11px 12px !important;
   border-radius: 0 !important;
   background: transparent !important;
-  color: var(--ui-control-text) !important;
+  color: var(--ui-muted) !important;
   text-align: center !important;
   cursor: default !important;
 }
@@ -2429,7 +2482,7 @@ dialog[open] .overview-release-info .release-table-section {
 }
 
 @media (max-width: 560px) {
-  dialog[open] .overview-anime-info .anime-episode-title-row {
+  dialog[open] .category-anime-info .anime-episode-title-row {
     margin-top: 34px !important;
   }
 
@@ -2454,8 +2507,7 @@ dialog[open] .overview-release-info .release-table-section {
   text-align: right !important;
 }
 
-dialog[open] .modal-art,
-.overview-guide-modal .overview-modal-art {
+dialog[open] .modal-art {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -2500,16 +2552,16 @@ dialog[open] .modal-art {
   display: block !important;
 }
 
-.gear-card,
+.catalog-card,
 .product-card{
   text-align: left !important;
   align-items: stretch !important;
 }
 
-.gear-card .card-name,
-.gear-card .card-en,
-.gear-card .card-full-en,
-.gear-card .card-full-ko,
+.catalog-card .card-name,
+.catalog-card .card-en,
+.catalog-card .card-full-en,
+.catalog-card .card-full-ko,
 .product-card .card-name,
 .product-card .card-en,
 .product-card .card-full-en,
@@ -2528,20 +2580,20 @@ dialog[open] .modal-art {
   gap: 12px !important;
   margin: 9px auto !important;
   color: var(--ui-text) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   line-height: 1.35 !important;
 }
 
 .stat-row span,
 .track-height-row span {
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 400 !important;
   text-align: left !important;
 }
 
 .stat-row b,
 .track-height-row b {
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 400 !important;
   text-align: left !important;
   white-space: nowrap !important;
@@ -2581,7 +2633,7 @@ dialog[open] .modal-art {
 .mode-title {
   margin: 0 0 8px !important;
   color: var(--ui-text) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
   line-height: 1.35 !important;
 }
@@ -2590,7 +2642,7 @@ dialog[open] .modal-art {
   width: var(--modal-body-width) !important;
   margin: 12px auto 0 !important;
   color: var(--ui-muted) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   line-height: 1.6 !important;
 }
 
@@ -2620,13 +2672,9 @@ dialog[open] .modal-art {
   color-scheme: light;
   --ui-bg: #f0f2f5;
   --ui-surface: #f7f9fc;
-  --ui-surface-hover: #eef3f8;
-  --ui-art-bg: #f1f5f9;
   --ui-section-bg: #e9eef4;
   --ui-control: #e4e9f0;
   --ui-control-hover: #d7e0ea;
-  --ui-control-active: #d8e0ea;
-  --ui-control-text: #526173;
   --ui-control-text-active: #101827;
   --ui-line: #cfd6df;
   --ui-text: #101827;
@@ -2635,8 +2683,13 @@ dialog[open] .modal-art {
   --ui-accent: #334155;
   --ui-brand-bg: #475569;
   --ui-brand-text: #f3f6fa;
-  --ui-card-meta: #475569;
-  --ui-tag-text: var(--ui-text);
+  --font-xs: .8125rem;
+  --font-sm: .875rem;
+  --font-md: 1rem;
+  --font-lg: 1.25rem;
+  --font-xl: 1.375rem;
+  --font-title: clamp(1.75rem, 2.4vw, 2.25rem);
+  --font-hero: clamp(3rem, 7vw, 5rem);
   --ui-radius: 12px;
   --ui-panel-radius: 14px;
   --ui-menu-width: 112px;
@@ -2658,7 +2711,7 @@ dialog[open] .modal-art {
   --cyan: var(--ui-accent);
   --menu-bg: var(--ui-surface);
   --button-glass: var(--ui-control);
-  --nav-active-bg: var(--ui-control-active);
+  --nav-active-bg: var(--ui-control-hover);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -2666,13 +2719,9 @@ dialog[open] .modal-art {
     color-scheme: dark;
     --ui-bg: #101419;
     --ui-surface: #151b23;
-    --ui-surface-hover: #1d2632;
-    --ui-art-bg: #111820;
     --ui-section-bg: #1c2531;
     --ui-control: #202936;
     --ui-control-hover: #283344;
-    --ui-control-active: #303b4b;
-    --ui-control-text: #a8b3c2;
     --ui-control-text-active: #f3f6fa;
     --ui-line: #303a48;
     --ui-text: #f3f6fa;
@@ -2681,9 +2730,7 @@ dialog[open] .modal-art {
     --ui-accent: #d7dee8;
     --ui-brand-bg: #2f3b4d;
     --ui-brand-text: #f3f6fa;
-    --ui-card-meta: #b6c0cf;
-    --ui-tag-text: var(--ui-text);
-    --ui-shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.28);
+    --ui-shadow-soft: 0 10px 30px color-mix(in srgb, var(--ui-bg) 72%, transparent);
     --bg: var(--ui-bg);
     --panel: var(--ui-surface);
     --panel-solid: var(--ui-surface);
@@ -2694,7 +2741,7 @@ dialog[open] .modal-art {
     --cyan: var(--ui-accent);
     --menu-bg: var(--ui-surface);
     --button-glass: var(--ui-control);
-    --nav-active-bg: var(--ui-control-active);
+    --nav-active-bg: var(--ui-control-hover);
   }
 
   html,
@@ -2710,7 +2757,7 @@ dialog[open] .modal-art {
     color: var(--ui-text) !important;
   }
 
-  .gear-card,
+  .catalog-card,
   .product-card,
   .search-box,
   .nav-filter-menu,
@@ -2723,8 +2770,8 @@ dialog[open] .modal-art {
   }
 
   dialog[open] .modal-art {
-    background: var(--ui-art-bg) !important;
-    background-color: var(--ui-art-bg) !important;
+    background: var(--ui-section-bg) !important;
+    background-color: var(--ui-section-bg) !important;
   }
 
   .modal-section {
@@ -2749,7 +2796,7 @@ dialog[open] .modal-art {
   background: transparent !important;
   color: var(--ui-muted) !important;
   font: inherit !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-align: center !important;
@@ -2781,8 +2828,16 @@ dialog[open] .modal-art {
 .nav-link.active,
 .nav-filter-menu .sub-filter.active,
 .nav-filter-menu .sub-filter[aria-selected="true"] {
-  background: var(--ui-control-active) !important;
+  background: var(--ui-control-hover) !important;
   color: var(--ui-control-text-active) !important;
+}
+
+.ui-card-button {
+  border: 0 !important;
+  font: inherit !important;
+  text-align: left !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
 }
 
 .ui-button--surface {
@@ -2809,7 +2864,7 @@ dialog[open] .modal-art {
   border: 0 !important;
   border-radius: var(--ui-radius) !important;
   background: transparent !important;
-  color: var(--ui-control-text) !important;
+  color: var(--ui-muted) !important;
   box-shadow: none !important;
   outline: 0 !important;
   line-height: 1 !important;
@@ -2833,6 +2888,77 @@ dialog[open] .modal-art {
   color: var(--ui-control-text-active) !important;
 }
 
+dialog[open] .modal-step {
+  position: fixed !important;
+  top: calc((var(--modal-vh, 100vh) - var(--modal-h, min(620px, calc(100vh - 48px)))) / 2 + (var(--modal-h, min(620px, calc(100vh - 48px))) / 2)) !important;
+  bottom: auto !important;
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: var(--ui-radius) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  color: var(--ui-muted) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  line-height: 1 !important;
+  transform: translateY(-50%) !important;
+}
+
+dialog[open] .modal-step-prev {
+  left: calc((var(--modal-vw, 100vw) - var(--modal-w, min(980px, calc(100vw - 48px)))) / 2 + 16px) !important;
+  right: auto !important;
+}
+
+dialog[open] .modal-step-next {
+  left: calc((var(--modal-vw, 100vw) + var(--modal-w, min(980px, calc(100vw - 48px)))) / 2 - 58px) !important;
+  right: auto !important;
+}
+
+dialog[open] .modal-step::before,
+dialog[open] .modal-step::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 12px !important;
+  height: 2px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: currentColor !important;
+  transform-origin: center !important;
+}
+
+dialog[open] .modal-step-prev::before {
+  transform: translate(-50%, -50%) translateY(-4px) rotate(-45deg) !important;
+}
+
+dialog[open] .modal-step-prev::after {
+  transform: translate(-50%, -50%) translateY(4px) rotate(45deg) !important;
+}
+
+dialog[open] .modal-step-next::before {
+  transform: translate(-50%, -50%) translateY(-4px) rotate(45deg) !important;
+}
+
+dialog[open] .modal-step-next::after {
+  transform: translate(-50%, -50%) translateY(4px) rotate(-45deg) !important;
+}
+
+dialog[open] .modal-step:hover,
+dialog[open] .modal-step:focus-visible {
+  background: var(--ui-control-hover) !important;
+  border-color: transparent !important;
+  color: var(--ui-control-text-active) !important;
+}
+
 .ui-chip-button,
 .catalog-filter-chip,
 .catalog-filter-reset {
@@ -2847,7 +2973,7 @@ dialog[open] .modal-art {
   background: var(--ui-control) !important;
   color: var(--ui-text) !important;
   font: inherit !important;
-  font-size: .92rem !important;
+  font-size: var(--font-sm) !important;
   font-weight: 700 !important;
   box-shadow: none !important;
   cursor: pointer !important;
@@ -2855,10 +2981,7 @@ dialog[open] .modal-art {
 
 .ui-tab-button,
 .release-region-tabs button,
-.overview-anime-tabs button,
-.overview-guide-tabs button,
-.overview-series-segment,
-.overview-system-chip {
+.category-anime-tabs button {
   width: 100% !important;
   min-width: 0 !important;
   min-height: 34px !important;
@@ -2871,7 +2994,7 @@ dialog[open] .modal-art {
   background: transparent !important;
   color: var(--ui-muted) !important;
   font: inherit !important;
-  font-size: .95rem !important;
+  font-size: var(--font-sm) !important;
   font-weight: 700 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -2887,20 +3010,12 @@ dialog[open] .modal-art {
 .release-region-tabs button:focus-visible,
 .release-region-tabs button.active,
 .release-region-tabs button[aria-selected="true"],
-.overview-anime-tabs button:hover,
-.overview-anime-tabs button:focus-visible,
-.overview-anime-tabs button.active,
-.overview-anime-tabs button[aria-selected="true"],
-.overview-guide-tabs button.active,
-.overview-guide-tabs button[aria-selected="true"],
-.overview-series-segment:hover,
-.overview-series-segment:focus-visible,
-.overview-series-segment.active,
-.overview-system-chip:hover,
-.overview-system-chip:focus-visible,
-.overview-system-chip.active {
-  background: var(--ui-control) !important;
-  color: var(--ui-text) !important;
+.category-anime-tabs button:hover,
+.category-anime-tabs button:focus-visible,
+.category-anime-tabs button.active,
+.category-anime-tabs button[aria-selected="true"] {
+  background: var(--ui-control-hover) !important;
+  color: var(--ui-control-text-active) !important;
 }
 
 .ui-dropdown-item,
@@ -2914,9 +3029,9 @@ dialog[open] .modal-art {
   border: 0 !important;
   border-radius: calc(var(--ui-radius) - 2px) !important;
   background: transparent !important;
-  color: var(--ui-control-text) !important;
+  color: var(--ui-muted) !important;
   font: inherit !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 500 !important;
   text-align: center !important;
   white-space: nowrap !important;
@@ -2929,13 +3044,12 @@ dialog[open] .modal-art {
 .catalog-dropdown-menu button:hover,
 .catalog-dropdown-menu button:focus-visible,
 .catalog-dropdown-menu button.active {
-  background: var(--ui-control-active) !important;
+  background: var(--ui-control-hover) !important;
   color: var(--ui-control-text-active) !important;
 }
 
 .ui-tabs,
-.overview-anime-tabs,
-.overview-guide-tabs {
+.category-anime-tabs {
   padding: 4px !important;
   display: grid !important;
   align-items: stretch !important;
@@ -2964,7 +3078,7 @@ dialog[open] .modal-art {
   border-collapse: separate !important;
   border-spacing: 0 !important;
   color: var(--ui-text) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   line-height: 1.45 !important;
 }
 
@@ -2980,7 +3094,7 @@ dialog[open] .modal-art {
 .anime-episode-table th,
 .release-table th {
   background: var(--ui-surface) !important;
-  color: var(--ui-control-text) !important;
+  color: var(--ui-muted) !important;
   font-weight: 600 !important;
   padding-top: 0 !important;
   padding-bottom: 10px !important;
@@ -3030,7 +3144,7 @@ dialog[open] .modal-art {
   background: transparent !important;
   background-image: none !important;
   color: var(--ui-text) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 400 !important;
   line-height: 1.2 !important;
   text-decoration: none !important;
@@ -3043,7 +3157,7 @@ dialog[open] .modal-art {
 .ui-list-link:hover,
 .product-composition-item:hover,
 .mounted-link:hover {
-  background: var(--ui-control-hover) !important;
+  background: var(--ui-control) !important;
   color: var(--ui-text) !important;
   box-shadow: none !important;
   filter: none !important;
@@ -3060,21 +3174,25 @@ dialog[open] .modal-art {
   left: var(--page-gutter) !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  display: inline-flex !important;
+  display: none !important;
   align-items: center !important;
   gap: 12px !important;
   color: var(--ui-control-text-active) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 800 !important;
   line-height: 1 !important;
   white-space: nowrap !important;
   text-decoration: none !important;
 }
 
+body.has-topbar .topbar > .brand {
+  display: inline-flex !important;
+}
+
 .brand span:not(.brand-mark),
 .brand span:not(.brand-mark) b {
   color: var(--ui-control-text-active) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 800 !important;
   line-height: 1 !important;
 }
@@ -3090,7 +3208,7 @@ dialog[open] .modal-art {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 900 !important;
   font-style: normal !important;
   line-height: 1 !important;
@@ -3107,27 +3225,36 @@ dialog[open] .modal-art {
   display: none !important;
 }
 
+body.is-overview .catalog-section {
+  min-height: calc(100svh - 88px) !important;
+  padding-top: clamp(42px, 8vh, 86px) !important;
+}
+
 .overview-home {
+  width: min(100%, 960px) !important;
+  margin: 0 auto !important;
   display: grid !important;
-  gap: 34px !important;
+  gap: clamp(22px, 4vh, 38px) !important;
+  align-content: start !important;
 }
 
 .overview-hero {
   position: relative !important;
-  min-height: 320px !important;
+  min-height: auto !important;
   display: grid !important;
-  grid-template-columns: minmax(0, 760px) !important;
+  grid-template-columns: minmax(0, 720px) !important;
   justify-content: center !important;
   align-items: center !important;
   overflow: visible !important;
-  padding: clamp(34px, 5vw, 60px) clamp(20px, 4vw, 56px) !important;
-  border-radius: 28px !important;
-  background: var(--ui-bg) !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
 }
 
 .overview-copy {
-  width: 100% !important;
+  width: min(100%, 720px) !important;
   min-width: 0 !important;
+  margin: 0 auto !important;
   display: grid !important;
   gap: 0 !important;
   align-content: center !important;
@@ -3137,14 +3264,15 @@ dialog[open] .modal-art {
 
 .overview-hero h2 {
   margin: 0 !important;
-  font-size: clamp(2.75rem, 5vw, 4.5rem) !important;
+  font-size: var(--font-hero) !important;
+  line-height: 1.02 !important;
 }
 
 .overview-intro {
-  max-width: 520px !important;
-  margin: 18px 0 0 !important;
+  max-width: 100% !important;
+  margin: 12px auto 0 !important;
   color: var(--ui-text) !important;
-  font-size: 1.0625rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 600 !important;
   line-height: 1.55 !important;
   word-break: keep-all !important;
@@ -3223,7 +3351,7 @@ dialog[open] .modal-art {
   --catalog-chip-row-height: 36px;
 }
 
-#gearDropdownFilters {
+#catalogDropdownFilters {
   width: 100% !important;
   max-width: 100% !important;
   grid-template-columns: minmax(0, 1fr) !important;
@@ -3287,7 +3415,7 @@ dialog[open] .modal-art {
 .catalog-filter-group::before,
 .catalog-filter-label {
   color: var(--ui-muted) !important;
-  font-size: .875rem !important;
+  font-size: var(--font-sm) !important;
   font-weight: 850 !important;
   line-height: 1.2 !important;
 }
@@ -3326,7 +3454,7 @@ dialog[open] .modal-art {
   background: var(--ui-control) !important;
   color: var(--ui-text) !important;
   font: inherit !important;
-  font-size: .875rem !important;
+  font-size: var(--font-sm) !important;
   font-weight: 750 !important;
   cursor: pointer !important;
   line-height: 1 !important;
@@ -3347,7 +3475,7 @@ dialog[open] .modal-art {
   background: var(--ui-control) !important;
   color: var(--ui-text) !important;
   font: inherit !important;
-  font-size: .9375rem !important;
+  font-size: var(--font-sm) !important;
   font-weight: 750 !important;
   cursor: pointer !important;
 }
@@ -3374,7 +3502,7 @@ dialog[open] .modal-art {
   gap: 8px !important;
   padding: 0 12px !important;
   border-radius: var(--catalog-pill-radius) !important;
-  font-size: .875rem !important;
+  font-size: var(--font-sm) !important;
   font-weight: 700 !important;
 }
 
@@ -3453,7 +3581,7 @@ dialog[open] .modal-art {
     gap: 12px !important;
   }
 
-  #gearDropdownFilters {
+  #catalogDropdownFilters {
     width: 100% !important;
   }
 
@@ -3478,7 +3606,7 @@ dialog[open] .modal-art {
   justify-self: stretch !important;
 }
 
-.catalog-panel.catalog-filters-compact #gearDropdownFilters,
+.catalog-panel.catalog-filters-compact #catalogDropdownFilters,
 .catalog-panel.catalog-filters-compact .catalog-filter-primary,
 .catalog-panel.catalog-filters-compact .catalog-filter-advanced {
   grid-template-columns: 1fr !important;
@@ -3546,7 +3674,7 @@ dialog[open] .modal-art {
 .catalog-panel.catalog-filters-compact .catalog-filter-dropdown > summary .catalog-filter-label,
 .catalog-filter-dropdown > summary .catalog-filter-label {
   color: var(--ui-muted) !important;
-  font-size: .8125rem !important;
+  font-size: var(--font-xs) !important;
   white-space: nowrap !important;
 }
 
@@ -3560,7 +3688,7 @@ dialog[open] .modal-art {
 }
 
 @media (max-width: 420px) {
-  #gearDropdownFilters,
+  #catalogDropdownFilters,
   .catalog-filter-primary,
   .catalog-filter-advanced {
     grid-template-columns: 1fr !important;
@@ -3617,26 +3745,17 @@ dialog[open] .modal-art {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto !important;
   grid-template-areas:
-    "eyebrow count"
     "title count" !important;
   align-items: end !important;
-  gap: 6px 18px !important;
+  gap: 10px 18px !important;
   margin-bottom: 10px !important;
-}
-
-.search-results-eyebrow {
-  grid-area: eyebrow !important;
-  margin: 0 !important;
-  color: var(--ui-muted) !important;
-  font-size: .9375rem !important;
-  font-weight: 700 !important;
 }
 
 .search-results-heading h2 {
   grid-area: title !important;
   margin: 0 !important;
   color: var(--ui-text) !important;
-  font-size: clamp(2rem, 4vw, 3rem) !important;
+  font-size: var(--font-title) !important;
   font-weight: 900 !important;
   line-height: 1.08 !important;
 }
@@ -3648,7 +3767,7 @@ dialog[open] .modal-art {
   border-radius: var(--ui-radius) !important;
   background: var(--ui-control) !important;
   color: var(--ui-muted) !important;
-  font-size: .9375rem !important;
+  font-size: var(--font-sm) !important;
   font-weight: 700 !important;
   white-space: nowrap !important;
 }
@@ -3657,14 +3776,14 @@ dialog[open] .modal-art {
   min-height: 22px !important;
   margin: 0 0 22px !important;
   color: var(--ui-muted) !important;
-  font-size: .9375rem !important;
+  font-size: var(--font-sm) !important;
   font-weight: 500 !important;
   line-height: 1.45 !important;
 }
 
 .search-results-list {
   display: grid !important;
-  gap: 2px !important;
+  gap: 8px !important;
 }
 
 .search-result-item {
@@ -3673,12 +3792,10 @@ dialog[open] .modal-art {
   grid-template-columns: auto minmax(0, 1fr) !important;
   grid-template-areas:
     "kind title"
-    "path path"
     "snippet snippet" !important;
   gap: 5px 10px !important;
   padding: 18px 14px !important;
   border: 0 !important;
-  border-top: 1px solid var(--ui-line) !important;
   border-radius: var(--ui-radius) !important;
   background: transparent !important;
   background-clip: padding-box !important;
@@ -3686,13 +3803,9 @@ dialog[open] .modal-art {
   text-align: left !important;
 }
 
-.search-result-item:last-child {
-  border-bottom: 1px solid var(--ui-line) !important;
-}
-
 .search-result-item:hover,
 .search-result-item:focus-visible {
-  background: color-mix(in srgb, var(--ui-control) 36%, transparent) !important;
+  background: var(--ui-control) !important;
   outline: 0 !important;
 }
 
@@ -3707,7 +3820,7 @@ dialog[open] .modal-art {
   border-radius: 999px !important;
   background: var(--ui-control) !important;
   color: var(--ui-muted) !important;
-  font-size: .8125rem !important;
+  font-size: var(--font-xs) !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   white-space: nowrap !important;
@@ -3717,25 +3830,15 @@ dialog[open] .modal-art {
   grid-area: title !important;
   min-width: 0 !important;
   color: var(--ui-text) !important;
-  font-size: 1.25rem !important;
+  font-size: var(--font-lg) !important;
   font-weight: 800 !important;
   line-height: 1.25 !important;
-}
-
-.search-result-item small {
-  grid-area: path !important;
-  min-width: 0 !important;
-  color: var(--ui-card-meta) !important;
-  font-size: .9375rem !important;
-  font-weight: 600 !important;
-  line-height: 1.35 !important;
-  overflow-wrap: anywhere !important;
 }
 
 .search-result-snippet {
   grid-area: snippet !important;
   color: var(--ui-muted) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 400 !important;
   line-height: 1.55 !important;
   word-break: keep-all !important;
@@ -3743,7 +3846,6 @@ dialog[open] .modal-art {
 
 .search-empty {
   padding: 34px 0 !important;
-  border-top: 1px solid var(--ui-line) !important;
   color: var(--ui-muted) !important;
 }
 
@@ -3751,7 +3853,7 @@ dialog[open] .modal-art {
   display: block !important;
   margin-bottom: 8px !important;
   color: var(--ui-text) !important;
-  font-size: 1.25rem !important;
+  font-size: var(--font-lg) !important;
 }
 
 .search-empty p {
@@ -3760,13 +3862,15 @@ dialog[open] .modal-art {
 
 .overview-card-grid {
   display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  width: min(100%, 760px) !important;
+  margin: 0 auto !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 14px !important;
 }
 
 .overview-open-card {
   width: 100% !important;
-  min-height: 156px !important;
+  min-height: 140px !important;
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto !important;
   grid-template-areas:
@@ -3787,7 +3891,7 @@ dialog[open] .modal-art {
 }
 
 .overview-open-card:hover {
-  background: var(--ui-surface-hover) !important;
+  background: var(--ui-control) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -3798,14 +3902,14 @@ dialog[open] .modal-art {
 .overview-open-card span {
   grid-area: eyebrow !important;
   color: var(--ui-muted) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 500 !important;
 }
 
 .overview-open-card strong {
   grid-area: title !important;
   color: var(--ui-text) !important;
-  font-size: 1.375rem !important;
+  font-size: var(--font-xl) !important;
   font-weight: 800 !important;
   line-height: 1.2 !important;
 }
@@ -3813,7 +3917,7 @@ dialog[open] .modal-art {
 .overview-open-card small {
   grid-area: desc !important;
   color: var(--ui-muted) !important;
-  font-size: 1rem !important;
+  font-size: var(--font-md) !important;
   font-weight: 400 !important;
   line-height: 1.45 !important;
 }
@@ -3821,7 +3925,7 @@ dialog[open] .modal-art {
 .overview-open-card b {
   grid-area: arrow !important;
   color: var(--ui-text) !important;
-  font-size: 1.375rem !important;
+  font-size: var(--font-xl) !important;
   font-weight: 400 !important;
   line-height: 1 !important;
 }
@@ -3844,500 +3948,29 @@ dialog[open] .modal-art {
   overflow: visible !important;
 }
 
-.overview-guide-modal .overview-modal-art {
-  padding: 22px !important;
-}
-
-.overview-guide-tabs {
-  width: var(--modal-body-width) !important;
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  margin: 0 auto var(--modal-flow-gap) !important;
-}
-
-.overview-guide-tabs button {
-  min-width: 0 !important;
-  min-height: 36px !important;
-  font-size: .9375rem !important;
-}
-
-.overview-guide-tabs button.active,
-.overview-guide-tabs button[aria-selected="true"] {
-  background: var(--ui-surface) !important;
-  color: var(--ui-text) !important;
-  box-shadow: none !important;
-}
-
-.overview-guide-panel {
-  width: var(--modal-body-width) !important;
-  margin: 0 auto !important;
-}
-
-.overview-guide-structure {
-  display: grid !important;
-  gap: 8px !important;
-}
-
-.overview-modal-desc:empty {
-  display: none !important;
-}
-
-.overview-structure-descriptions:empty {
-  display: none !important;
-}
-
-.overview-structure-descriptions ul,
-.overview-guide-copy ul {
-  margin: 0 !important;
-  padding: 0 !important;
-  display: grid !important;
-  gap: 10px !important;
-  list-style: none !important;
-}
-
-.overview-structure-descriptions li,
-.overview-guide-copy li {
-  min-width: 0 !important;
-  color: var(--ui-text) !important;
-  font-size: 1rem !important;
-  font-weight: 400 !important;
-  line-height: 1.55 !important;
-}
-
-.overview-structure-descriptions li span,
-.overview-guide-copy li span {
-  display: inline-flex !important;
-  align-items: center !important;
-  min-height: 30px !important;
-  margin: 0 8px 0 0 !important;
-  padding: 0 10px !important;
-  border-radius: 0.5rem !important;
-  background: var(--ui-control) !important;
-  color: var(--ui-text) !important;
-  font-size: 1rem !important;
-  font-weight: 400 !important;
-  line-height: 1 !important;
-  white-space: nowrap !important;
-}
-
-.overview-guide-subtitle-row {
-  width: 100% !important;
-  margin: 0 !important;
-}
-
-.overview-title-row.overview-guide-subtitle-row {
-  margin: 0 auto !important;
-}
-
-.overview-structure-controls {
-  width: var(--modal-body-width) !important;
-  min-width: 0 !important;
-  margin: 0 auto !important;
-  display: grid !important;
-  gap: 8px !important;
-}
-
-.overview-series-segments {
-  min-width: 0 !important;
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 4px !important;
-  padding: 4px !important;
-  border-radius: var(--ui-radius) !important;
-  background: var(--ui-control) !important;
-}
-
-.overview-series-segment {
-  min-width: 0 !important;
-  min-height: 36px !important;
-  padding: 0 10px !important;
-  border: 0 !important;
-  border-radius: calc(var(--ui-radius) - 4px) !important;
-  background: transparent !important;
-  color: var(--ui-muted) !important;
-  font: inherit !important;
-  font-size: .875rem !important;
-  font-weight: 700 !important;
-  line-height: 1 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  cursor: pointer !important;
-}
-
-.overview-series-segment:hover,
-.overview-series-segment:focus-visible,
-.overview-series-segment.active {
-  background: var(--ui-surface) !important;
-  color: var(--ui-text) !important;
-  box-shadow: none !important;
-}
-
-.overview-system-chips {
-  min-width: 0 !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 6px !important;
-}
-
-.overview-system-chip {
-  width: auto !important;
-  flex: 0 0 auto !important;
-  min-width: 0 !important;
-  min-height: 34px !important;
-  padding: 0 12px !important;
-  border: 1px solid var(--ui-line) !important;
-  border-radius: 0.65rem !important;
-  background: var(--ui-surface) !important;
-  color: var(--ui-muted) !important;
-  font: inherit !important;
-  font-size: .9375rem !important;
-  font-weight: 700 !important;
-  line-height: 1 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  cursor: pointer !important;
-}
-
-.overview-system-chip:hover,
-.overview-system-chip:focus-visible,
-.overview-system-chip.active {
-  background: var(--ui-control) !important;
-  color: var(--ui-text) !important;
-}
-
-.overview-guide-heading {
-  margin: 0 !important;
-  color: var(--ui-text) !important;
-  font-size: 1.25rem !important;
-  font-weight: 850 !important;
-  line-height: 1.2 !important;
-}
-
-.overview-guide-art-stack {
-  width: min(100%, 360px) !important;
-  height: min(76%, 420px) !important;
-  max-width: 100% !important;
-  display: grid !important;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) !important;
-  gap: 14px !important;
-  align-self: center !important;
-}
-
-.overview-guide-art-single {
-  height: min(100%, 360px) !important;
-  grid-template-rows: minmax(0, 1fr) !important;
-}
-
-.overview-guide-visual-card {
-  min-width: 0 !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-  padding: 18px !important;
-  border-radius: 22px !important;
-  background: var(--ui-art-bg) !important;
-  display: grid !important;
-  grid-template-rows: minmax(0, 1fr) !important;
-}
-
-.overview-guide-structure-visual-card {
-  align-content: center !important;
-}
-
-.structure-layer-diagram {
-  display: grid !important;
-  gap: 10px !important;
-  align-content: center !important;
-  min-height: 0 !important;
-}
-
-.structure-layer-item {
-  min-width: 0 !important;
-  min-height: 44px !important;
-  display: grid !important;
-  grid-template-columns: 40px minmax(0, 1fr) !important;
-  align-items: center !important;
-  gap: 12px !important;
-  padding: 8px 10px !important;
-  border-radius: var(--ui-radius) !important;
-  background: var(--ui-surface) !important;
-  color: var(--ui-text) !important;
-}
-
-.structure-layer-item span {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 32px !important;
-  height: 32px !important;
-  border-radius: 999px !important;
-  background: var(--ui-control) !important;
-  color: var(--ui-muted) !important;
-  font-size: .8125rem !important;
-  font-weight: 800 !important;
-}
-
-.structure-layer-item b {
-  min-width: 0 !important;
-  font-size: 1rem !important;
-  font-weight: 800 !important;
-  line-height: 1.2 !important;
-}
-
-.overview-guide-copy h4,
-.spin-direction-item b {
-  min-width: 0 !important;
-  color: var(--ui-text) !important;
-  font-size: 1rem !important;
-  font-weight: 700 !important;
-  line-height: 1.2 !important;
-}
-
-.overview-guide-copy h4 {
-  margin: 0 0 12px !important;
-}
-
-.type-relation-diagram {
-  width: 100% !important;
-  aspect-ratio: 1 / 1 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 0 !important;
-  overflow: visible !important;
-}
-
-.type-matchup-image {
-  width: 100% !important;
-  max-width: 340px !important;
-  max-height: 100% !important;
-  height: auto !important;
-  display: block !important;
-  object-fit: contain !important;
-}
-
-.spin-relation-diagram {
-  display: grid !important;
-  gap: 8px !important;
-  align-content: center !important;
-  align-items: stretch !important;
-}
-
-.spin-direction-item {
-  display: grid !important;
-  grid-template-columns: 44px minmax(0, 1fr) !important;
-  grid-template-rows: auto auto !important;
-  gap: 2px 12px !important;
-  align-items: center !important;
-  min-width: 0 !important;
-}
-
-.spin-arrow {
-  grid-row: 1 / 3 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 44px !important;
-  height: 44px !important;
-  border-radius: var(--ui-radius) !important;
-  background: var(--ui-surface) !important;
-  color: var(--ui-text) !important;
-  font-size: 1.375rem !important;
-  font-weight: 400 !important;
-  line-height: 1 !important;
-  overflow: visible !important;
-}
-
-
-.spin-arrow.dual {
-  position: relative !important;
-  font-size: 1.625rem !important;
-}
-
-.spin-arrow.dual i {
-  position: absolute !important;
-  inset: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
-  line-height: 1 !important;
-}
-.spin-direction-item small {
-  min-width: 0 !important;
-  color: var(--ui-muted) !important;
-  font-size: .875rem !important;
-  font-weight: 400 !important;
-  line-height: 1.2 !important;
-}
-
-.overview-guide-info {
-  width: 100% !important;
-  display: block !important;
-  grid-template-rows: none !important;
-  gap: 0 !important;
-  margin: 0 !important;
-}
-
-.overview-guide-copy {
-  display: grid !important;
-  gap: 18px !important;
-}
-
-.overview-guide-copy section {
-  min-width: 0 !important;
-}
-
-@media (max-width: 560px) {
-  .overview-series-segments {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .overview-system-chip {
-    flex: 0 0 auto !important;
-  }
-}
-
-@media (max-width: 900px) {
-  dialog[open] .overview-guide-modal .overview-modal-art {
-    padding: 18px 22px !important;
-    overflow: hidden !important;
-  }
-
-  .overview-guide-art-stack {
-    width: min(100%, 340px) !important;
-    height: 100% !important;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-    grid-template-rows: 1fr !important;
-    gap: 10px !important;
-  }
-
-  .overview-guide-art-single {
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: minmax(0, 1fr) !important;
-  }
-
-  .overview-guide-visual-card {
-    padding: 12px !important;
-    border-radius: 18px !important;
-    height: 100% !important;
-    aspect-ratio: auto !important;
-  }
-
-  .type-relation-diagram {
-    height: 100% !important;
-    aspect-ratio: auto !important;
-  }
-
-  .type-matchup-image {
-    max-width: min(100%, 210px) !important;
-  max-height: 100% !important;
-  }
-
-  .spin-relation-diagram {
-    grid-template-columns: 1fr !important;
-    gap: 8px !important;
-    height: 100% !important;
-  }
-
-  .spin-direction-item {
-    grid-template-columns: 38px minmax(0, 1fr) !important;
-    grid-template-rows: auto auto !important;
-    justify-items: stretch !important;
-    text-align: left !important;
-    gap: 2px 10px !important;
-  }
-
-  .spin-arrow {
-    grid-row: 1 / 3 !important;
-    width: 38px !important;
-    height: 38px !important;
-  }
-
-  .spin-direction-item b {
-    font-size: .9375rem !important;
-  }
-
-  .spin-direction-item small {
-    font-size: .8125rem !important;
-  }
-}
-
-@media (max-width: 460px) {
-  dialog[open] .overview-guide-modal .overview-modal-art {
-    padding: 14px 18px !important;
-  }
-
-  .overview-guide-art-stack {
-    width: min(100%, 300px) !important;
-    height: 100% !important;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-    grid-template-rows: 1fr !important;
-    gap: 6px !important;
-  }
-
-  .overview-guide-art-single {
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-template-rows: minmax(0, 1fr) !important;
-  }
-
-  .overview-guide-visual-card {
-    padding: 8px !important;
-    height: 100% !important;
-    aspect-ratio: auto !important;
-  }
-
-  .type-matchup-image {
-    max-width: 100% !important;
-    max-height: 100% !important;
-  }
-
-  .spin-direction-item {
-    grid-template-columns: 30px minmax(0, 1fr) !important;
-    gap: 1px 6px !important;
-  }
-
-  .spin-arrow {
-    width: 30px !important;
-    height: 30px !important;
-    font-size: 1.125rem !important;
-  }
-
-  .spin-arrow.dual {
-    font-size: 1.25rem !important;
-  }
-
-  .spin-direction-item b {
-    font-size: .875rem !important;
-  }
-
-  .spin-direction-item small {
-    font-size: .75rem !important;
-  }
-
-}
-
 @media (max-width: 640px) {
+  body.is-overview .catalog-section {
+    padding-top: 34px !important;
+  }
+
   .overview-home {
-    gap: 14px !important;
+    gap: 18px !important;
   }
 
   .overview-hero {
-    padding: 24px 14px !important;
-    border-radius: 24px !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
   }
 
   .overview-hero h2 {
-    font-size: 2.35rem !important;
+    font-size: var(--font-title) !important;
     white-space: normal !important;
   }
 
   .overview-intro {
     max-width: 20rem !important;
     margin-top: 10px !important;
-    font-size: 1rem !important;
+    font-size: var(--font-md) !important;
   }
 
   .overview-search {
@@ -4347,16 +3980,16 @@ dialog[open] .modal-art {
   }
 
   .overview-card-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 8px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
   }
 
   .overview-open-card {
-    min-height: 54px !important;
+    min-height: 78px !important;
     grid-template-columns: minmax(0, 1fr) !important;
     grid-template-areas: "title" !important;
     justify-items: center !important;
-    padding: 8px 6px !important;
+    padding: 10px 8px !important;
     border-radius: 16px !important;
     text-align: center !important;
   }
@@ -4368,8 +4001,11 @@ dialog[open] .modal-art {
   }
 
   .overview-open-card strong {
-    font-size: .9375rem !important;
+    font-size: var(--font-sm) !important;
     line-height: 1.2 !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+    overflow-wrap: anywhere !important;
   }
 
   .search-results-page {
@@ -4379,7 +4015,6 @@ dialog[open] .modal-art {
   .search-results-heading {
     grid-template-columns: 1fr !important;
     grid-template-areas:
-      "eyebrow"
       "title"
       "count" !important;
     align-items: start !important;
@@ -4394,7 +4029,6 @@ dialog[open] .modal-art {
     grid-template-areas:
       "kind"
       "title"
-      "path"
       "snippet" !important;
     padding: 16px 14px !important;
   }
@@ -4404,7 +4038,7 @@ dialog[open] .modal-art {
   }
 
   .search-result-item strong {
-    font-size: 1.125rem !important;
+    font-size: var(--font-lg) !important;
   }
 
 }
@@ -4419,11 +4053,6 @@ dialog[open] .modal-art {
     width: 100% !important;
   }
 
-}
-
-/* Current navigation and overview structure layout. */
-body.is-overview .topbar .nav {
-  display: flex !important;
 }
 
 .menu-button,
@@ -4494,11 +4123,11 @@ button.menu-button {
 
 .menu-button:hover,
 .menu-button:focus-visible {
-  background: var(--ui-control-active) !important;
+  background: var(--ui-control-hover) !important;
 }
 
 body.menu-open .menu-button {
-  background: var(--ui-control-active) !important;
+  background: var(--ui-control-hover) !important;
 }
 
 body.menu-open .menu-button span:nth-child(1) {
@@ -4526,8 +4155,8 @@ body.menu-open .menu-button span:nth-child(3) {
     display: none !important;
   }
 
-  .menu-button,
-  button.menu-button {
+  body.has-topbar .menu-button,
+  body.has-topbar button.menu-button {
     --menu-button-size: 44px;
     --menu-button-line-width: 20px;
     --menu-button-line-height: 2px;
@@ -4538,11 +4167,7 @@ body.menu-open .menu-button span:nth-child(3) {
     right: auto !important;
   }
 
-  .topbar .nav {
-    display: none !important;
-  }
-
-  body.is-overview .topbar .nav {
+  body.has-topbar .topbar .nav {
     display: none !important;
   }
 
@@ -4569,8 +4194,8 @@ body.menu-open .menu-button span:nth-child(3) {
   .mobile-drawer {
     position: fixed;
     inset: 0 auto 0 0;
-    width: min(calc(100dvw - 18px), 420px);
-    height: 100dvh;
+    width: min(calc(100vw - 18px), 420px);
+    height: 100vh;
     display: grid !important;
     grid-template-rows: auto minmax(0, 1fr);
     gap: 14px;
@@ -4578,7 +4203,7 @@ body.menu-open .menu-button span:nth-child(3) {
     border: 1px solid color-mix(in srgb, var(--ui-line) 82%, transparent);
     border-left: 0;
     border-radius: 0 22px 22px 0;
-    background: color-mix(in srgb, var(--ui-surface) 94%, white 6%);
+    background: color-mix(in srgb, var(--ui-surface) 94%, var(--ui-text) 6%);
     color: var(--ui-text);
     box-shadow: none;
     overflow-x: hidden;
@@ -4609,7 +4234,7 @@ body.menu-open .menu-button span:nth-child(3) {
 
   .mobile-drawer-header strong {
     color: var(--ui-text);
-    font-size: 1.05rem;
+    font-size: var(--font-md);
     font-weight: 800;
     line-height: 1;
   }
@@ -4627,10 +4252,10 @@ body.menu-open .menu-button span:nth-child(3) {
     border: 0;
     border-radius: 12px;
     background: transparent;
-    color: var(--ui-control-text);
+    color: var(--ui-muted);
     box-shadow: none;
     font-family: inherit;
-    font-size: 1.5rem;
+    font-size: var(--font-xl);
     font-weight: 600;
     line-height: 1;
     cursor: pointer;
@@ -4673,7 +4298,7 @@ body.menu-open .menu-button span:nth-child(3) {
     border: 0;
     box-shadow: none;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: var(--font-md);
     line-height: 1;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -4696,8 +4321,17 @@ body.menu-open .menu-button span:nth-child(3) {
   .mobile-primary:hover,
   .mobile-primary:focus-visible,
   .mobile-primary.active {
-    background: var(--ui-control-active);
+    background: var(--ui-control-hover);
     color: var(--ui-text);
+  }
+
+  .mobile-primary-pending,
+  .mobile-primary:disabled,
+  .mobile-primary[aria-disabled="true"] {
+    background: transparent !important;
+    color: color-mix(in srgb, var(--ui-muted) 58%, transparent) !important;
+    cursor: default !important;
+    pointer-events: none !important;
   }
 
   .mobile-secondary {
@@ -4730,8 +4364,8 @@ body.menu-open .menu-button span:nth-child(3) {
 
   .mobile-secondary button:hover,
   .mobile-secondary button:focus-visible {
-    background: color-mix(in srgb, var(--ui-control) 72%, transparent);
-    color: var(--ui-text);
+    background: var(--ui-control-hover);
+    color: var(--ui-control-text-active);
   }
 }
 
@@ -4755,23 +4389,21 @@ body.menu-open .menu-button span:nth-child(3) {
   }
 
   .overview-card-grid {
-    gap: 7px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
   }
 
   .overview-open-card {
-    min-height: 52px !important;
-    padding: 7px 4px !important;
+    min-height: 72px !important;
+    padding: 8px 5px !important;
   }
 
   .overview-open-card strong {
-    font-size: .875rem !important;
+    font-size: var(--font-sm) !important;
   }
 
   .mobile-primary,
   .mobile-secondary button {
-    font-size: .9375rem;
+    font-size: var(--font-sm);
   }
 }
-
-
-

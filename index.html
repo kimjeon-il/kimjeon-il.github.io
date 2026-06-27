@@ -13,7 +13,7 @@
     />
   <link rel="stylesheet" href="./styles.css?v=20260626-release-tabs-align" />
   </head>
-  <body>
+  <body class="is-overview">
     <header class="topbar">
       <a class="brand" href="#" data-home>
         <span class="brand-mark">B</span>
@@ -21,11 +21,20 @@
       </a>
       <nav class="nav">
         <div class="nav-group">
-          <button class="nav-link" data-toy-section="catalog">도감</button>
+          <button class="nav-link" type="button" data-category-catalog-open>도감</button>
           <div class="nav-submenu nav-filter-menu" id="catalogNavFilters">
             <button class="sub-filter" type="button" data-catalog-nav-scope="bey">베이</button>
             <button class="sub-filter" type="button" data-catalog-nav-scope="tools">장비</button>
           </div>
+        </div>
+        <div class="nav-group">
+          <button class="nav-link" type="button" data-category-release-open>출시 정보</button>
+        </div>
+        <div class="nav-group">
+          <button class="nav-link nav-link-pending" type="button" disabled aria-disabled="true">만화</button>
+        </div>
+        <div class="nav-group">
+          <button class="nav-link" type="button" data-category-anime-open>애니메이션</button>
         </div>
       </nav>
       <button class="menu-button" id="menuButton" type="button" aria-label="메뉴 열기" aria-controls="mobileDrawer" aria-expanded="false">
@@ -40,11 +49,20 @@
       </div>
       <nav class="mobile-drawer-nav" aria-label="모바일 메뉴">
         <section class="mobile-drawer-section">
-          <button class="ui-button mobile-primary" type="button" data-mobile-section="catalog">도감</button>
+          <button class="ui-button mobile-primary" type="button" data-category-catalog-open>도감</button>
           <div class="mobile-secondary" aria-label="도감 분류">
             <button class="ui-tab-button" type="button" data-mobile-catalog-scope="bey">베이</button>
             <button class="ui-tab-button" type="button" data-mobile-catalog-scope="tools">장비</button>
           </div>
+        </section>
+        <section class="mobile-drawer-section">
+          <button class="ui-button mobile-primary" type="button" data-category-release-open>출시 정보</button>
+        </section>
+        <section class="mobile-drawer-section">
+          <button class="ui-button mobile-primary mobile-primary-pending" type="button" disabled aria-disabled="true">만화</button>
+        </section>
+        <section class="mobile-drawer-section">
+          <button class="ui-button mobile-primary" type="button" data-category-anime-open>애니메이션</button>
         </section>
       </nav>
     </aside>
@@ -93,34 +111,28 @@
             </div>
 
             <div class="overview-card-grid" aria-label="도감 탐색">
-              <button class="overview-open-card" type="button" data-overview-guide-open>
-                <span>완구 소개</span>
-                <strong>개요</strong>
-                <small>구조, 타입, 회전방향</small>
-                <b aria-hidden="true">→</b>
-              </button>
-              <button class="overview-open-card" type="button" data-overview-release-open>
-                <span>자료</span>
-                <strong>출시 정보</strong>
-                <small>제품번호와 발매 정보</small>
-                <b aria-hidden="true">→</b>
-              </button>
-              <button class="overview-open-card" type="button" data-toy-section="catalog">
-                <span>완구 도감</span>
+              <button class="ui-card-button overview-open-card" type="button" data-category-catalog-open>
+                <span>완구</span>
                 <strong>도감</strong>
-                <small>베이와 장비</small>
+                <small>베이와 장비 목록</small>
                 <b aria-hidden="true">→</b>
               </button>
-              <button class="overview-open-card is-pending" type="button">
+              <button class="ui-card-button overview-open-card" type="button" data-category-release-open>
+                <span>완구</span>
+                <strong>출시 정보</strong>
+                <small>제품 발매 정보</small>
+                <b aria-hidden="true">→</b>
+              </button>
+              <button class="ui-card-button overview-open-card is-pending" type="button">
                 <span>미디어</span>
                 <strong>만화</strong>
-                <small>만화판 자료</small>
+                <small>만화 연재 정보</small>
                 <b aria-hidden="true">→</b>
               </button>
-              <button class="overview-open-card" type="button" data-overview-anime-open>
+              <button class="ui-card-button overview-open-card" type="button" data-category-anime-open>
                 <span>미디어</span>
                 <strong>애니메이션</strong>
-                <small>애니메이션 자료</small>
+                <small>애니메이션 방영 정보</small>
                 <b aria-hidden="true">→</b>
               </button>
             </div>
@@ -130,7 +142,6 @@
         <div class="toy-panel search-results-panel" data-toy-panel="all">
           <section class="search-results-page" aria-labelledby="searchResultsTitle">
             <div class="search-results-heading">
-              <p class="search-results-eyebrow">검색결과</p>
               <h2 id="searchResultsTitle">전체 검색결과</h2>
               <p class="search-results-summary"><b id="globalCount">0</b>개 항목</p>
             </div>
@@ -154,7 +165,7 @@
           <div class="catalog-combined">
             <section class="catalog-subsection" data-catalog-section="catalog">
               <div class="catalog-filter-row">
-                <div class="catalog-dropdowns catalog-filter-groups" id="gearDropdownFilters" aria-label="도감 필터">
+                <div class="catalog-dropdowns catalog-filter-groups" id="catalogDropdownFilters" aria-label="도감 필터">
                   <div class="catalog-filter-primary">
                     <div class="catalog-filter-expanded">
                       <div class="catalog-filter-group" data-filter-group="series" data-filter-label="시리즈">
@@ -177,33 +188,33 @@
                   </div>
                   <div class="catalog-filter-advanced" data-catalog-filter-advanced="bey" hidden>
                     <div class="catalog-filter-expanded">
-                      <div class="catalog-filter-group" data-gear-dependent="subtype" data-filter-label="세부" hidden>
+                      <div class="catalog-filter-group" data-catalog-dependent="subtype" data-filter-label="세부" hidden>
                         <div class="catalog-filter-options"></div>
                       </div>
-                      <div class="catalog-filter-group" data-gear-dependent="system" data-filter-label="시스템" hidden>
+                      <div class="catalog-filter-group" data-catalog-dependent="system" data-filter-label="시스템" hidden>
                         <div class="catalog-filter-options"></div>
                       </div>
-                      <div class="catalog-filter-group" data-gear-dependent="type" data-filter-label="타입" hidden>
+                      <div class="catalog-filter-group" data-catalog-dependent="type" data-filter-label="타입" hidden>
                         <div class="catalog-filter-options"></div>
                       </div>
-                      <div class="catalog-filter-group" data-gear-dependent="spin" data-filter-label="회전" hidden>
+                      <div class="catalog-filter-group" data-catalog-dependent="spin" data-filter-label="회전" hidden>
                         <div class="catalog-filter-options"></div>
                       </div>
                     </div>
                     <div class="catalog-filter-compact">
-                      <details class="catalog-filter-dropdown catalog-dropdown" data-gear-dependent="subtype" data-filter-label="세부" hidden>
+                      <details class="catalog-filter-dropdown catalog-dropdown" data-catalog-dependent="subtype" data-filter-label="세부" hidden>
                         <summary><span class="catalog-filter-label">세부</span><b class="catalog-dropdown-value">전체</b></summary>
                         <div class="catalog-dropdown-menu"></div>
                       </details>
-                      <details class="catalog-filter-dropdown catalog-dropdown" data-gear-dependent="system" data-filter-label="시스템" hidden>
+                      <details class="catalog-filter-dropdown catalog-dropdown" data-catalog-dependent="system" data-filter-label="시스템" hidden>
                         <summary><span class="catalog-filter-label">시스템</span><b class="catalog-dropdown-value">전체</b></summary>
                         <div class="catalog-dropdown-menu"></div>
                       </details>
-                      <details class="catalog-filter-dropdown catalog-dropdown" data-gear-dependent="type" data-filter-label="타입" hidden>
+                      <details class="catalog-filter-dropdown catalog-dropdown" data-catalog-dependent="type" data-filter-label="타입" hidden>
                         <summary><span class="catalog-filter-label">타입</span><b class="catalog-dropdown-value">전체</b></summary>
                         <div class="catalog-dropdown-menu"></div>
                       </details>
-                      <details class="catalog-filter-dropdown catalog-dropdown" data-gear-dependent="spin" data-filter-label="회전" hidden>
+                      <details class="catalog-filter-dropdown catalog-dropdown" data-catalog-dependent="spin" data-filter-label="회전" hidden>
                         <summary><span class="catalog-filter-label">회전</span><b class="catalog-dropdown-value">전체</b></summary>
                         <div class="catalog-dropdown-menu"></div>
                       </details>
@@ -212,7 +223,7 @@
                   <div class="catalog-filter-chips is-empty" data-catalog-filter-chips="catalog" aria-hidden="true"></div>
                 </div>
               </div>
-              <div class="gear-grid" id="gearGrid"></div>
+              <div class="catalog-grid" id="catalogGrid"></div>
             </section>
           </div>
         </div>
@@ -221,13 +232,13 @@
     </main>
 
     <dialog id="detailModal">
+      <div class="modal-overlay" data-modal-overlay></div>
       <button class="modal-close" id="modalClose" aria-label="상세 닫기">×</button>
       <div id="modalContent"></div>
     </dialog>
 
     <footer>
       <a class="brand" href="#"><span class="brand-mark">B</span><span><b>베이</b> 아카이브</span></a>
-      <p>제품, 베이, 장비를 정리한 비공식 팬 도감</p>
     </footer>
     <button class="to-top" id="toTop" type="button" aria-label="맨 위로 이동">↑</button>
   <script src="./app.js?v=20260626-release-tabs-align"></script>
