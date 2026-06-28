@@ -1774,6 +1774,9 @@ footer {
 
 .product-composition,
 .mounted-parts {
+  --composition-row-height: 36px;
+  --composition-visible-rows: 6;
+  --composition-list-max-height: calc(var(--composition-row-height) * var(--composition-visible-rows));
   --modal-row-arrow-column: 22px;
   --modal-row-x-padding: 8px;
   --modal-row-gap: 10px;
@@ -1786,7 +1789,6 @@ footer {
   margin-right: calc(var(--modal-scroll-gutter) * -1) !important;
   min-height: 0 !important;
   flex: 0 1 auto !important;
-  max-height: 224px !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
@@ -1794,6 +1796,11 @@ footer {
   -webkit-overflow-scrolling: touch !important;
   touch-action: pan-y !important;
   padding-inline: var(--modal-scroll-gutter) 0 !important;
+}
+
+.product-composition-list,
+.mounted-parts-list {
+  max-height: var(--composition-list-max-height) !important;
 }
 
 .product-meta-slot {
@@ -2476,8 +2483,9 @@ dialog[open] .category-release-info .release-table-section {
 }
 
 @media (max-width: 900px) {
-  .modal-section-scroll:not(.release-table-scroll):not(.anime-episode-table-scroll) {
-    max-height: min(224px, 34dvh) !important;
+  .product-composition,
+  .mounted-parts {
+    --composition-list-max-height: min(calc(var(--composition-row-height) * var(--composition-visible-rows)), 34dvh);
   }
 }
 
@@ -2486,8 +2494,10 @@ dialog[open] .category-release-info .release-table-section {
     margin-top: 34px !important;
   }
 
-  .modal-section-scroll:not(.release-table-scroll):not(.anime-episode-table-scroll) {
-    max-height: min(204px, 30dvh) !important;
+  .product-composition,
+  .mounted-parts {
+    --composition-visible-rows: 5;
+    --composition-list-max-height: min(calc(var(--composition-row-height) * var(--composition-visible-rows)), 30dvh);
   }
 }
 
