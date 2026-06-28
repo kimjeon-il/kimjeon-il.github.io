@@ -601,7 +601,6 @@ body.has-topbar .nav {
 .product-card{
   min-height: 176px !important;
   padding: 16px !important;
-  border: 1px solid var(--ui-line) !important;
   border-radius: 16px !important;
   background: var(--ui-surface) !important;
   background-image: none !important;
@@ -810,7 +809,7 @@ dialog[open] #modalClose.modal-close:hover{
   padding: 16px !important;
   display: flex !important;
   flex-direction: column !important;
-  border: 1px solid var(--ui-line) !important;
+  border: 1px solid color-mix(in srgb, var(--ui-line) 72%, var(--ui-text) 28%) !important;
   border-radius: 16px !important;
   background: var(--ui-surface) !important;
   background-image: none !important;
@@ -942,9 +941,23 @@ dialog[open] #modalClose.modal-close:hover{
   .catalog-card .card-en,
   .catalog-card .card-full-en,
   .catalog-card .card-full-ko,
+  .catalog-card .catalog-card-badge,
   .product-card .card-en,
   .product-card .card-full-en,
-  .product-card .card-full-ko{
+  .product-card .card-full-ko,
+  .product-card .catalog-card-badge{
+    font-size: var(--font-sm) !important;
+  }
+
+  .catalog-card .catalog-card-badge,
+  .product-card .catalog-card-badge{
+    padding: 2px 7px !important;
+  }
+
+  .search-box .search-scope.catalog-dropdown summary b,
+  .overview-search .search-scope.catalog-dropdown summary b,
+  .search-box .search-scope.catalog-dropdown .catalog-dropdown-menu button,
+  .overview-search .search-scope.catalog-dropdown .catalog-dropdown-menu button{
     font-size: var(--font-sm) !important;
   }
 }
@@ -1139,7 +1152,7 @@ body.has-topbar .topbar {
 .product-card:hover{
   transform: translateY(-2px) !important;
   background: var(--ui-control) !important;
-  border-color: var(--ui-line) !important;
+  border-color: color-mix(in srgb, var(--ui-line) 72%, var(--ui-text) 28%) !important;
 }
 
 .catalog-card:active,
@@ -2226,6 +2239,10 @@ dialog[open] .category-anime-info .modal-body-block {
   text-align: left !important;
 }
 
+.anime-air-date-compact {
+  display: none !important;
+}
+
 .anime-episode-row {
   cursor: pointer !important;
   outline: 0 !important;
@@ -2506,9 +2523,9 @@ dialog[open] .category-release-info .release-table-section {
 }
 
 @container (max-width: 430px) {
-  .anime-episode-table th:nth-child(3),
-  .anime-episode-table td:nth-child(3) {
-    display: none !important;
+  .anime-episode-table th:nth-child(1),
+  .anime-episode-table td:nth-child(1) {
+    width: 56px !important;
   }
 
   .anime-episode-table th:nth-child(2),
@@ -2516,8 +2533,22 @@ dialog[open] .category-release-info .release-table-section {
     width: auto !important;
   }
 
-  .anime-episode-table tbody td:nth-child(2) {
+  .anime-episode-table th:nth-child(3),
+  .anime-episode-table td:nth-child(3) {
+    display: table-cell !important;
+    width: 84px !important;
+  }
+
+  .anime-episode-table tbody td:nth-child(3) {
     border-radius: 0 var(--ui-radius) var(--ui-radius) 0 !important;
+  }
+
+  .anime-air-date-full {
+    display: none !important;
+  }
+
+  .anime-air-date-compact {
+    display: inline !important;
   }
 }
 
@@ -2806,8 +2837,6 @@ dialog[open] .modal-art {
     color: var(--ui-text) !important;
   }
 
-  .catalog-card,
-  .product-card,
   .search-box,
   .nav-filter-menu,
   dialog[open] .modal-inner,
@@ -2815,6 +2844,13 @@ dialog[open] .modal-art {
     background: var(--ui-surface) !important;
     background-color: var(--ui-surface) !important;
     border-color: var(--ui-line) !important;
+    color: var(--ui-text) !important;
+  }
+
+  .catalog-card,
+  .product-card {
+    background: var(--ui-surface) !important;
+    background-color: var(--ui-surface) !important;
     color: var(--ui-text) !important;
   }
 
@@ -3723,7 +3759,7 @@ body.is-overview .catalog-section {
 .catalog-panel.catalog-filters-compact .catalog-filter-dropdown > summary .catalog-filter-label,
 .catalog-filter-dropdown > summary .catalog-filter-label {
   color: var(--ui-muted) !important;
-  font-size: var(--font-xs) !important;
+  font-size: var(--font-sm) !important;
   white-space: nowrap !important;
 }
 
@@ -3734,6 +3770,7 @@ body.is-overview .catalog-section {
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
   text-align: right !important;
+  font-size: var(--font-sm) !important;
 }
 
 @media (max-width: 420px) {

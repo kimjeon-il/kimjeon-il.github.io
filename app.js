@@ -1464,6 +1464,11 @@ const animeAirDateLabel = value => {
   const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
   return match ? `${match[1]}년 ${Number(match[2])}월 ${Number(match[3])}일` : value;
 };
+const animeAirDateCompactLabel = value => {
+  if (!value) return "";
+  const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return match ? `${match[1]}.${Number(match[2])}.${Number(match[3])}.` : animeAirDateLabel(value);
+};
 const releaseDateSortValue = value => {
   if (!value) return Number.MAX_SAFE_INTEGER;
   const match = String(value).match(/^(\d{4})-(\d{2})(?:-(\d{2}))?$/);
@@ -2693,11 +2698,14 @@ const visibleAnimeEpisodes = () => {
 };
 
 const animeEpisodeRowsMarkup = visibleRows => {
-  const rows = visibleRows.map(({ episode, index }) => `<tr class="anime-episode-row" role="button" tabindex="0" data-anime-episode-index="${index}">
+  const rows = visibleRows.map(({ episode, index }) => {
+    const airDate = episode.airDates?.[activeAnimeRegion] || "";
+    return `<tr class="anime-episode-row" role="button" tabindex="0" data-anime-episode-index="${index}">
     <td>${escapeHtml(episode.no || "")}</td>
     <td><span class="release-product-link">${escapeHtml(episode.titles?.[activeAnimeRegion] || "")}</span></td>
-    <td>${animeAirDateLabel(episode.airDates?.[activeAnimeRegion] || "")}</td>
-  </tr>`).join("");
+    <td><span class="anime-air-date-full">${animeAirDateLabel(airDate)}</span><span class="anime-air-date-compact">${animeAirDateCompactLabel(airDate)}</span></td>
+  </tr>`;
+  }).join("");
   return rows || `<tr class="release-empty-row"><td colspan="3">등록된 방영목록이 없습니다.</td></tr>`;
 };
 
