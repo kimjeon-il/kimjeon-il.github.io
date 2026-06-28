@@ -1657,6 +1657,18 @@ dialog[open] .modal-name {
   overflow: hidden !important;
 }
 
+@media (max-width: 560px) {
+  dialog[open] .modal-name {
+    font-size: clamp(1.45rem, 6vw, 1.75rem) !important;
+  }
+}
+
+@media (max-width: 390px) {
+  dialog[open] .modal-name {
+    font-size: clamp(1.3rem, 5.6vw, 1.55rem) !important;
+  }
+}
+
 
 .modal-info-slot {
   --modal-info-lines: 2;
@@ -1777,9 +1789,9 @@ footer {
   --composition-row-height: 36px;
   --composition-visible-rows: 6;
   --composition-list-max-height: calc(var(--composition-row-height) * var(--composition-visible-rows));
-  --modal-row-arrow-column: 22px;
-  --modal-row-x-padding: 8px;
-  --modal-row-gap: 10px;
+  --modal-row-arrow-column: 26px;
+  --modal-row-x-padding: 10px;
+  --modal-row-gap: 16px;
   --modal-scroll-gutter: 5px;
 }
 
@@ -2428,7 +2440,7 @@ dialog[open] .category-release-info .release-table-section {
 
   .release-table th:nth-child(1),
   .release-table td:nth-child(1) {
-    width: 90px !important;
+    width: 72px !important;
   }
 
   .release-table th:nth-child(2),
@@ -2438,7 +2450,22 @@ dialog[open] .category-release-info .release-table-section {
 
   .release-table th:nth-child(4),
   .release-table td:nth-child(4) {
-    width: 104px !important;
+    width: 88px !important;
+  }
+
+  .release-table th,
+  .release-table td {
+    padding-inline: 8px !important;
+  }
+
+  .release-table th:first-child,
+  .release-table td:first-child {
+    padding-left: 0 !important;
+  }
+
+  .release-table th:last-child,
+  .release-table td:last-child {
+    padding-right: 0 !important;
   }
 
   .release-table tbody td:nth-child(4) {
