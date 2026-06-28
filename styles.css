@@ -389,7 +389,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   text-overflow: clip !important;
   color: var(--ui-text) !important;
   font-size: var(--font-md) !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   white-space: nowrap !important;
 }
 
@@ -555,7 +555,7 @@ body.has-topbar .nav {
   margin: 0 !important;
   color: var(--ui-text) !important;
   font-size: var(--font-title) !important;
-  font-weight: 900 !important; line-height: 1.02 !important;
+  font-weight: 800 !important; line-height: 1.02 !important;
 }
 
 .result-count {
@@ -631,7 +631,7 @@ button.icon-back-button,
   align-items: center !important;
   justify-content: center !important;
   font-size: var(--font-xl) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1 !important; text-indent: 0 !important;
   white-space: nowrap !important;
 }
@@ -700,7 +700,7 @@ dialog[open] #modalClose.modal-close:hover{
   color: var(--ui-muted) !important;
   box-shadow: none !important;
   font-size: var(--font-xl) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1 !important;
   text-indent: 0 !important;
   opacity: 0 !important;
@@ -743,7 +743,7 @@ dialog[open] #modalClose.modal-close:hover{
   padding: 16px !important;
   display: flex !important;
   flex-direction: column !important;
-  border: 1px solid color-mix(in srgb, var(--ui-line) 72%, var(--ui-text) 28%) !important;
+  border: 1px solid var(--ui-line) !important;
   border-radius: 16px !important;
   background: var(--ui-surface) !important;
   background-image: none !important;
@@ -772,14 +772,16 @@ dialog[open] #modalClose.modal-close:hover{
   margin: auto 0 4px !important;
   color: var(--ui-control-text-active) !important;
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 500 !important;
   line-height: 1.18 !important;
   display: flex !important;
   align-items: baseline !important;
-  flex-wrap: wrap !important;
+  flex-wrap: nowrap !important;
   gap: 6px !important;
-  word-break: keep-all !important;
-  overflow-wrap: anywhere !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
   opacity: 1 !important;
 }
 
@@ -790,8 +792,8 @@ dialog[open] #modalClose.modal-close:hover{
   border-radius: 8px !important;
   background: var(--ui-control-hover) !important;
   color: var(--ui-control-text-active) !important;
-  font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-size: var(--font-sm) !important;
+  font-weight: 600 !important;
   line-height: 1.1 !important;
   white-space: nowrap !important;
 }
@@ -807,7 +809,11 @@ dialog[open] #modalClose.modal-close:hover{
 .catalog-card-title {
   min-width: 0 !important;
   flex: 1 1 auto !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
   color: var(--ui-control-text-active) !important;
+  font-weight: 500 !important;
 }
 .card-en,
 .card-full-en,
@@ -822,7 +828,7 @@ dialog[open] #modalClose.modal-close:hover{
   z-index: 3 !important;
   color: var(--ui-muted) !important;
   font-size: var(--font-md) !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   line-height: 1.25 !important; opacity: 1 !important;
 }
 
@@ -851,8 +857,6 @@ dialog[open] #modalClose.modal-close:hover{
     padding: 12px !important;
   }
 
-  .catalog-card .card-name,
-  .product-card .card-name,
   .catalog-card .card-en,
   .catalog-card .card-full-en,
   .catalog-card .card-full-ko,
@@ -924,7 +928,7 @@ dialog[open] #modalClose.modal-close:hover{
   border: 0 !important;
   outline: 0 !important;
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1 !important;
   text-align: center !important;
   white-space: nowrap !important;
@@ -979,7 +983,7 @@ dialog[open] #modalClose.modal-close:hover{
   border: 0 !important;
   outline: 0 !important;
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1 !important;
   text-align: center !important;
   white-space: nowrap !important;
@@ -1003,7 +1007,7 @@ dialog[open] #modalClose.modal-close:hover{
   border: 0 !important;
   outline: 0 !important;
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1 !important;
   text-align: center !important;
   white-space: nowrap !important;
@@ -1016,7 +1020,7 @@ dialog[open] #modalClose.modal-close:hover{
 .nav-filter-menu .sub-filter.active,
 .nav-filter-menu .sub-filter[aria-selected="true"] {
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 650 !important;
   line-height: 1 !important;
   text-align: center !important;
   white-space: nowrap !important;
@@ -1027,7 +1031,7 @@ dialog[open] #modalClose.modal-close:hover{
 .nav-filter-menu .sub-filter.active:hover,
 .nav-filter-menu .sub-filter[aria-selected="true"]:hover {
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 650 !important;
   line-height: 1 !important;
   text-align: center !important;
   white-space: nowrap !important;
@@ -1067,7 +1071,7 @@ body.has-topbar .topbar {
 .product-card:hover{
   transform: translateY(-2px) !important;
   background: var(--ui-control) !important;
-  border-color: color-mix(in srgb, var(--ui-line) 72%, var(--ui-text) 28%) !important;
+  border: 1px solid var(--ui-line) !important;
 }
 
 .catalog-card:active,
@@ -1112,7 +1116,7 @@ dialog[open] #modalClose.modal-close {
   box-shadow: none !important;
   filter: none !important;
   font-size: var(--font-xl) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1 !important; text-indent: 0 !important;
   transform: none !important;
   transition: background-color .16s ease, color .16s ease !important;
@@ -1232,7 +1236,7 @@ dialog[open] #modalClose.modal-close {
 .toy-panel[data-toy-panel] .section-heading h2,
 .overview-hero h2 {
   color: var(--ui-text) !important;
-  font-weight: 900 !important;
+  font-weight: 800 !important;
   line-height: 1 !important;
   white-space: nowrap !important;
   word-break: keep-all !important;
@@ -1343,7 +1347,7 @@ dialog[open] #modalClose.modal-close {
   display: block;
   margin: 0 0 6px;
   font-size: var(--font-sm);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2;
 }
 
@@ -1567,7 +1571,7 @@ dialog[open] .modal-name {
   max-height: calc(var(--modal-title-line-height) * var(--modal-title-lines)) !important;
   margin: 0 auto calc(var(--modal-flow-gap) - var(--modal-title-line-height)) !important;
   font-size: var(--font-title) !important;
-  font-weight: 900 !important;
+  font-weight: 800 !important;
   line-height: 1.15 !important;
   color: var(--ui-text) !important;
   word-break: keep-all !important;
@@ -1741,7 +1745,7 @@ footer {
   margin: 0 0 8px !important;
   color: var(--ui-text) !important;
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1.2 !important;
   padding: 0 10px !important;
 }
@@ -1988,7 +1992,7 @@ dialog[open] .category-anime-info .anime-episode-title-row .category-title {
   margin: 0 !important;
   color: var(--ui-text) !important;
   font-size: var(--font-title) !important;
-  font-weight: 900 !important;
+  font-weight: 800 !important;
   line-height: 1 !important;
   word-break: keep-all !important;
 }
@@ -2080,7 +2084,7 @@ dialog[open] .category-anime-info .modal-body-block {
   min-width: 0 !important;
   color: var(--ui-text) !important;
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
 }
 
 .category-anime-episodes {
@@ -2273,7 +2277,7 @@ dialog[open] .category-release-info .release-table-section {
   transform: translateY(-50%) !important;
   color: var(--ui-muted) !important;
   font-size: var(--font-xs) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1 !important;
   text-align: center !important;
   opacity: .58 !important;
@@ -2618,7 +2622,7 @@ dialog[open] .modal-art {
   margin: 0 0 8px !important;
   color: var(--ui-text) !important;
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1.35 !important;
 }
 
@@ -2786,7 +2790,7 @@ dialog[open] .modal-art {
   color: var(--ui-muted) !important;
   font: inherit !important;
   font-size: var(--font-md) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1 !important;
   text-align: center !important;
   text-decoration: none !important;
@@ -2819,7 +2823,6 @@ dialog[open] .modal-art {
 }
 
 .ui-card-button {
-  border: 0 !important;
   font: inherit !important;
   text-align: left !important;
   text-decoration: none !important;
@@ -2954,7 +2957,7 @@ dialog[open] .modal-step:focus-visible {
   color: var(--ui-text) !important;
   font: inherit !important;
   font-size: var(--font-sm) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   box-shadow: none !important;
   cursor: pointer !important;
 }
@@ -2975,7 +2978,7 @@ dialog[open] .modal-step:focus-visible {
   color: var(--ui-muted) !important;
   font: inherit !important;
   font-size: var(--font-sm) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   box-shadow: none !important;
@@ -3395,8 +3398,8 @@ body.is-overview .catalog-section {
 .catalog-filter-group::before,
 .catalog-filter-label {
   color: var(--ui-muted) !important;
-  font-size: var(--font-sm) !important;
-  font-weight: 850 !important;
+  font-size: var(--font-md) !important;
+  font-weight: 500 !important;
   line-height: 1.2 !important;
 }
 
@@ -3434,8 +3437,8 @@ body.is-overview .catalog-section {
   background: var(--ui-control) !important;
   color: var(--ui-text) !important;
   font: inherit !important;
-  font-size: var(--font-sm) !important;
-  font-weight: 750 !important;
+  font-size: var(--font-md) !important;
+  font-weight: 500 !important;
   cursor: pointer !important;
   line-height: 1 !important;
 }
@@ -3455,8 +3458,8 @@ body.is-overview .catalog-section {
   background: var(--ui-control) !important;
   color: var(--ui-text) !important;
   font: inherit !important;
-  font-size: var(--font-sm) !important;
-  font-weight: 750 !important;
+  font-size: var(--font-md) !important;
+  font-weight: 500 !important;
   cursor: pointer !important;
 }
 
@@ -3482,8 +3485,8 @@ body.is-overview .catalog-section {
   gap: 8px !important;
   padding: 0 12px !important;
   border-radius: var(--catalog-pill-radius) !important;
-  font-size: var(--font-sm) !important;
-  font-weight: 700 !important;
+  font-size: var(--font-md) !important;
+  font-weight: 500 !important;
 }
 
 .catalog-filter-chip span {
@@ -3654,7 +3657,8 @@ body.is-overview .catalog-section {
 .catalog-panel.catalog-filters-compact .catalog-filter-dropdown > summary .catalog-filter-label,
 .catalog-filter-dropdown > summary .catalog-filter-label {
   color: var(--ui-muted) !important;
-  font-size: var(--font-sm) !important;
+  font-size: var(--font-md) !important;
+  font-weight: 500 !important;
   white-space: nowrap !important;
 }
 
@@ -3665,7 +3669,8 @@ body.is-overview .catalog-section {
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
   text-align: right !important;
-  font-size: var(--font-sm) !important;
+  font-size: var(--font-md) !important;
+  font-weight: 500 !important;
 }
 
 @media (max-width: 420px) {
@@ -3737,7 +3742,7 @@ body.is-overview .catalog-section {
   margin: 0 !important;
   color: var(--ui-text) !important;
   font-size: var(--font-title) !important;
-  font-weight: 900 !important;
+  font-weight: 800 !important;
   line-height: 1.08 !important;
 }
 
@@ -3749,7 +3754,7 @@ body.is-overview .catalog-section {
   background: var(--ui-control) !important;
   color: var(--ui-muted) !important;
   font-size: var(--font-sm) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   white-space: nowrap !important;
 }
 
@@ -3802,7 +3807,7 @@ body.is-overview .catalog-section {
   background: var(--ui-control) !important;
   color: var(--ui-muted) !important;
   font-size: var(--font-xs) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1 !important;
   white-space: nowrap !important;
 }
@@ -4293,11 +4298,11 @@ body.menu-open .menu-button span:nth-child(3) {
     justify-content: flex-start;
     padding: 0 12px;
     border-radius: 10px;
-    background: transparent;
-    color: var(--ui-text);
-    font-weight: 750;
-    transition: background-color .16s ease, color .16s ease;
-  }
+  background: transparent;
+  color: var(--ui-text);
+  font-weight: 600;
+  transition: background-color .16s ease, color .16s ease;
+}
 
   .mobile-primary:hover,
   .mobile-primary:focus-visible,
