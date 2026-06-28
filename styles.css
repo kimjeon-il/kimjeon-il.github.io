@@ -17,6 +17,12 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+html.is-modal-open {
+  overflow: hidden !important;
+  scrollbar-gutter: auto !important;
+}
+
 body { margin: 0; }
 button, input, select, textarea { font-family:inherit; }
 button, input { font: inherit; }
@@ -1810,6 +1816,11 @@ footer {
   grid-template-areas: "region series search" !important;
 }
 
+.release-dropdowns[data-anime-controls] {
+  grid-template-columns: minmax(13.5rem, var(--release-series-dropdown-width)) minmax(0, 1fr) !important;
+  grid-template-areas: "series search" !important;
+}
+
 .release-dropdowns:not([data-overview-controls]) > .release-region-tabs,
 .release-dropdowns[data-anime-controls] > .release-region-tabs {
   grid-area: region !important;
@@ -1895,6 +1906,10 @@ footer {
       "search search" !important;
   }
 
+  .release-dropdowns[data-anime-controls] {
+    grid-template-areas: "series search" !important;
+  }
+
   .release-dropdowns:not([data-overview-controls]) .release-search-box,
   .release-dropdowns[data-anime-controls] .release-search-box {
     width: 100% !important;
@@ -1909,6 +1924,12 @@ footer {
     grid-template-columns: 1fr !important;
     grid-template-areas:
       "region"
+      "series"
+      "search" !important;
+  }
+
+  .release-dropdowns[data-anime-controls] {
+    grid-template-areas:
       "series"
       "search" !important;
   }
@@ -1936,6 +1957,14 @@ footer {
   justify-content: center !important;
   padding-inline: 0 !important;
   text-align: center !important;
+}
+
+.anime-episode-controls .catalog-dropdown-menu button {
+  min-width: 0 !important;
+  padding-inline: 12px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 .release-table-section {
@@ -1988,6 +2017,40 @@ dialog[open] .category-anime-info .anime-episode-title-row .category-title {
   min-width: 0 !important;
 }
 
+.category-anime-title-actions {
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.category-anime-title-actions:empty {
+  display: none !important;
+}
+
+.category-anime-jump-button {
+  min-height: 34px !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--ui-line) !important;
+  border-radius: var(--catalog-pill-radius, 12px) !important;
+  background: var(--ui-control) !important;
+  color: var(--ui-text) !important;
+  font: inherit !important;
+  font-size: var(--font-sm) !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+}
+
+.category-anime-jump-button:hover,
+.category-anime-jump-button:focus-visible {
+  background: var(--ui-control-hover) !important;
+  color: var(--ui-control-text-active) !important;
+  outline: 0 !important;
+}
+
 .category-title {
   margin: 0 !important;
   color: var(--ui-text) !important;
@@ -2014,6 +2077,11 @@ dialog[open] .category-anime-info .modal-body-block {
   margin: 0 auto !important;
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+[data-category-anime-tabs-slot]:empty,
+.category-anime-tabs:empty {
+  display: none !important;
 }
 
 .category-anime-tabs button {
@@ -2248,6 +2316,7 @@ dialog[open] .category-release-info .release-table-section {
   background: transparent !important;
   color: inherit !important;
   font: inherit !important;
+  font-size: var(--font-md) !important;
   font-weight: inherit !important;
   text-align: center !important;
   cursor: pointer !important;
@@ -2264,6 +2333,7 @@ dialog[open] .category-release-info .release-table-section {
 .release-sort-label {
   display: block !important;
   width: 100% !important;
+  font-size: var(--font-md) !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
@@ -2425,6 +2495,11 @@ dialog[open] .category-release-info .release-table-section {
     width: 132px !important;
   }
 
+  .anime-episode-table th,
+  .anime-episode-table td {
+    padding-inline: 8px !important;
+  }
+
   .anime-episode-table tbody td:nth-child(3) {
     border-radius: 0 var(--ui-radius) var(--ui-radius) 0 !important;
   }
@@ -2444,7 +2519,12 @@ dialog[open] .category-release-info .release-table-section {
   .anime-episode-table th:nth-child(3),
   .anime-episode-table td:nth-child(3) {
     display: table-cell !important;
-    width: 84px !important;
+    width: 104px !important;
+  }
+
+  .anime-episode-table th,
+  .anime-episode-table td {
+    padding-inline: 8px !important;
   }
 
   .anime-episode-table tbody td:nth-child(3) {
@@ -2985,6 +3065,10 @@ dialog[open] .modal-step:focus-visible {
   cursor: pointer !important;
 }
 
+.release-region-tabs button {
+  font-size: var(--font-md) !important;
+}
+
 .ui-tab-button:hover,
 .ui-tab-button:focus-visible,
 .ui-tab-button.active,
@@ -3078,6 +3162,7 @@ dialog[open] .modal-step:focus-visible {
 .release-table th {
   background: var(--ui-surface) !important;
   color: var(--ui-muted) !important;
+  font-size: var(--font-md) !important;
   font-weight: 600 !important;
   padding-top: 0 !important;
   padding-bottom: 10px !important;
@@ -3322,9 +3407,12 @@ body.is-overview .catalog-section {
   align-items: flex-start !important;
   justify-content: space-between !important;
   gap: 16px !important;
+  margin: 0 !important;
 }
 
 .toy-panel[data-toy-panel="catalog"] {
+  --catalog-control-stack-gap: 12px;
+  --catalog-filter-card-gap: 12px;
   --catalog-control-radius: 10px;
   --catalog-pill-height: 36px;
   --catalog-pill-radius: 12px;
@@ -3504,17 +3592,17 @@ body.is-overview .catalog-section {
   align-items: start !important;
   justify-content: end !important;
   gap: 16px !important;
-  margin: 0 0 18px !important;
+  margin: 0 0 var(--catalog-control-stack-gap) !important;
 }
 
 .catalog-combined {
   display: grid !important;
-  gap: 28px !important;
+  gap: var(--catalog-filter-card-gap) !important;
 }
 
 .catalog-subsection {
   display: grid !important;
-  gap: 16px !important;
+  gap: var(--catalog-filter-card-gap) !important;
 }
 
 .catalog-subsection[hidden] {
@@ -3595,6 +3683,10 @@ body.is-overview .catalog-section {
   grid-template-columns: 1fr !important;
 }
 
+.catalog-panel.catalog-filters-compact .catalog-filter-primary {
+  min-height: 0 !important;
+}
+
 .catalog-panel.catalog-filters-compact .catalog-filter-expanded {
   display: none !important;
 }
@@ -3656,14 +3748,23 @@ body.is-overview .catalog-section {
 
 .catalog-panel.catalog-filters-compact .catalog-filter-dropdown > summary .catalog-filter-label,
 .catalog-filter-dropdown > summary .catalog-filter-label {
+  align-self: stretch !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
   color: var(--ui-muted) !important;
   font-size: var(--font-md) !important;
   font-weight: 500 !important;
+  line-height: 1 !important;
   white-space: nowrap !important;
 }
 
 .catalog-panel.catalog-filters-compact .catalog-filter-dropdown > summary .catalog-dropdown-value,
 .catalog-filter-dropdown > summary .catalog-dropdown-value {
+  align-self: stretch !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
   min-width: 0 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -3671,6 +3772,7 @@ body.is-overview .catalog-section {
   text-align: right !important;
   font-size: var(--font-md) !important;
   font-weight: 500 !important;
+  line-height: 1 !important;
 }
 
 @media (max-width: 420px) {
