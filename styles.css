@@ -567,8 +567,9 @@ body.has-topbar .nav {
 
 .catalog-section {
   --section-heading-align: flex-end;
-  --catalog-card-min-width: clamp(154px, 24vw, 320px);
+  --catalog-card-min-width: clamp(154px, 18vw, 240px);
   --catalog-grid-columns: repeat(auto-fit, minmax(min(100%, var(--catalog-card-min-width)), 1fr));
+  --catalog-grid-max-width: min(var(--page-max), 1320px);
   --catalog-grid-gap: clamp(10px, 1.1vw, 12px);
   --catalog-card-min-height: clamp(154px, 10vw, 176px);
   --catalog-card-padding: clamp(12px, 1.1vw, 16px);
@@ -733,7 +734,7 @@ dialog[open] #modalClose.modal-close:hover{
   grid-template-columns: var(--catalog-grid-columns) !important;
   gap: var(--catalog-grid-gap) !important;
   width: 100% !important;
-  max-width: var(--page-max) !important;
+  max-width: var(--catalog-grid-max-width, var(--page-max)) !important;
   margin: 0 !important;
   margin-left: auto !important;
   margin-right: auto !important;
@@ -2831,7 +2832,7 @@ body.is-overview .catalog-section {
   color: var(--ui-muted) !important;
 }
 
-/* Search screen responsive rules use one shared breakpoint system: wide 901+, medium 561-900, narrow <=560. */
+/* Catalog controls follow the shared wide / medium / narrow tier system. */
 .toy-panel[data-toy-panel="catalog"] .toolbar {
   display: var(--catalog-toolbar-display, flex) !important;
   grid-template-columns: var(--catalog-toolbar-columns, none) !important;
@@ -3517,6 +3518,7 @@ body.menu-open .menu-button span:nth-child(3) {
 
   dialog[open] {
     --modal-edge-gap: clamp(18px, 3.2vw, 28px);
+    --modal-h: calc(var(--modal-vh) - var(--modal-edge-gap));
     --modal-gutter: 6px;
     --modal-close-offset: 18px;
     --modal-scrollbar-inset: calc(var(--modal-close-offset) + 16px);
@@ -3558,6 +3560,7 @@ body.menu-open .menu-button span:nth-child(3) {
 
   .toy-panel[data-toy-panel="catalog"] {
     --catalog-control-columns: 1fr;
+    --catalog-control-justify: stretch;
     --catalog-control-gap: 12px;
     --catalog-toolbar-display: grid;
     --catalog-toolbar-columns: 1fr;
@@ -3567,6 +3570,7 @@ body.menu-open .menu-button span:nth-child(3) {
     --catalog-search-wrap-width: 100%;
     --catalog-search-wrap-margin: 0;
     --catalog-search-wrap-flex: 0 0 auto;
+    --catalog-search-wrap-align: stretch;
     --catalog-search-box-width: 100%;
     --catalog-search-box-min-width: 0;
     --catalog-search-box-max-width: none;
@@ -3792,6 +3796,7 @@ body.menu-open .menu-button span:nth-child(3) {
 
 @media (max-width: 39.999rem) {
   dialog[open] {
+    --modal-edge-gap: clamp(10px, 3vw, 16px);
     --modal-title-size-default: clamp(0.94rem, 4.2vw, 1.32rem);
     --composition-visible-rows-default: 5;
     --composition-list-max-height-default: min(calc(var(--composition-row-height) * var(--composition-visible-rows)), 30dvh);
@@ -3821,11 +3826,22 @@ body.menu-open .menu-button span:nth-child(3) {
     margin-top: 34px !important;
   }
 
-  .catalog-filter-expanded {
+  .toy-panel[data-toy-panel="catalog"] {
+    --catalog-control-gap: 10px;
+    --catalog-control-stack-gap: 10px;
+    --catalog-filter-card-gap: 10px;
+    --catalog-toolbar-gap: 10px;
+  }
+
+  .catalog-panel .catalog-filter-primary {
+    min-height: 0 !important;
+  }
+
+  .catalog-panel .catalog-filter-expanded {
     display: none !important;
   }
 
-  .catalog-filter-compact {
+  .catalog-panel .catalog-filter-compact {
     display: grid !important;
     grid-template-columns: 1fr !important;
   }
