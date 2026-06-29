@@ -1232,6 +1232,7 @@ dialog[open] .modal-close {
 
 dialog[open] .modal-name {
   --modal-title-line-height: 1.15em;
+  --modal-title-row-height: max(34px, var(--modal-title-line-height));
   --modal-title-lines: 2;
   --modal-title-size: var(--modal-title-size-default, var(--font-title));
   width: var(--modal-body-width) !important;
@@ -1241,8 +1242,8 @@ dialog[open] .modal-name {
   flex-wrap: wrap !important;
   column-gap: 10px !important;
   row-gap: 2px !important;
-  height: calc(var(--modal-title-line-height) * var(--modal-title-lines)) !important;
-  max-height: calc(var(--modal-title-line-height) * var(--modal-title-lines)) !important;
+  height: calc(var(--modal-title-row-height) * var(--modal-title-lines)) !important;
+  max-height: calc(var(--modal-title-row-height) * var(--modal-title-lines)) !important;
   margin: 0 auto 0 !important;
   font-size: var(--modal-title-size) !important;
   font-weight: 800 !important;
@@ -1265,6 +1266,13 @@ dialog[open] .modal-name {
   --modal-info-lines: 1;
   grid-template-rows: 34px !important;
   gap: 0 !important;
+}
+
+.modal-info-slot.single-line-info-slot .modal-slot-tags {
+  min-height: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .modal-info-slot.single-line-info-slot .modal-description:empty {
@@ -1358,6 +1366,7 @@ dialog[open] .modal-name {
 }
 
 .product-meta-slot {
+  display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
@@ -2175,6 +2184,39 @@ dialog[open] .modal-art {
   margin-right: auto !important;
 }
 
+.product-modal-info .modal-body-block {
+  grid-row: 5 !important;
+  margin-top: 0 !important;
+}
+
+.product-modal-info .modal-scroll-area {
+  display: grid !important;
+  grid-template-columns: var(--modal-body-width) !important;
+  grid-template-rows: calc(var(--modal-title-size-default, var(--font-title)) * 1.15) var(--modal-flow-gap) auto var(--modal-flow-gap) auto !important;
+  align-content: start !important;
+  justify-content: center !important;
+}
+
+.product-modal-info .modal-name {
+  grid-row: 1 / 4 !important;
+  align-self: start !important;
+}
+
+.product-modal-info .product-meta-slot {
+  grid-row: 3 !important;
+  display: grid !important;
+  margin: 0 auto !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+dialog[open] .modal-info.bey-modal-info .modal-name,
+dialog[open] .modal-info.part-modal-info .modal-name {
+  --modal-title-row-height: var(--modal-title-line-height);
+  --modal-title-lines: 1;
+  margin: 0 auto var(--modal-flow-gap) !important;
+}
+
 .modal-body-block > .modal-section,
 .modal-body-block > .stat-block {
   width: 100% !important;
@@ -2350,9 +2392,13 @@ dialog[open] .modal-art {
 }
 
 dialog[open] .modal-step {
+  --modal-step-bottom-offset: max(var(--modal-close-offset, 18px), env(safe-area-inset-bottom, 0px));
+  --modal-step-start-offset: max(var(--modal-close-offset, 18px), env(safe-area-inset-left, 0px));
+  --modal-step-end-offset: max(var(--modal-close-offset, 18px), env(safe-area-inset-right, 0px));
   position: fixed !important;
   top: auto !important;
-  bottom: calc((var(--modal-vh, 100vh) - var(--modal-h, min(620px, calc(100vh - 48px)))) / 2 + var(--modal-close-offset, 18px)) !important;
+  bottom: calc((var(--modal-vh, 100vh) - var(--modal-h, min(620px, calc(100vh - 48px)))) / 2 + var(--modal-step-bottom-offset)) !important;
+  z-index: 320 !important;
   width: 42px !important;
   min-width: 42px !important;
   height: 42px !important;
@@ -2373,13 +2419,13 @@ dialog[open] .modal-step {
 }
 
 dialog[open] .modal-step-prev {
-  left: calc((var(--modal-vw, 100vw) - var(--modal-w, min(980px, calc(100vw - 48px)))) / 2 + var(--modal-close-offset, 18px)) !important;
+  left: calc((var(--modal-vw, 100vw) - var(--modal-w, min(980px, calc(100vw - 48px)))) / 2 + var(--modal-step-start-offset)) !important;
   right: auto !important;
 }
 
 dialog[open] .modal-step-next {
   left: auto !important;
-  right: calc((var(--modal-vw, 100vw) - var(--modal-w, min(980px, calc(100vw - 48px)))) / 2 + var(--modal-close-offset, 18px)) !important;
+  right: calc((var(--modal-vw, 100vw) - var(--modal-w, min(980px, calc(100vw - 48px)))) / 2 + var(--modal-step-end-offset)) !important;
 }
 
 dialog[open] .modal-step::before,
@@ -3823,10 +3869,18 @@ body.menu-open .menu-button span:nth-child(3) {
   }
 
   dialog[open] {
-    --modal-edge-gap: clamp(10px, 3vw, 16px);
-    --modal-title-size-default: clamp(0.94rem, 4.2vw, 1.32rem);
+    --modal-title-size-default: clamp(1.14rem, calc(0.385rem + 3.41vw), 1.75rem);
     --composition-visible-rows-default: 5;
     --composition-list-max-height-default: min(calc(var(--composition-row-height) * var(--composition-visible-rows)), 30dvh);
+  }
+
+  dialog[open] .modal-info:not(.category-release-info):not(.category-anime-info) .modal-name {
+    --modal-title-lines: 1;
+    min-width: 0 !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+    text-overflow: ellipsis !important;
   }
 
   .release-dropdowns:not([data-overview-controls]) {
