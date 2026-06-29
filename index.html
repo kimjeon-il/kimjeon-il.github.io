@@ -11,7 +11,7 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="./styles.css?v=20260629-product-meta-slot-grid-adjust" />
+    <link rel="stylesheet" href="./styles.css?v=20260629-overview-mobile-rules-off" />
   </head>
   <body class="is-overview">
     <header class="topbar">
@@ -81,7 +81,7 @@
               </div>
             </details>
             <span class="search-icon" aria-hidden="true"></span>
-            <input id="globalSearchInput" type="search" placeholder="검색어를 입력해주세요." />
+            <input id="globalSearchInput" type="search" placeholder="검색어를 입력해주세요." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-autocomplete="none" />
           </div>
         </div>
         <div class="toy-panel active overview-panel" data-toy-panel="overview">
@@ -102,7 +102,7 @@
                     </div>
                   </details>
                   <span class="search-icon" aria-hidden="true"></span>
-                  <input id="overviewSearchInput" type="search" placeholder="찾고 싶은 정보를 검색해보세요." />
+                  <input id="overviewSearchInput" type="search" placeholder="찾고 싶은 정보를 검색해보세요." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-autocomplete="none" />
                 </div>
               </div>
             </div>
@@ -162,7 +162,7 @@
           <div class="catalog-combined">
             <section class="catalog-subsection" data-catalog-section="catalog">
               <div class="catalog-filter-row">
-                <div class="catalog-dropdowns catalog-filter-groups" id="catalogDropdownFilters" aria-label="도감 필터">
+                <div class="catalog-dropdowns" id="catalogDropdownFilters" aria-label="도감 필터">
                   <div class="catalog-filter-primary">
                     <div class="catalog-filter-expanded">
                       <div class="catalog-filter-group" data-filter-group="series" data-filter-label="시리즈">
@@ -230,11 +230,11 @@
 
     <dialog id="detailModal">
       <div class="modal-overlay" data-modal-overlay></div>
-      <button class="modal-close" id="modalClose" aria-label="상세 닫기">×</button>
+      <button class="ui-icon-button modal-close" id="modalClose" aria-label="상세 닫기">×</button>
       <div id="modalContent"></div>
     </dialog>
 
     <button class="to-top" id="toTop" type="button" aria-label="맨 위로 이동">↑</button>
-    <script src="./app.js?v=20260629-modal-step-offset"></script>
+    <script src="./app.js?v=20260629-search-preview-clear"></script>
   </body>
 </html>

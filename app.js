@@ -613,7 +613,15 @@ const setSearchScope = (dropdown, dataAttr, scope) => {
 const setGlobalSearchScope = scope => setSearchScope(globalSearchScope, "data-global-search-scope", scope);
 const setOverviewSearchScope = scope => setSearchScope(overviewSearchScope, "data-overview-search-scope", scope);
 const overviewSearch = document.querySelector("#overviewSearchInput");
-const syncSearchInputState = input => input?.classList.toggle("has-value", input.value.length > 0);
+const searchInputRoot = input => input?.closest(".overview-search, .search-box");
+const searchClearButton = input => searchInputRoot(input)?.querySelector(".search-clear");
+const syncSearchInputState = input => {
+  if (!input) return;
+  const hasValue = input.value.length > 0;
+  input.classList.toggle("has-value", hasValue);
+  const clearButton = searchClearButton(input);
+  if (clearButton) clearButton.hidden = !hasValue;
+};
 const setSearchInputValue = (input, value = "") => {
   if (!input) return;
   input.value = value;
@@ -1685,7 +1693,7 @@ const releaseControls = () => `<div class="release-dropdowns" aria-label="출시
   </details>
   <div class="search-box release-search-box" role="search">
     <span class="search-icon" aria-hidden="true"></span>
-    <input id="releaseSearchInput" type="search" placeholder="표 안에서 검색" value="${escapeAttributeValue(activeReleaseQuery)}" />
+    <input id="releaseSearchInput" type="search" placeholder="표 안에서 검색" value="${escapeAttributeValue(activeReleaseQuery)}" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-autocomplete="none" />
   </div>
 </div>`;
 
@@ -2134,6 +2142,152 @@ const searchResultButton = entry => {
     <strong>${escapeHtml(searchResultTitle(entry))}</strong>
     <span class="search-result-snippet">${escapeHtml(searchResultSnippet(entry))}</span>
   </button>`;
+};
+const SEARCH_PREVIEW_LIMIT = 6;
+const searchPreviewControls = new Map();
+let activeSearchPreview = null;
+const searchPreviewScopeValue = input => input === overviewSearch ? overviewSearchScopeValue() : globalSearchScopeValue();
+const searchPreviewSyncToGlobal = input => {
+  if (input !== overviewSearch) return;
+  if (globalSearch && overviewSearch) setSearchInputValue(globalSearch, overviewSearch.value);
+  setGlobalSearchScope(overviewSearchScopeValue());
+};
+const searchPreviewOptionId = (control, index) => `${control.preview.id}-option-${index}`;
+const searchPreviewItemButton = (entry, control, index) => {
+  const attr = searchResultAttributes(entry);
+  const selected = index === control.highlightedIndex;
+  return `<button class="search-result-item search-preview-item${selected ? " is-active" : ""}" type="button" ${attr} role="option" id="${escapeAttributeValue(searchPreviewOptionId(control, index))}" data-search-preview-index="${index}" aria-selected="${selected ? "true" : "false"}">
+    <span class="search-result-kind">${escapeHtml(searchResultType(entry))}</span>
+    <strong>${escapeHtml(searchResultTitle(entry))}</strong>
+    <span class="search-result-snippet">${escapeHtml(searchResultSnippet(entry))}</span>
+  </button>`;
+};
+const closeSearchPreview = control => {
+  if (!control) return;
+  control.preview.hidden = true;
+  control.highlightedIndex = -1;
+  control.entries = [];
+  control.input.setAttribute("aria-expanded", "false");
+  control.input.removeAttribute("aria-activedescendant");
+  if (activeSearchPreview === control) activeSearchPreview = null;
+};
+const closeAllSearchPreviews = exceptControl => {
+  searchPreviewControls.forEach(control => {
+    if (control !== exceptControl) closeSearchPreview(control);
+  });
+};
+const renderSearchPreview = control => {
+  if (!control) return;
+  const query = control.input.value.trim();
+  const focusedInside = control.root.contains(document.activeElement);
+  if (!query || !focusedInside) {
+    closeSearchPreview(control);
+    return;
+  }
+  closeAllSearchPreviews(control);
+  const visible = visibleSearchResultItems(searchPreviewScopeValue(control.input), query);
+  control.entries = visible.slice(0, SEARCH_PREVIEW_LIMIT);
+  if (control.highlightedIndex >= control.entries.length) control.highlightedIndex = -1;
+  control.preview.innerHTML = control.entries.length
+    ? `<div class="search-preview-list" role="presentation">${control.entries.map((entry, index) => searchPreviewItemButton(entry, control, index)).join("")}</div>
+      <button class="search-preview-all" type="button" data-search-preview-all>전체 검색결과 보기<span>${visible.length}개</span></button>`
+    : `<div class="search-preview-empty">검색결과가 없습니다.</div>`;
+  control.preview.hidden = false;
+  activeSearchPreview = control;
+  control.input.setAttribute("aria-expanded", "true");
+  if (control.highlightedIndex >= 0) {
+    control.input.setAttribute("aria-activedescendant", searchPreviewOptionId(control, control.highlightedIndex));
+  } else {
+    control.input.removeAttribute("aria-activedescendant");
+  }
+};
+const refreshSearchPreview = (input, { resetActive = false } = {}) => {
+  const control = searchPreviewControls.get(input);
+  if (!control) return;
+  if (resetActive) control.highlightedIndex = -1;
+  renderSearchPreview(control);
+};
+const openSearchPreviewItem = (control, button) => {
+  if (!control || !button) return;
+  searchPreviewSyncToGlobal(control.input);
+  closeAllSearchPreviews();
+  openCatalogCard(button);
+};
+const openSearchPreviewResults = control => {
+  if (!control) return;
+  searchPreviewSyncToGlobal(control.input);
+  closeAllSearchPreviews();
+  openSearchResults();
+};
+const handleSearchPreviewKeydown = (input, event) => {
+  const control = searchPreviewControls.get(input);
+  if (!control) return false;
+  const key = event.key;
+  if (!["ArrowDown", "ArrowUp", "Enter", "Escape"].includes(key)) return false;
+  const isOpen = !control.preview.hidden;
+  if (key === "Escape") {
+    if (!isOpen) return false;
+    event.preventDefault();
+    closeSearchPreview(control);
+    return true;
+  }
+  if (key === "ArrowDown" || key === "ArrowUp") {
+    if (!input.value.trim()) return false;
+    event.preventDefault();
+    if (!isOpen) renderSearchPreview(control);
+    const count = control.entries.length;
+    if (!count) return true;
+    const direction = key === "ArrowDown" ? 1 : -1;
+    control.highlightedIndex = control.highlightedIndex < 0
+      ? (direction > 0 ? 0 : count - 1)
+      : (control.highlightedIndex + direction + count) % count;
+    renderSearchPreview(control);
+    return true;
+  }
+  if (key === "Enter" && isOpen && control.highlightedIndex >= 0) {
+    const button = control.preview.querySelector(`[data-search-preview-index="${control.highlightedIndex}"]`);
+    if (button) {
+      event.preventDefault();
+      openSearchPreviewItem(control, button);
+      return true;
+    }
+  }
+  return false;
+};
+const bindSearchPreview = (input, containerSelector) => {
+  if (!input || searchPreviewControls.has(input)) return;
+  const root = input.closest(containerSelector);
+  if (!root) return;
+  const preview = document.createElement("div");
+  preview.className = "search-preview";
+  preview.id = `${input.id}Preview`;
+  preview.hidden = true;
+  preview.setAttribute("role", "listbox");
+  preview.setAttribute("aria-label", "검색결과 미리보기");
+  root.appendChild(preview);
+  input.setAttribute("aria-haspopup", "listbox");
+  input.setAttribute("aria-controls", preview.id);
+  input.setAttribute("aria-expanded", "false");
+  const control = { input, root, preview, entries: [], highlightedIndex: -1 };
+  searchPreviewControls.set(input, control);
+  input.addEventListener("focus", () => refreshSearchPreview(input, { resetActive: true }));
+  root.addEventListener("focusout", () => {
+    setTimeout(() => {
+      if (!root.contains(document.activeElement)) closeSearchPreview(control);
+    }, 0);
+  });
+  preview.addEventListener("click", event => {
+    const allButton = event.target.closest("[data-search-preview-all]");
+    if (allButton) {
+      event.preventDefault();
+      openSearchPreviewResults(control);
+      return;
+    }
+    const itemButton = event.target.closest("[data-search-preview-index]");
+    if (!itemButton) return;
+    event.preventDefault();
+    openSearchPreviewItem(control, itemButton);
+  });
 };
 const renderGlobalCards = () => {
   const grid = document.querySelector("#globalGrid");
@@ -3339,7 +3493,7 @@ const animeEpisodeControls = () => `<div class="release-dropdowns anime-episode-
   </details>
   <div class="search-box release-search-box" role="search">
     <span class="search-icon" aria-hidden="true"></span>
-    <input id="animeEpisodeSearchInput" type="search" placeholder="방영목록 안에서 검색" value="${escapeAttributeValue(activeAnimeEpisodeQuery)}" />
+    <input id="animeEpisodeSearchInput" type="search" placeholder="방영목록 안에서 검색" value="${escapeAttributeValue(activeAnimeEpisodeQuery)}" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-autocomplete="none" />
   </div>
 </div>`;
 
@@ -3528,7 +3682,7 @@ function openAnimeEpisodeDetail(indexOrId, options = {}) {
   if (!content || !modal) return;
   if (!id) return;
   const backButton = options.fromAnimeList
-    ? `<button class="ui-icon-button modal-back icon-back-button" type="button" data-back-anime-episodes aria-label="방영목록으로 돌아가기">←</button>`
+    ? modalBackButtonMarkup({ label: "방영목록으로 돌아가기", animeEpisodes: true })
     : "";
   content.innerHTML = `<div class="modal-inner category-anime-modal">
     <div class="modal-info category-anime-info">
@@ -3646,6 +3800,7 @@ const refreshActiveSearchResults = () => {
   }
 };
 const openSearchResults = ({ replace = false } = {}) => {
+  closeAllSearchPreviews();
   document.querySelectorAll(".nav-link").forEach(link => link.classList.remove("active"));
   activateToyPanel("all");
   renderGlobalCards();
@@ -3657,17 +3812,38 @@ const openSearchResults = ({ replace = false } = {}) => {
 };
 const bindSearchInput = (input, containerSelector, { onInput, onSubmit = onInput } = {}) => {
   if (!input) return;
+  const root = input.closest(containerSelector);
+  let clearButton = root?.querySelector(".search-clear");
   const runSearch = handler => {
     syncSearchInputState(input);
     handler?.(input);
   };
-  input.addEventListener("input", () => runSearch(onInput));
+  if (root && !clearButton) {
+    clearButton = document.createElement("button");
+    clearButton.type = "button";
+    clearButton.className = "search-clear";
+    clearButton.hidden = true;
+    clearButton.setAttribute("aria-label", "검색어 지우기");
+    clearButton.setAttribute("title", "검색어 지우기");
+    input.insertAdjacentElement("afterend", clearButton);
+    clearButton.addEventListener("click", () => {
+      setSearchInputValue(input, "");
+      input.focus();
+      runSearch(onInput);
+      refreshSearchPreview(input, { resetActive: true });
+    });
+  }
+  input.addEventListener("input", () => {
+    runSearch(onInput);
+    refreshSearchPreview(input, { resetActive: true });
+  });
   input.addEventListener("keydown", event => {
+    if (handleSearchPreviewKeydown(input, event)) return;
     if (event.key !== "Enter") return;
     event.preventDefault();
     runSearch(onSubmit);
   });
-  input.closest(containerSelector)?.querySelector(".search-icon")?.addEventListener("click", () => runSearch(onSubmit));
+  root?.querySelector(".search-icon")?.addEventListener("click", () => runSearch(onSubmit));
   syncSearchInputState(input);
 };
 const syncOverviewSearchToGlobal = () => {
@@ -3682,6 +3858,7 @@ bindSearchInput(globalSearch, ".search-box", {
   onInput: refreshSearchPanel,
   onSubmit: openSearchResults
 });
+bindSearchPreview(globalSearch, ".search-box");
 bindSearchInput(overviewSearch, ".overview-search", {
   onInput: () => {
     syncOverviewSearchToGlobal();
@@ -3692,6 +3869,7 @@ bindSearchInput(overviewSearch, ".overview-search", {
     openSearchResults();
   }
 });
+bindSearchPreview(overviewSearch, ".overview-search");
 overviewSearchScope?.addEventListener("click", event => {
   const button = event.target.closest("button[data-overview-search-scope]");
   if (!button) return;
@@ -3701,6 +3879,7 @@ overviewSearchScope?.addEventListener("click", event => {
     syncOverviewSearchToGlobal();
     openSearchResults({ replace: true });
   }
+  refreshSearchPreview(overviewSearch, { resetActive: true });
 });
 globalSearchScope?.addEventListener("click", event => {
   const button = event.target.closest("button[data-global-search-scope]");
@@ -3709,6 +3888,7 @@ globalSearchScope?.addEventListener("click", event => {
   setGlobalSearchScope(button.dataset.globalSearchScope || "all");
   if (activeToyPanelName() === "all") openSearchResults({ replace: true });
   else renderSearchResults();
+  refreshSearchPreview(globalSearch, { resetActive: true });
 });
 const setDropdownOption = button => {
   const attr = filterButtonAttr(button);
@@ -3763,10 +3943,11 @@ const selectedSubtypeOptions = () => selectedCatalogKind === "tools" ? toolsSubt
 const renderCatalogSubtypeOptions = () => {
   const options = selectedSubtypeOptions();
   if (selectedCatalogSubtype && !options.some(option => option.value === selectedCatalogSubtype)) selectedCatalogSubtype = null;
-  const optionMarkup = `
-    <button type="button" class="ui-dropdown-item ${selectedCatalogSubtype ? "" : "active"}" data-catalog-subtype="" data-summary-label="전체">전체</button>
-    ${options.map(option => `<button type="button" class="ui-dropdown-item ${selectedCatalogSubtype === option.value ? "active" : ""}" data-catalog-subtype="${option.value}">${option.label}</button>`).join("")}
-  `;
+  const optionMarkup = catalogFilterOptionMarkup(
+    [{ value: "", label: "전체", summaryLabel: "전체" }, ...options],
+    selectedCatalogSubtype || "",
+    "data-catalog-subtype"
+  );
   document.querySelectorAll('#catalogDropdownFilters [data-catalog-dependent="subtype"] .catalog-filter-options, #catalogDropdownFilters [data-catalog-dependent="subtype"] .catalog-dropdown-menu').forEach(optionsRoot => {
     optionsRoot.innerHTML = optionMarkup;
   });
@@ -3923,6 +4104,10 @@ const activeFilterChips = scope => {
   }
   return chips;
 };
+const catalogFilterChipMarkup = chip =>
+  `<button type="button" class="ui-chip-button catalog-filter-chip" data-filter-chip-scope="${escapeAttributeValue(chip.scope)}" data-filter-chip-key="${escapeAttributeValue(chip.key)}">${escapeHtml(chip.label)}<span aria-hidden="true">×</span></button>`;
+const catalogFilterResetMarkup = scope =>
+  `<button type="button" class="ui-chip-button catalog-filter-reset" data-filter-reset-scope="${escapeAttributeValue(scope)}">초기화</button>`;
 const renderCatalogFilterChips = () => {
   ["catalog"].forEach(scope => {
     const root = document.querySelector(`[data-catalog-filter-chips="${scope}"]`);
@@ -3932,8 +4117,8 @@ const renderCatalogFilterChips = () => {
     root.classList.toggle("is-empty", chips.length === 0);
     root.setAttribute("aria-hidden", String(chips.length === 0));
     root.innerHTML = chips.length ? `
-      ${chips.map(chip => `<button type="button" class="ui-chip-button catalog-filter-chip" data-filter-chip-scope="${chip.scope}" data-filter-chip-key="${chip.key}">${escapeHtml(chip.label)}<span aria-hidden="true">×</span></button>`).join("")}
-      <button type="button" class="ui-chip-button catalog-filter-reset" data-filter-reset-scope="${scope}">초기화</button>
+      ${chips.map(catalogFilterChipMarkup).join("")}
+      ${catalogFilterResetMarkup(scope)}
     ` : "";
   });
 };
@@ -3977,6 +4162,7 @@ document.addEventListener("toggle", event => {
   });
 }, true);
 document.addEventListener("click", event => {
+  if (!event.target.closest(".search-box") && !event.target.closest(".overview-search")) closeAllSearchPreviews();
   if (!event.target.closest(".catalog-dropdown")) {
     document.querySelectorAll(".catalog-dropdown[open]").forEach(dropdown => {
       dropdown.removeAttribute("open");
@@ -4002,18 +4188,45 @@ updateToTop();
 
 const modal = document.querySelector("#detailModal");
 let modalScrollY = 0;
+let modalViewportSyncFrame = 0;
+const modalViewportSize = () => {
+  const visualViewport = window.visualViewport;
+  const width = Math.round(visualViewport?.width || window.innerWidth || document.documentElement.clientWidth || 0);
+  const height = Math.round(visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 0);
+  return { width, height };
+};
+const modalLockWidth = () => {
+  const clientWidth = document.documentElement.clientWidth || 0;
+  const innerWidth = window.innerWidth || 0;
+  return Math.round(clientWidth || innerWidth || modalViewportSize().width || 0);
+};
+const cancelModalViewportSync = () => {
+  if (!modalViewportSyncFrame) return;
+  cancelAnimationFrame(modalViewportSyncFrame);
+  modalViewportSyncFrame = 0;
+};
 function syncModalViewportMetrics() {
   if (!modal?.open) return;
-  const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-  document.body.style.setProperty("--modal-viewport-width", `${viewportWidth}px`);
-  document.body.style.setProperty("--modal-viewport-height", `${window.innerHeight}px`);
+  const { width, height } = modalViewportSize();
+  document.body.style.setProperty("--modal-viewport-width", `${width}px`);
+  document.body.style.setProperty("--modal-viewport-height", `${height}px`);
+  document.body.style.setProperty("--modal-lock-width", `${modalLockWidth()}px`);
+}
+function scheduleModalViewportSync() {
+  if (!modal?.open) return;
+  syncModalViewportMetrics();
+  cancelModalViewportSync();
+  modalViewportSyncFrame = requestAnimationFrame(() => {
+    modalViewportSyncFrame = 0;
+    syncModalViewportMetrics();
+  });
 }
 function openModal() {
   if (!modal || modal.open) return;
   modalScrollY = window.scrollY || document.documentElement.scrollTop || 0;
   const bodyRect = document.body.getBoundingClientRect();
   document.body.style.setProperty("--modal-lock-left", `${bodyRect.left}px`);
-  document.body.style.setProperty("--modal-lock-width", `${bodyRect.width}px`);
+  document.body.style.setProperty("--modal-lock-width", `${modalLockWidth()}px`);
   document.body.style.setProperty("--modal-scroll-lock-top", `${modalScrollY * -1}px`);
   document.documentElement.classList.add("is-modal-open");
   document.body.classList.add("is-modal-open");
@@ -4022,6 +4235,7 @@ function openModal() {
 }
 function closeModal() {
   if (modal?.open) modal.close();
+  cancelModalViewportSync();
   document.documentElement.classList.remove("is-modal-open");
   document.body.classList.remove("is-modal-open");
   document.body.style.removeProperty("--modal-lock-left");
@@ -4134,12 +4348,13 @@ function partStats(item) {
     .join("");
   return modeStats ? `<div class="stat-block"><div class="mode-stats">${modeStats}</div>${note}</div>` : "";
 }
-const modalBackButtonMarkup = ({ backId = "", backProductId = "", backRelease = false, region = "", label = "돌아가기" } = {}) => {
+const modalBackButtonMarkup = ({ backId = "", backProductId = "", backRelease = false, region = "", label = "돌아가기", animeEpisodes = false } = {}) => {
   const releaseBackAttr = backRelease ? ` data-back-release="true"` : "";
   const regionBackAttr = region ? ` data-back-region="${escapeAttributeValue(region)}"` : "";
   const backIdAttr = backId ? ` data-back-id="${escapeAttributeValue(backId)}"` : "";
   const productAttr = backProductId ? ` data-back-product-id="${escapeAttributeValue(backProductId)}"` : "";
-  return `<button class="ui-icon-button modal-back icon-back-button" type="button"${backIdAttr}${productAttr}${releaseBackAttr}${regionBackAttr} aria-label="${escapeAttributeValue(label)}">←</button>`;
+  const animeBackAttr = animeEpisodes ? " data-back-anime-episodes" : "";
+  return `<button class="ui-icon-button modal-back icon-back-button" type="button"${backIdAttr}${productAttr}${releaseBackAttr}${regionBackAttr}${animeBackAttr} aria-label="${escapeAttributeValue(label)}">←</button>`;
 };
 const detailBackButton = (backId, backProductId, backRelease, backRegion) => {
   if (backId) {
@@ -4172,13 +4387,17 @@ function bindCatalogModalBack(scope = document, { fallbackRegion = "" } = {}) {
     if (backButton.dataset.backRelease) openCategoryReleaseDetail({ region: backOptions.region || activeReleaseRegion });
   });
 }
+const modalStepButtonMarkup = ({ direction, targetId, kind, label }) =>
+  `<button class="ui-icon-button modal-step modal-step-${direction}" type="button" data-modal-kind="${escapeAttributeValue(kind)}" data-modal-target="${escapeAttributeValue(targetId)}" aria-label="${escapeAttributeValue(label)}"></button>`;
 function modalStepButtons(list, currentId, kind) {
   const index = list.findIndex(entry => entry.id === currentId);
   if (index < 0 || list.length < 2) return "";
   const prev = list[(index - 1 + list.length) % list.length];
   const next = list[(index + 1) % list.length];
-  return `<button class="ui-icon-button modal-step modal-step-prev" type="button" data-modal-kind="${kind}" data-modal-target="${prev.id}" aria-label="전 항목"></button>
-    <button class="ui-icon-button modal-step modal-step-next" type="button" data-modal-kind="${kind}" data-modal-target="${next.id}" aria-label="후 항목"></button>`;
+  return [
+    modalStepButtonMarkup({ direction: "prev", targetId: prev.id, kind, label: "전 항목" }),
+    modalStepButtonMarkup({ direction: "next", targetId: next.id, kind, label: "후 항목" })
+  ].join("");
 }
 function bindModalStepButtons(options = {}) {
   document.querySelectorAll(".modal-step").forEach(button => button.addEventListener("click", event => {
@@ -4220,7 +4439,8 @@ function openDetail(id, options = {}) {
     ? modalInfoSlot(item.desc || "", beyModalTags(item), "single-line-info-slot")
     : modalInfoSlot(item.desc || "", partModalTags(item));
   const body = item.type === "bey" ? beyDetailSections(item, options.region) : partStats(item);
-  const stepItems = visibleCatalogCoreItems().some(entry => entry.id === item.id) ? visibleCatalogCoreItems() : catalogCoreItems;
+  const visibleCoreItems = visibleCatalogCoreItems();
+  const stepItems = visibleCoreItems.some(entry => entry.id === item.id) ? visibleCoreItems : catalogCoreItems;
   const modalContentRoot = document.querySelector("#modalContent");
   modalContentRoot.innerHTML = `${modalStepButtons(stepItems, item.id, "item")}<div class="modal-inner">
     <div class="modal-art">${modalArtMarkup(item)}</div>
@@ -4451,6 +4671,7 @@ modal.addEventListener("cancel", event => {
   closeDetail();
 });
 modal.addEventListener("close", () => {
+  cancelModalViewportSync();
   document.documentElement.classList.remove("is-modal-open");
   document.body.classList.remove("is-modal-open");
   document.body.style.removeProperty("--modal-lock-left");
@@ -4586,7 +4807,7 @@ mobileDrawer?.addEventListener("click", event => {
 window.addEventListener("resize", () => {
   if (window.innerWidth > 980) setMenuOpen(false);
   scheduleCatalogFilterModeCheck();
-  if (modal?.open) syncModalViewportMetrics();
+  if (modal?.open) scheduleModalViewportSync();
   if (!activeModalTagButton) return;
   if (!modal?.open || !document.body.contains(activeModalTagButton)) {
     closeModalTagPopover();
@@ -4594,7 +4815,14 @@ window.addEventListener("resize", () => {
   }
   positionModalTagPopover(activeModalTagButton);
 });
+window.visualViewport?.addEventListener("resize", scheduleModalViewportSync);
+window.visualViewport?.addEventListener("scroll", scheduleModalViewportSync);
 document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && activeSearchPreview) {
+    closeAllSearchPreviews();
+    event.preventDefault();
+    return;
+  }
   if (event.key === "Escape" && activeModalTagButton) {
     closeModalTagPopover();
     event.preventDefault();
