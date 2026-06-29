@@ -1835,27 +1835,152 @@ const beySerialNumber = item => {
   return zeroGMatch ? 200 + Number(zeroGMatch[1]) : Number.MAX_SAFE_INTEGER;
 };
 const wheelTypeOrder = { wheel: 0, clearwheel: 1, "4dclearwheel": 2, lightwheel: 3, metalwheel: 4, "4dmetalwheel": 5, chromewheel: 6, crystalwheel: 7 };
-const itemSearchText = item => {
-  const labels = item.tags.map(tag => tagLabels[tag] || tag).join(" ");
-  const typeText = typeLabels[item.type] || item.type;
-  const structureText = item.type === "bey" ? structureLabels[item.structure] || "" : "";
-  const battleText = item.battleType ? battleTypeLabel(item.battleType, item) : "";
-  const spinText = item.spin ? spinLabel(item.spin) : "";
-  const spinAlias = item.spin === "dual" ? "양회전 좌회전 우회전" : "";
-  const heightText = item.heightClass ? heightClassLabel(item.heightClass) : "";
-  return `${item.name} ${item.en} ${item.sub || ""} ${item.productNo || ""} ${item.desc || ""} ${itemSeriesLabel(item)} ${typeText} ${structureText} ${battleText} ${spinText} ${heightText} ${labels} ${spinAlias}`;
+const directItemSearchText = item => item
+  ? [item.name, item.jpName, item.en, item.sub, item.no, item.productNo].filter(Boolean).join(" ")
+  : "";
+const compactSearchSpacing = value => String(value || "").replace(/\s+/g, "");
+const lowerSearchText = value => String(value || "").toLocaleLowerCase("ko");
+const HANGUL_SYLLABLE_START = 0xac00;
+const HANGUL_SYLLABLE_END = 0xd7a3;
+const HANGUL_MEDIAL_COUNT = 21;
+const HANGUL_FINAL_COUNT = 28;
+const HANGUL_INITIALS = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+const HANGUL_INITIAL_INDEX = new Map(HANGUL_INITIALS.map((char, index) => [char, index]));
+const hangulSyllableParts = char => {
+  const code = char.codePointAt(0);
+  if (code < HANGUL_SYLLABLE_START || code > HANGUL_SYLLABLE_END) return null;
+  const offset = code - HANGUL_SYLLABLE_START;
+  const initial = Math.floor(offset / (HANGUL_MEDIAL_COUNT * HANGUL_FINAL_COUNT));
+  const medial = Math.floor((offset % (HANGUL_MEDIAL_COUNT * HANGUL_FINAL_COUNT)) / HANGUL_FINAL_COUNT);
+  const final = offset % HANGUL_FINAL_COUNT;
+  return final ? [initial, medial, final] : [initial, medial];
 };
-const escapeSearchTerm = term => term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-const searchIncludes = (text, term) => new RegExp(escapeSearchTerm(term), "i").test(text);
-const matchesSearchText = (text, query) => {
-  if (!query) return true;
-  const terms = query.split(",").map(term => term.trim()).filter(Boolean);
-  return terms.length ? terms.every(term => searchIncludes(text, term)) : searchIncludes(text, query);
+const hangulInitialIndex = char => HANGUL_INITIAL_INDEX.has(char) ? HANGUL_INITIAL_INDEX.get(char) : -1;
+const hangulInitialMatchesChar = (textChar, initialChar) => {
+  const textParts = hangulSyllableParts(textChar);
+  const initial = hangulInitialIndex(initialChar);
+  return Boolean(textParts) && initial >= 0 && textParts[0] === initial;
 };
-const itemMatchesSearch = (item, query) => matchesSearchText(itemSearchText(item), query);
+const hangulInitialForChar = char => {
+  if (hangulInitialIndex(char) >= 0) return char;
+  const parts = hangulSyllableParts(char);
+  return parts ? HANGUL_INITIALS[parts[0]] : "";
+};
+const searchCharExactMatches = (textChar, termChar) => textChar.toLocaleLowerCase("ko") === termChar.toLocaleLowerCase("ko");
+const searchCharPrefixMatches = (textChar, termChar) => {
+  const textParts = hangulSyllableParts(textChar);
+  if (textParts && hangulInitialIndex(termChar) >= 0) return hangulInitialMatchesChar(textChar, termChar);
+  const termParts = hangulSyllableParts(termChar);
+  if (textParts && termParts) return termParts.every((part, index) => textParts[index] === part);
+  return searchCharExactMatches(textChar, termChar);
+};
+const searchCharMatches = (textChar, termChar, { allowPrefix = false } = {}) =>
+  allowPrefix ? searchCharPrefixMatches(textChar, termChar) : searchCharExactMatches(textChar, termChar);
+const searchQueryTerms = query => String(query || "").split(",").map(term => term.trim()).filter(Boolean);
+const createHangulInitialWordStartSet = text => {
+  const starts = new Set();
+  String(text || "")
+    .split(/[\s·,.;:!?()[\]{}"“”'‘’/\\\-]+/)
+    .filter(Boolean)
+    .forEach(word => {
+      const initial = hangulInitialForChar([...word][0] || "");
+      if (initial) starts.add(initial);
+    });
+  return starts;
+};
+const createSearchTextIndex = (text = "", initialText = "") => {
+  const raw = String(text || "");
+  const initial = String(initialText || "");
+  const lower = lowerSearchText(raw);
+  const compact = compactSearchSpacing(raw);
+  return {
+    isSearchTextIndex: true,
+    raw,
+    lower,
+    compact,
+    compactLower: compactSearchSpacing(lower),
+    compactChars: [...compact],
+    initialText: initial,
+    initialWordStarts: createHangulInitialWordStartSet(initial)
+  };
+};
+const searchTextIndexFrom = (text, initialText = "") =>
+  text && typeof text === "object" && text.isSearchTextIndex ? text : createSearchTextIndex(text, initialText);
+const prepareSearchTerm = term => {
+  const raw = String(term || "");
+  const compact = compactSearchSpacing(raw);
+  const compactChars = [...compact];
+  return {
+    isPreparedSearchTerm: true,
+    raw,
+    lower: lowerSearchText(raw),
+    compact,
+    compactLower: compactSearchSpacing(lowerSearchText(raw)),
+    compactChars,
+    hasHangulTerm: compactChars.some(char => hangulSyllableParts(char) || hangulInitialIndex(char) >= 0),
+    isSingleHangulInitial: compactChars.length === 1 && hangulInitialIndex(compactChars[0]) >= 0
+  };
+};
+const searchTermFrom = term =>
+  term && typeof term === "object" && term.isPreparedSearchTerm ? term : prepareSearchTerm(term);
+const prepareSearchQuery = query => {
+  const raw = String(query || "").trim();
+  const termTexts = searchQueryTerms(raw);
+  return {
+    isPreparedSearchQuery: true,
+    raw,
+    isEmpty: !raw,
+    terms: raw ? (termTexts.length ? termTexts : [raw]).map(prepareSearchTerm) : []
+  };
+};
+const searchQueryFrom = query =>
+  query && typeof query === "object" && query.isPreparedSearchQuery ? query : prepareSearchQuery(query);
+const hangulJamoPrefixIncludesPrepared = (textIndex, term) => {
+  const textChars = textIndex.compactChars;
+  const termChars = term.compactChars;
+  if (!termChars.length || !term.hasHangulTerm || term.isSingleHangulInitial) return false;
+  for (let start = 0; start <= textChars.length - termChars.length; start += 1) {
+    let matched = true;
+    for (let index = 0; index < termChars.length; index += 1) {
+      if (!searchCharMatches(textChars[start + index], termChars[index], { allowPrefix: index === termChars.length - 1 })) {
+        matched = false;
+        break;
+      }
+    }
+    if (matched) return true;
+  }
+  return false;
+};
+const searchTermMatchRank = (text, term, { initialText = "" } = {}) => {
+  const textIndex = searchTextIndexFrom(text, initialText);
+  const preparedTerm = searchTermFrom(term);
+  if (preparedTerm.lower && textIndex.lower.includes(preparedTerm.lower)) return 2;
+  if (preparedTerm.compactLower && textIndex.compactLower.includes(preparedTerm.compactLower)) return 2;
+  if (preparedTerm.isSingleHangulInitial && textIndex.initialWordStarts.has(preparedTerm.compact)) return 1;
+  return hangulJamoPrefixIncludesPrepared(textIndex, preparedTerm) ? 1 : 0;
+};
+const searchMatchRank = (text, query, { initialText = "" } = {}) => {
+  const preparedQuery = searchQueryFrom(query);
+  if (preparedQuery.isEmpty) return 2;
+  const textIndex = searchTextIndexFrom(text, initialText);
+  const ranks = preparedQuery.terms.map(term => searchTermMatchRank(textIndex, term));
+  return ranks.every(Boolean) ? Math.min(...ranks) : 0;
+};
+const matchesSearchText = (text, query, initialText = "") => {
+  return searchMatchRank(text, query, { initialText }) > 0;
+};
+const directSearchIndexCache = new WeakMap();
+const directItemSearchIndex = item => {
+  if (!item || typeof item !== "object") return createSearchTextIndex("");
+  const cached = directSearchIndexCache.get(item);
+  if (cached) return cached;
+  const text = directItemSearchText(item);
+  const index = createSearchTextIndex(text, text);
+  directSearchIndexCache.set(item, index);
+  return index;
+};
+const directItemMatchesSearch = (item, query) => searchMatchRank(directItemSearchIndex(item), query) > 0;
 
-const toolsSearchText = item => `${item.name} ${item.en} ${itemSeriesLabel(item)} ${item.category} ${item.desc}`;
-const toolsMatchesSearch = (item, query) => matchesSearchText(toolsSearchText(item), query);
 const globalSearchQuery = () => globalSearch?.value.trim() || "";
 const searchResultTitleElement = document.querySelector("#searchResultsTitle");
 const searchResultMeta = document.querySelector("#searchResultsMeta");
@@ -1947,19 +2072,19 @@ const deriveCatalogItemFilters = () => {
   resolvedCatalogStructure = selectedCatalogKind === "bey" ? selectedCatalogStructure : null;
 };
 const visibleToolsItems = () => {
-  const query = globalSearchQuery();
+  const query = prepareSearchQuery(globalSearchQuery());
   if (selectedCatalogKind && selectedCatalogKind !== "tools") return [];
   return toolsItems
-    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!selectedCatalogSubtype || item.category === selectedCatalogSubtype) && toolsMatchesSearch(item, query))
+    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!selectedCatalogSubtype || item.category === selectedCatalogSubtype) && (query.isEmpty || directItemMatchesSearch(item, query)))
     .sort(compareToolsItemsByFirstRelease);
 };
 const visibleCatalogCoreItems = () => {
-  const query = globalSearchQuery();
+  const query = prepareSearchQuery(globalSearchQuery());
   if (selectedCatalogKind === "tools") return [];
   const useTypeFilter = resolvedCatalogItemType !== "all";
   const useMetalAttributeFilters = isMetalFightSeries(selectedCatalogSeries);
   return catalogCoreItems
-    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!useTypeFilter || (catalogItemTypeGroup ? catalogItemTypeGroup.includes(item.type) : item.type === resolvedCatalogItemType)) && (!useMetalAttributeFilters || !resolvedCatalogStructure || item.structure === resolvedCatalogStructure) && (!useMetalAttributeFilters || matchesCatalogBattleType(item)) && (!useMetalAttributeFilters || matchesCatalogSpin(item)) && itemMatchesSearch(item, query))
+    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!useTypeFilter || (catalogItemTypeGroup ? catalogItemTypeGroup.includes(item.type) : item.type === resolvedCatalogItemType)) && (!useMetalAttributeFilters || !resolvedCatalogStructure || item.structure === resolvedCatalogStructure) && (!useMetalAttributeFilters || matchesCatalogBattleType(item)) && (!useMetalAttributeFilters || matchesCatalogSpin(item)) && (query.isEmpty || directItemMatchesSearch(item, query)))
     .sort((a, b) => {
       if (useMetalAttributeFilters && a.type === "bey" && b.type === "bey") return beySerialNumber(a) - beySerialNumber(b);
       if (useMetalAttributeFilters && resolvedCatalogItemType === "wheel" && catalogItemTypeGroup) return (wheelTypeOrder[a.type] ?? 99) - (wheelTypeOrder[b.type] ?? 99);
@@ -1994,8 +2119,16 @@ const renderCatalogCards = ({ gridSelector, countSelector, getItems, cardTemplat
   grid.innerHTML = visible.map(cardTemplate).join("");
   bindCatalogCardClicks(grid);
 };
-const searchScopeLabel = scope => ({ all: "전체", bey: "베이", tools: "장비" })[scope] || "전체";
-const normalizeSearchScope = scope => ["all", "bey", "tools"].includes(scope) ? scope : "all";
+const searchScopeLabel = scope => ({
+  all: "전체",
+  bey: "베이",
+  tools: "장비",
+  product: "제품",
+  manga: "만화",
+  anime: "애니"
+})[scope] || "전체";
+const searchScopeValues = ["all", "bey", "tools", "product", "manga", "anime"];
+const normalizeSearchScope = scope => searchScopeValues.includes(scope) ? scope : "all";
 const updateCatalogCount = () => {
   const count = document.querySelector("#catalogCount");
   if (!count) return;
@@ -2017,65 +2150,137 @@ const searchHashParams = hash => {
   return new URLSearchParams(value);
 };
 const isSearchHash = () => window.location.hash.startsWith("#search");
-const releaseSearchText = (item, region) => {
+const productCompositionSearchText = (item, region) => productCompositionItems(item, region)
+  .map(part => [part.name, directItemSearchText(findCatalogItemById(part.target))].filter(Boolean).join(" "))
+  .filter(Boolean)
+  .join(" ");
+const releasePrimarySearchText = (item, region) => {
   const release = productRelease(item, region);
   if (release.status === "unreleased") return "";
-  const compositionText = productCompositionItems(item, region).map(part => `${part.name || ""} ${part.quantity || part.qty || ""}`).join(" ");
   return [
     release.no,
     release.name,
-    release.sale,
-    release.kind,
-    release.releaseDate || release.release,
-    release.price,
-    compositionText
+    productCompositionSearchText(item, region)
   ].filter(Boolean).join(" ");
 };
 const productSearchText = item => [
-  item.id,
   item.no,
   item.name,
-  seriesLabels[item.series] || item.series || "",
-  releaseSearchText(item, "kr"),
-  releaseSearchText(item, "jp")
+  releasePrimarySearchText(item, "kr"),
+  releasePrimarySearchText(item, "jp")
 ].filter(Boolean).join(" ");
-const productMatchesSearch = (item, query) => matchesSearchText(productSearchText(item), query);
-const bookSearchText = item => `${item.id} ${item.name} ${item.en || ""} ${item.category || ""} ${item.desc || ""}`;
-const bookMatchesSearch = (item, query) => matchesSearchText(bookSearchText(item), query);
-const gameSearchText = item => `${item.id} ${item.name} ${item.category || ""} ${item.desc || ""}`;
-const gameMatchesSearch = (item, query) => matchesSearchText(gameSearchText(item), query);
-const animeEpisodeGlobalSearchText = (episode, index) => [
-  episodeHashId(index),
+const animeEpisodeDirectSearchText = episode => [
   episode.no || "",
   episode.titles?.kr || "",
-  episode.titles?.jp || "",
-  animeSeasonLabels[episode.season] || episode.season || "",
-  animeAirDateLabel(episode.airDates?.kr || ""),
-  animeAirDateLabel(episode.airDates?.jp || ""),
-  episode.airDates?.kr || "",
-  episode.airDates?.jp || "",
-  episode.note || ""
+  episode.titles?.jp || ""
 ].filter(Boolean).join(" ");
-const animeEpisodeMatchesSearch = (episode, index, query) => matchesSearchText(animeEpisodeGlobalSearchText(episode, index), query);
-const visibleSearchResultItems = (scope = globalSearchScopeValue(), query = globalSearchQuery()) => {
+let searchResultRecordCache = null;
+let searchResultRecordListCache = null;
+const SEARCH_RESULT_ITEMS_CACHE_LIMIT = 64;
+const SEARCH_RESULT_MARKUP_CACHE_LIMIT = 32;
+const SEARCH_RESULTS_PAGE_SIZE = 10;
+const SEARCH_HASH_UPDATE_DELAY = 180;
+const searchResultItemsCache = new Map();
+const searchResultMarkupCache = new Map();
+const cacheSearchResultItems = (key, result) => {
+  if (!searchResultItemsCache.has(key) && searchResultItemsCache.size >= SEARCH_RESULT_ITEMS_CACHE_LIMIT) {
+    searchResultItemsCache.delete(searchResultItemsCache.keys().next().value);
+  }
+  searchResultItemsCache.set(key, result);
+  return result;
+};
+const cacheSearchResultMarkup = (key, result) => {
+  if (!searchResultMarkupCache.has(key) && searchResultMarkupCache.size >= SEARCH_RESULT_MARKUP_CACHE_LIMIT) {
+    searchResultMarkupCache.delete(searchResultMarkupCache.keys().next().value);
+  }
+  searchResultMarkupCache.set(key, result);
+  return result;
+};
+const unifiedSearchRecord = (kind, item, searchText, extra = {}) => {
+  const searchIndex = createSearchTextIndex(searchText, searchText);
+  const record = {
+    kind,
+    item,
+    ...extra,
+    searchIndex
+  };
+  record.entry = kind === "anime" ? { kind, item, index: record.index } : { kind, item };
+  return record;
+};
+const createUnifiedSearchRecords = ({ items, kind, searchText = directItemSearchText, extra = () => ({}) }) =>
+  items.map((item, index) => unifiedSearchRecord(kind, item, searchText(item, index), extra(item, index)));
+const searchResultRecordSources = () => [
+  { key: "catalog", kind: "catalog-item", items: catalogCoreItems },
+  { key: "tools", kind: "tools", items: toolsItems },
+  { key: "product", kind: "product", items: productItems.filter(item => !item.lineupOnly), searchText: productSearchText },
+  { key: "manga", kind: "book", items: bookItems },
+  { key: "game", kind: "game", items: gameItems },
+  { key: "anime", kind: "anime", items: animeInfo.episodes, searchText: animeEpisodeDirectSearchText, extra: (episode, index) => ({ index }) }
+];
+const searchResultRecords = () => {
+  if (searchResultRecordCache) return searchResultRecordCache;
+  searchResultRecordCache = Object.fromEntries(searchResultRecordSources().map(source => [source.key, createUnifiedSearchRecords(source)]));
+  return searchResultRecordCache;
+};
+const searchResultCacheKey = (scope, query) => `${scope}\u0000${searchQueryFrom(query).raw}`;
+const searchResultRenderKey = (scope, query) => [
+  scope,
+  searchQueryFrom(query).raw,
+  activeReleaseRegion,
+  animeDisplayRegion
+].join("\u0000");
+const searchResultRecordLists = () => {
+  if (searchResultRecordListCache) return searchResultRecordListCache;
+  const records = searchResultRecords();
+  searchResultRecordListCache = {
+    all: [...records.catalog, ...records.tools, ...records.product, ...records.manga, ...records.game, ...records.anime],
+    bey: records.catalog,
+    tools: records.tools,
+    product: records.product,
+    manga: records.manga,
+    anime: records.anime
+  };
+  return searchResultRecordListCache;
+};
+const searchResultRecordList = scope => searchResultRecordLists()[normalizeSearchScope(scope)] || searchResultRecordLists().all;
+const searchResultRecordRank = (record, query) => searchMatchRank(record.searchIndex, query);
+const collectSearchResultItems = (scope = globalSearchScopeValue(), query = globalSearchQuery()) => {
   scope = normalizeSearchScope(scope);
-  const results = [];
-  if (scope === "all" || scope === "bey") {
-    results.push(...catalogCoreItems.filter(item => itemMatchesSearch(item, query)).map(item => ({ kind: "catalog-item", item })));
+  const preparedQuery = searchQueryFrom(query);
+  const cacheKey = searchResultCacheKey(scope, preparedQuery);
+  const cached = searchResultItemsCache.get(cacheKey);
+  if (cached) return cached;
+  const exact = [];
+  const fallback = [];
+  for (const record of searchResultRecordList(scope)) {
+    const rank = searchResultRecordRank(record, preparedQuery);
+    if (rank === 2) exact.push(record.entry);
+    else if (rank === 1) fallback.push(record.entry);
   }
-  if (scope === "all" || scope === "tools") {
-    results.push(...toolsItems.filter(item => toolsMatchesSearch(item, query)).map(item => ({ kind: "tools", item })));
+  const items = exact.concat(fallback);
+  const result = { total: items.length, items };
+  return cacheSearchResultItems(cacheKey, result);
+};
+const collectSearchPreviewItems = (scope = globalSearchScopeValue(), query = globalSearchQuery(), limit = SEARCH_PREVIEW_LIMIT) => {
+  scope = normalizeSearchScope(scope);
+  const preparedQuery = searchQueryFrom(query);
+  const cached = searchResultItemsCache.get(searchResultCacheKey(scope, preparedQuery));
+  if (cached) return cached.items.slice(0, limit);
+  const exact = [];
+  const fallback = [];
+  for (const record of searchResultRecordList(scope)) {
+    const rank = searchResultRecordRank(record, preparedQuery);
+    if (rank === 2) {
+      exact.push(record.entry);
+      if (exact.length >= limit) return exact;
+    } else if (rank === 1 && fallback.length < limit) {
+      fallback.push(record.entry);
+    }
   }
-  if (scope === "all") {
-    results.push(...productItems.filter(item => !item.lineupOnly && productMatchesSearch(item, query)).map(item => ({ kind: "product", item })));
-    results.push(...bookItems.filter(item => bookMatchesSearch(item, query)).map(item => ({ kind: "book", item })));
-    results.push(...gameItems.filter(item => gameMatchesSearch(item, query)).map(item => ({ kind: "game", item })));
-    results.push(...animeInfo.episodes
-      .map((episode, index) => ({ episode, index }))
-      .filter(({ episode, index }) => animeEpisodeMatchesSearch(episode, index, query))
-      .map(({ episode, index }) => ({ kind: "anime", item: episode, index })));
-  }
-  return results;
+  return exact.concat(fallback).slice(0, limit);
+};
+const visibleSearchResultItems = (scope = globalSearchScopeValue(), query = globalSearchQuery()) => {
+  return collectSearchResultItems(scope, query).items;
 };
 const searchResultType = entry => {
   if (entry.kind === "tools") return "장비";
@@ -2143,6 +2348,56 @@ const searchResultButton = entry => {
     <span class="search-result-snippet">${escapeHtml(searchResultSnippet(entry))}</span>
   </button>`;
 };
+const searchResultButtonMarkupSlice = (renderKey, items, start, end) => {
+  const cached = searchResultMarkupCache.get(renderKey);
+  const markup = cached || cacheSearchResultMarkup(renderKey, []);
+  const safeStart = Math.max(0, start);
+  const safeEnd = Math.min(end, items.length);
+  for (let index = safeStart; index < safeEnd; index += 1) {
+    if (!markup[index]) markup[index] = searchResultButton(items[index]);
+  }
+  return markup.slice(safeStart, safeEnd);
+};
+const searchResultPageButtons = (currentPage, totalPages) => {
+  if (totalPages <= 1) return "";
+  const pages = [];
+  const start = Math.max(1, currentPage - 2);
+  const end = Math.min(totalPages, currentPage + 2);
+  for (let page = start; page <= end; page += 1) pages.push(page);
+  const pageButtons = pages.map(page => `
+    <button class="ui-button search-results-page-button${page === currentPage ? " active" : ""}" type="button" data-search-results-page="${page}"${page === currentPage ? " aria-current=\"page\"" : ""}>${page}</button>`).join("");
+  return `<nav class="search-results-pagination" aria-label="검색결과 페이지">
+    <button class="ui-button search-results-page-step" type="button" data-search-results-page="${currentPage - 1}" ${currentPage <= 1 ? "disabled aria-disabled=\"true\"" : ""}>이전</button>
+    ${start > 1 ? `<button class="ui-button search-results-page-button" type="button" data-search-results-page="1">1</button>${start > 2 ? `<span class="search-results-page-gap">…</span>` : ""}` : ""}
+    ${pageButtons}
+    ${end < totalPages ? `${end < totalPages - 1 ? `<span class="search-results-page-gap">…</span>` : ""}<button class="ui-button search-results-page-button" type="button" data-search-results-page="${totalPages}">${totalPages}</button>` : ""}
+    <button class="ui-button search-results-page-step" type="button" data-search-results-page="${currentPage + 1}" ${currentPage >= totalPages ? "disabled aria-disabled=\"true\"" : ""}>다음</button>
+  </nav>`;
+};
+let currentSearchResultPage = 1;
+let currentSearchResultKey = "";
+const resetCurrentSearchResultPage = key => {
+  currentSearchResultKey = key;
+  currentSearchResultPage = 1;
+};
+const syncSearchResultRenderState = (scope, query) => {
+  const normalizedScope = normalizeSearchScope(scope);
+  const preparedQuery = prepareSearchQuery(query);
+  const renderKey = searchResultRenderKey(normalizedScope, preparedQuery);
+  if (renderKey !== currentSearchResultKey) resetCurrentSearchResultPage(renderKey);
+  return { scope: normalizedScope, query: preparedQuery.raw, preparedQuery, renderKey };
+};
+const bindSearchResultControls = gridRoot => {
+  if (!gridRoot || gridRoot.dataset.searchResultControlsBound) return;
+  gridRoot.dataset.searchResultControlsBound = "true";
+  gridRoot.addEventListener("click", event => {
+    const pageButton = event.target.closest("[data-search-results-page]");
+    if (!pageButton || pageButton.disabled || !gridRoot.contains(pageButton)) return;
+    event.preventDefault();
+    currentSearchResultPage = Number(pageButton.dataset.searchResultsPage) || 1;
+    renderGlobalCards();
+  });
+};
 const SEARCH_PREVIEW_LIMIT = 6;
 const searchPreviewControls = new Map();
 let activeSearchPreview = null;
@@ -2185,12 +2440,11 @@ const renderSearchPreview = control => {
     return;
   }
   closeAllSearchPreviews(control);
-  const visible = visibleSearchResultItems(searchPreviewScopeValue(control.input), query);
-  control.entries = visible.slice(0, SEARCH_PREVIEW_LIMIT);
+  control.entries = collectSearchPreviewItems(searchPreviewScopeValue(control.input), query);
   if (control.highlightedIndex >= control.entries.length) control.highlightedIndex = -1;
   control.preview.innerHTML = control.entries.length
     ? `<div class="search-preview-list" role="presentation">${control.entries.map((entry, index) => searchPreviewItemButton(entry, control, index)).join("")}</div>
-      <button class="search-preview-all" type="button" data-search-preview-all>전체 검색결과 보기<span>${visible.length}개</span></button>`
+      <button class="search-preview-all" type="button" data-search-preview-all>전체 검색결과 보기</button>`
     : `<div class="search-preview-empty">검색결과가 없습니다.</div>`;
   control.preview.hidden = false;
   activeSearchPreview = control;
@@ -2293,10 +2547,14 @@ const renderGlobalCards = () => {
   const grid = document.querySelector("#globalGrid");
   const count = document.querySelector("#globalCount");
   if (!grid || !count) return;
-  const query = globalSearchQuery();
-  const scope = normalizeSearchScope(globalSearchScopeValue());
-  const visible = visibleSearchResultItems(scope, query);
-  count.textContent = visible.length;
+  const { scope, query, preparedQuery, renderKey } = syncSearchResultRenderState(globalSearchScopeValue(), globalSearchQuery());
+  const visible = collectSearchResultItems(scope, preparedQuery).items;
+  const totalCount = visible.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / SEARCH_RESULTS_PAGE_SIZE));
+  currentSearchResultPage = Math.min(Math.max(1, currentSearchResultPage), totalPages);
+  const pageStart = (currentSearchResultPage - 1) * SEARCH_RESULTS_PAGE_SIZE;
+  const pageEnd = pageStart + SEARCH_RESULTS_PAGE_SIZE;
+  count.textContent = totalCount;
   if (searchResultTitleElement) {
     searchResultTitleElement.textContent = query
       ? `${query}의 검색결과`
@@ -2307,10 +2565,12 @@ const renderGlobalCards = () => {
   if (searchResultMeta) {
     searchResultMeta.textContent = scope === "all" ? "" : `${searchScopeLabel(scope)} 범위`;
   }
+  const itemMarkup = visible.length ? searchResultButtonMarkupSlice(renderKey, visible, pageStart, pageEnd) : [];
   grid.innerHTML = visible.length
-    ? visible.map(searchResultButton).join("")
+    ? `${itemMarkup.join("")}${searchResultPageButtons(currentSearchResultPage, totalPages)}`
     : `<div class="search-empty"><strong>검색결과가 없습니다.</strong><p>검색어를 줄이거나 범위를 전체로 바꿔보세요.</p></div>`;
   bindCatalogCardClicks(grid);
+  bindSearchResultControls(grid);
 };
 
 const orderedTags = item => item.tags.slice();
@@ -2693,13 +2953,21 @@ const releaseSortableColumns = {
 };
 const releaseTableSearchText = (item, region = activeReleaseRegion) => {
   const release = productRelease(item, region);
+  const releaseDate = release.releaseDate || release.release;
   return [
     release.no || "",
     release.name || item.name || "",
+    release.sale || "",
     release.kind || "",
-    releaseDateLabel(release.releaseDate || release.release),
+    releaseDate,
+    releaseDateLabel(releaseDate),
+    release.price,
     priceLabel(release.price, region)
   ].join(" ");
+};
+const releaseTableInitialSearchText = (item, region = activeReleaseRegion) => {
+  const release = productRelease(item, region);
+  return [release.name || item.name || "", item.name || ""].filter(Boolean).join(" ");
 };
 const releaseSortTieBreak = (a, b, region = activeReleaseRegion) => {
   const serialDiff = productSerialNumber(a, region) - productSerialNumber(b, region);
@@ -2745,7 +3013,7 @@ const visibleReleaseTableItems = (region = activeReleaseRegion, series = activeR
   const sortedItems = productItems
     .slice()
     .filter(item => !item.lineupOnly && item.series === series && productReleasedInRegion(item, region))
-    .filter(item => matchesSearchText(releaseTableSearchText(item, region), query))
+    .filter(item => matchesSearchText(releaseTableSearchText(item, region), query, releaseTableInitialSearchText(item, region)))
     .sort((a, b) => compareReleaseTableItemsAsc(a, b, activeReleaseSort.key, region));
   return activeReleaseSort.direction === "desc" ? sortedItems.reverse() : sortedItems;
 };
@@ -3564,13 +3832,14 @@ const animeEpisodeSearchText = episode => [
   animeAirDateLabel(episode.airDates?.[animeDisplayRegion] || ""),
   episode.note || ""
 ].join(" ");
+const animeEpisodeDisplayInitialSearchText = episode => episode.titles?.[animeDisplayRegion] || "";
 
 const visibleAnimeEpisodes = () => {
   const query = activeAnimeEpisodeQuery.trim();
   return animeInfo.episodes
     .map((episode, index) => ({ episode, index }))
     .filter(({ episode }) => episode.season === activeAnimeSeason)
-    .filter(({ episode }) => matchesSearchText(animeEpisodeSearchText(episode), query));
+    .filter(({ episode }) => matchesSearchText(animeEpisodeSearchText(episode), query, animeEpisodeDisplayInitialSearchText(episode)));
 };
 
 const animeEpisodeRowsMarkup = visibleRows => {
@@ -3778,9 +4047,12 @@ document.querySelector(".overview-panel")?.addEventListener("click", event => {
 
 });
 const renderSearchResults = () => {
-  renderGlobalCards();
-  renderCatalogItems();
-  syncCatalogScopeState();
+  const panel = activeToyPanelName();
+  if (panel === "all") renderGlobalCards();
+  if (panel === "catalog") {
+    renderCatalogItems();
+    syncCatalogScopeState();
+  }
 };
 const activeToyPanelName = () => activeToyPanel()?.dataset.toyPanel || "";
 const syncSearchHashToControls = () => {
@@ -3792,14 +4064,52 @@ const syncSearchHashToControls = () => {
   setGlobalSearchScope(scope);
   setOverviewSearchScope(scope);
 };
-const refreshActiveSearchResults = () => {
-  renderGlobalCards();
+let searchHashUpdateTimer = 0;
+const updateActiveSearchHash = () => {
+  if (searchHashUpdateTimer) clearTimeout(searchHashUpdateTimer);
+  searchHashUpdateTimer = 0;
+  if (activeToyPanelName() !== "all") return;
   const nextHash = searchHash();
   if (window.location.hash !== nextHash) {
     history.replaceState(null, "", `${window.location.pathname}${window.location.search}${nextHash}`);
   }
 };
+const scheduleActiveSearchHashUpdate = () => {
+  if (searchHashUpdateTimer) clearTimeout(searchHashUpdateTimer);
+  searchHashUpdateTimer = setTimeout(updateActiveSearchHash, SEARCH_HASH_UPDATE_DELAY);
+};
+const refreshActiveSearchResults = ({ deferHash = true } = {}) => {
+  renderGlobalCards();
+  if (deferHash) scheduleActiveSearchHashUpdate();
+  else updateActiveSearchHash();
+};
+let activeSearchResultsFrame = 0;
+let catalogSearchResultsFrame = 0;
+const cancelScheduledSearchRenders = () => {
+  if (activeSearchResultsFrame) cancelAnimationFrame(activeSearchResultsFrame);
+  if (catalogSearchResultsFrame) cancelAnimationFrame(catalogSearchResultsFrame);
+  if (searchHashUpdateTimer) clearTimeout(searchHashUpdateTimer);
+  activeSearchResultsFrame = 0;
+  catalogSearchResultsFrame = 0;
+  searchHashUpdateTimer = 0;
+};
+const scheduleActiveSearchResultsRefresh = () => {
+  if (activeSearchResultsFrame) cancelAnimationFrame(activeSearchResultsFrame);
+  activeSearchResultsFrame = requestAnimationFrame(() => {
+    activeSearchResultsFrame = 0;
+    refreshActiveSearchResults();
+  });
+};
+const scheduleCatalogSearchResultsRefresh = () => {
+  if (catalogSearchResultsFrame) cancelAnimationFrame(catalogSearchResultsFrame);
+  catalogSearchResultsFrame = requestAnimationFrame(() => {
+    catalogSearchResultsFrame = 0;
+    renderCatalogItems();
+    syncCatalogScopeState();
+  });
+};
 const openSearchResults = ({ replace = false } = {}) => {
+  cancelScheduledSearchRenders();
   closeAllSearchPreviews();
   document.querySelectorAll(".nav-link").forEach(link => link.classList.remove("active"));
   activateToyPanel("all");
@@ -3851,8 +4161,14 @@ const syncOverviewSearchToGlobal = () => {
   setGlobalSearchScope(overviewSearchScopeValue());
 };
 const refreshSearchPanel = () => {
-  if (activeToyPanelName() === "all") refreshActiveSearchResults();
-  else renderSearchResults();
+  const panel = activeToyPanelName();
+  if (panel === "all") {
+    scheduleActiveSearchResultsRefresh();
+    return;
+  }
+  if (panel === "catalog") {
+    scheduleCatalogSearchResultsRefresh();
+  }
 };
 bindSearchInput(globalSearch, ".search-box", {
   onInput: refreshSearchPanel,
@@ -3887,7 +4203,7 @@ globalSearchScope?.addEventListener("click", event => {
   event.preventDefault();
   setGlobalSearchScope(button.dataset.globalSearchScope || "all");
   if (activeToyPanelName() === "all") openSearchResults({ replace: true });
-  else renderSearchResults();
+  else refreshSearchPanel();
   refreshSearchPreview(globalSearch, { resetActive: true });
 });
 const setDropdownOption = button => {
@@ -4719,6 +5035,7 @@ const setMenuOpen = open => {
   }
 };
 const activatePrimarySection = section => {
+  cancelScheduledSearchRenders();
   if (section === "product") section = "overview";
   const isCatalogSection = ["catalog", "bey", "tools"].includes(section);
   const catalogScope = section === "catalog" ? "all" : section;
@@ -4739,7 +5056,10 @@ const activatePrimarySection = section => {
     setCatalogScope(catalogScope);
     setGlobalSearchScope(catalogScope === "all" ? "all" : catalogScope);
   }
-  if (panelSection === "catalog") syncCatalogScopeState();
+  if (panelSection === "catalog") {
+    renderCatalogItems();
+    syncCatalogScopeState();
+  }
 
   setMenuOpen(false);
 };

@@ -321,6 +321,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   color: var(--ui-control-text-active) !important;
   font: inherit !important;
   font-size: var(--font-md) !important;
+  font-weight: 400 !important;
 }
 
 .search-box input[type="search"]:-webkit-autofill,
@@ -488,7 +489,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   text-overflow: clip !important;
   color: var(--ui-text) !important;
   font-size: var(--search-scope-font-size, var(--font-md)) !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   white-space: nowrap !important;
 }
 
@@ -510,11 +511,14 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
 
 .search-box .search-scope.catalog-dropdown .catalog-dropdown-menu {
   top: calc(100% + 8px) !important;
-  left: 0 !important;
-  width: max-content !important;
-  min-width: 100% !important;
-  max-height: min(220px, 50vh) !important;
+  left: 50% !important;
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+  max-height: none !important;
   padding: 8px !important;
+  overflow-y: visible !important;
+  transform: translateX(-50%) !important;
   z-index: 50 !important;
 }
 
@@ -522,6 +526,7 @@ dialog[open] .modal-scroll-area::-webkit-scrollbar-corner,
   min-height: 32px !important;
   padding: 0 10px !important;
   font-size: var(--search-scope-font-size, var(--font-md)) !important;
+  font-weight: 400 !important;
 }
 .global-search-box {
   flex: 0 1 420px !important;
@@ -2731,7 +2736,7 @@ body.is-overview .catalog-section {
   --overview-scope-min-width: var(--primary-search-scope-min-width);
   --overview-scope-max-width: var(--primary-search-scope-max-width);
   --overview-scope-summary-padding: var(--primary-search-scope-padding);
-  --overview-card-grid-gap: 14px;
+  --overview-card-grid-gap: clamp(6px, 2.2vw, 14px);
   --overview-card-min-height: 140px;
   --overview-card-columns: minmax(0, 1fr) auto;
   --overview-card-areas:
@@ -2739,13 +2744,18 @@ body.is-overview .catalog-section {
     "title arrow"
     "desc arrow";
   --overview-card-justify-items: stretch;
-  --overview-card-padding: 22px 24px;
+  --overview-card-padding: clamp(10px, 3vw, 22px) clamp(8px, 3.2vw, 24px);
+  --overview-card-row-gap: 8px;
+  --overview-card-column-gap: clamp(4px, calc(-4px + 3.4vw), 18px);
   --overview-card-radius: 24px;
   --overview-card-text-align: left;
   --overview-card-detail-display: inline;
-  --overview-card-title-size: var(--font-xl);
+  --overview-card-label-size: clamp(.45rem, 2.5vw, var(--font-md));
+  --overview-card-title-size: clamp(.625rem, 3.45vw, var(--font-xl));
+  --overview-card-desc-size: clamp(.45rem, 2.5vw, var(--font-md));
+  --overview-card-arrow-size: clamp(.625rem, 3.45vw, var(--font-xl));
   --overview-card-title-line-height: 1.2;
-  --overview-card-title-white-space: normal;
+  --overview-card-title-white-space: nowrap;
   --overview-card-title-word-break: normal;
   --overview-card-title-overflow-wrap: normal;
   width: min(100%, 960px) !important;
@@ -2875,7 +2885,7 @@ body.is-overview .catalog-section {
   text-overflow: clip !important;
   color: var(--ui-text) !important;
   font-size: var(--search-scope-font-size, var(--font-md)) !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   white-space: nowrap !important;
 }
 
@@ -2897,11 +2907,14 @@ body.is-overview .catalog-section {
 
 .overview-search .search-scope.catalog-dropdown .catalog-dropdown-menu {
   top: calc(100% + 8px) !important;
-  left: 0 !important;
-  width: max-content !important;
-  min-width: 100% !important;
-  max-height: min(220px, 50vh) !important;
+  left: 50% !important;
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+  max-height: none !important;
   padding: 8px !important;
+  overflow-y: visible !important;
+  transform: translateX(-50%) !important;
   z-index: 80 !important;
 }
 
@@ -2909,6 +2922,7 @@ body.is-overview .catalog-section {
   min-height: 32px !important;
   padding: 0 10px !important;
   font-size: var(--search-scope-font-size, var(--font-md)) !important;
+  font-weight: 400 !important;
 }
 
 .overview-search input {
@@ -2921,6 +2935,7 @@ body.is-overview .catalog-section {
   color: var(--ui-text) !important;
   font: inherit !important;
   font-size: var(--font-md) !important;
+  font-weight: 400 !important;
 }
 
 .overview-search input::placeholder {
@@ -3087,6 +3102,22 @@ body.is-overview .catalog-section {
   border-color: var(--ui-text) !important;
   background: var(--ui-text) !important;
   color: var(--ui-surface) !important;
+}
+
+.catalog-filter-chips {
+  width: 100% !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.catalog-filter-chips.is-empty {
+  display: none !important;
+}
+
+.catalog-filter-chips > .ui-chip-button {
+  margin: 0 !important;
 }
 
 .catalog-filter-chip {
@@ -3297,7 +3328,7 @@ body.is-overview .catalog-section {
   margin: 0 !important;
   color: var(--ui-text) !important;
   font-size: var(--font-title) !important;
-  font-weight: 800 !important;
+  font-weight: 700 !important;
   line-height: 1.08 !important;
 }
 
@@ -3309,7 +3340,7 @@ body.is-overview .catalog-section {
   background: var(--ui-control) !important;
   color: var(--ui-muted) !important;
   font-size: var(--font-sm) !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   white-space: nowrap !important;
 }
 
@@ -3318,7 +3349,7 @@ body.is-overview .catalog-section {
   margin: 0 0 22px !important;
   color: var(--ui-muted) !important;
   font-size: var(--font-sm) !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   line-height: 1.45 !important;
 }
 
@@ -3362,7 +3393,7 @@ body.is-overview .catalog-section {
   background: var(--ui-control) !important;
   color: var(--ui-muted) !important;
   font-size: var(--font-xs) !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   line-height: 1 !important;
   white-space: nowrap !important;
 }
@@ -3372,7 +3403,7 @@ body.is-overview .catalog-section {
   min-width: 0 !important;
   color: var(--ui-text) !important;
   font-size: var(--font-lg) !important;
-  font-weight: 800 !important;
+  font-weight: 600 !important;
   line-height: 1.25 !important;
 }
 
@@ -3385,18 +3416,57 @@ body.is-overview .catalog-section {
   word-break: keep-all !important;
 }
 
+.search-results-pagination {
+  justify-self: center !important;
+  margin-top: 12px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+}
+
+.search-results-pagination .ui-button {
+  min-width: 38px !important;
+  min-height: 34px !important;
+  padding: 0 11px !important;
+  background: var(--ui-control) !important;
+  color: var(--ui-muted) !important;
+  font-size: var(--font-sm) !important;
+  font-weight: 500 !important;
+}
+
+.search-results-pagination .ui-button:hover,
+.search-results-pagination .ui-button:focus-visible,
+.search-results-pagination .ui-button.active {
+  background: var(--ui-control-hover) !important;
+  color: var(--ui-control-text-active) !important;
+}
+
+.search-results-pagination .ui-button:disabled {
+  opacity: .42 !important;
+  cursor: default !important;
+}
+
+.search-results-page-gap {
+  min-width: 18px !important;
+  color: var(--ui-muted) !important;
+  text-align: center !important;
+  font-size: var(--font-sm) !important;
+}
+
 .search-preview {
   position: absolute !important;
   top: calc(100% + 8px) !important;
   left: 0 !important;
   right: 0 !important;
   z-index: 65 !important;
-  max-height: min(440px, 58vh) !important;
+  max-height: none !important;
   padding: 8px !important;
   display: grid !important;
   gap: 6px !important;
   overflow-x: hidden !important;
-  overflow-y: auto !important;
+  overflow-y: visible !important;
   border: 1px solid var(--ui-line) !important;
   border-radius: var(--ui-panel-radius) !important;
   background: var(--ui-surface) !important;
@@ -3466,7 +3536,7 @@ body.is-overview .catalog-section {
   color: var(--ui-text) !important;
   font: inherit !important;
   font-size: var(--font-sm) !important;
-  font-weight: 700 !important;
+  font-weight: 500 !important;
   text-align: left !important;
 }
 
@@ -3479,7 +3549,7 @@ body.is-overview .catalog-section {
 .search-preview-all span {
   color: var(--ui-muted) !important;
   font-size: var(--font-xs) !important;
-  font-weight: 600 !important;
+  font-weight: 400 !important;
   white-space: nowrap !important;
 }
 
@@ -3487,7 +3557,7 @@ body.is-overview .catalog-section {
   padding: 14px 12px !important;
   color: var(--ui-muted) !important;
   font-size: var(--font-sm) !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
 }
 
 .search-empty {
@@ -3520,7 +3590,7 @@ body.is-overview .catalog-section {
   display: grid !important;
   grid-template-columns: var(--overview-card-columns) !important;
   grid-template-areas: var(--overview-card-areas) !important;
-  gap: 8px 18px !important;
+  gap: var(--overview-card-row-gap) var(--overview-card-column-gap) !important;
   align-items: center !important;
   justify-items: var(--overview-card-justify-items) !important;
   padding: var(--overview-card-padding) !important;
@@ -3547,7 +3617,7 @@ body.is-overview .catalog-section {
   display: var(--overview-card-detail-display) !important;
   grid-area: eyebrow !important;
   color: var(--ui-muted) !important;
-  font-size: var(--font-md) !important;
+  font-size: var(--overview-card-label-size) !important;
   font-weight: 500 !important;
 }
 
@@ -3566,16 +3636,23 @@ body.is-overview .catalog-section {
   display: var(--overview-card-detail-display) !important;
   grid-area: desc !important;
   color: var(--ui-muted) !important;
-  font-size: var(--font-md) !important;
+  font-size: var(--overview-card-desc-size) !important;
   font-weight: 400 !important;
   line-height: 1.45 !important;
+}
+
+.overview-open-card span,
+.overview-open-card strong,
+.overview-open-card small {
+  min-width: 0 !important;
+  white-space: nowrap !important;
 }
 
 .overview-open-card b {
   display: var(--overview-card-detail-display) !important;
   grid-area: arrow !important;
   color: var(--ui-text) !important;
-  font-size: var(--font-xl) !important;
+  font-size: var(--overview-card-arrow-size) !important;
   font-weight: 400 !important;
   line-height: 1 !important;
 }
