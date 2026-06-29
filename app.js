@@ -2302,6 +2302,12 @@ function beyDetailSections(item, region) {
 let modelViewerCleanup = null;
 let threeModules = null;
 
+function cleanupModelViewer() {
+  if (!modelViewerCleanup) return;
+  modelViewerCleanup();
+  modelViewerCleanup = null;
+}
+
 async function loadThreeModules() {
   if (!threeModules) {
     const [THREE, { OBJLoader }, { OrbitControls }] = await Promise.all([
@@ -2315,10 +2321,7 @@ async function loadThreeModules() {
 }
 
 async function initModelViewer() {
-  if (modelViewerCleanup) {
-    modelViewerCleanup();
-    modelViewerCleanup = null;
-  }
+  cleanupModelViewer();
   const container = document.querySelector(".model-viewer");
   if (!container) return;
 
@@ -2703,10 +2706,7 @@ function openCategoryReleaseDetail(options = {}) {
     activeReleaseSort = { key: options.releaseSort.key, direction: options.releaseSort.direction === "desc" ? "desc" : "asc" };
   }
   if (typeof options.releaseQuery === "string") activeReleaseQuery = options.releaseQuery;
-  if (modelViewerCleanup) {
-    modelViewerCleanup();
-    modelViewerCleanup = null;
-  }
+  cleanupModelViewer();
   const content = document.querySelector("#modalContent");
   content.innerHTML = `<div class="modal-inner category-release-modal">
     <div class="modal-info category-release-info">
@@ -3519,10 +3519,7 @@ function openAnimeEpisodeDetail(indexOrId, options = {}) {
   const index = typeof indexOrId === "number" ? indexOrId : episodeIndexFromHash(indexOrId);
   const episode = animeInfo.episodes[index];
   if (!episode) return;
-  if (modelViewerCleanup) {
-    modelViewerCleanup();
-    modelViewerCleanup = null;
-  }
+  cleanupModelViewer();
   const id = episodeHashId(index);
   const backAnimeRegion = animeDisplayRegion;
   const backAnimeSeason = normalizeAnimeSeason(options.animeSeason || episode.season || activeAnimeSeason);
@@ -3565,10 +3562,7 @@ function openCategoryAnimeDetail(options = {}) {
   activeAnimeRegion = animeDisplayRegion;
   activeAnimeSeason = normalizeAnimeSeason(options.animeSeason);
   activeAnimeEpisodeQuery = typeof options.animeQuery === "string" ? options.animeQuery : "";
-  if (modelViewerCleanup) {
-    modelViewerCleanup();
-    modelViewerCleanup = null;
-  }
+  cleanupModelViewer();
   const content = document.querySelector("#modalContent");
   if (!content || !modal) return;
   content.innerHTML = `<div class="modal-inner category-anime-modal">
@@ -4221,10 +4215,7 @@ function openDetail(id, options = {}) {
   const item = catalogCoreItemsById.get(id);
   if (!item) return;
   closeModalTagPopover();
-  if (modelViewerCleanup) {
-    modelViewerCleanup();
-    modelViewerCleanup = null;
-  }
+  cleanupModelViewer();
   const slot = item.type === "bey"
     ? modalInfoSlot(item.desc || "", beyModalTags(item), "single-line-info-slot")
     : modalInfoSlot(item.desc || "", partModalTags(item));
@@ -4354,10 +4345,7 @@ function openProductLineupDetail(id, options = {}) {
   const requestedRegion = releaseRegionLabels[options.region] ? options.region : (releaseRegionLabels[activeReleaseRegion] ? activeReleaseRegion : "kr");
   const region = productDisplayRegion(item, requestedRegion);
   activeReleaseRegion = region;
-  if (modelViewerCleanup) {
-    modelViewerCleanup();
-    modelViewerCleanup = null;
-  }
+  cleanupModelViewer();
   const backButton = options.backProductId
     ? productBackButton({ backProductId: options.backProductId, backRelease: options.backRelease, region })
     : options.backRelease
@@ -4390,10 +4378,7 @@ function openProductDetail(id, options = {}) {
   const region = productDisplayRegion(item, requestedRegion);
   const stepRegion = requestedRegion === "kr" ? "kr" : region;
   activeReleaseRegion = region;
-  if (modelViewerCleanup) {
-    modelViewerCleanup();
-    modelViewerCleanup = null;
-  }
+  cleanupModelViewer();
   const backButton = options.backProductId
     ? productBackButton({ backProductId: options.backProductId, backRelease: options.backRelease, region })
     : options.backRelease
@@ -4416,10 +4401,7 @@ function openProductDetail(id, options = {}) {
   openModal();
 }
 function openSimpleCatalogDetail({ item, options = {}, kind, stepItems, tags = "" }) {
-  if (modelViewerCleanup) {
-    modelViewerCleanup();
-    modelViewerCleanup = null;
-  }
+  cleanupModelViewer();
   const backButton = productBackButton({ backProductId: options.backProductId, backRelease: options.backRelease, region: options.region });
   const modalContentRoot = document.querySelector("#modalContent");
   modalContentRoot.innerHTML = `${modalStepButtons(stepItems, item.id, kind)}<div class="modal-inner">
@@ -4453,10 +4435,7 @@ function openGameDetail(id, options = {}) {
 }
 function closeDetail() {
   closeModalTagPopover();
-  if (modelViewerCleanup) {
-    modelViewerCleanup();
-    modelViewerCleanup = null;
-  }
+  cleanupModelViewer();
   closeModal();
   clearModalContext();
   history.replaceState(null, "", window.location.pathname + window.location.search);
