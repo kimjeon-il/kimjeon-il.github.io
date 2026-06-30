@@ -2736,9 +2736,9 @@ body.is-overview .catalog-section {
   --overview-card-text-align: left;
   --overview-card-detail-display: inline;
   --overview-card-label-size: clamp(.625rem, 3.1vw, var(--font-md));
-  --overview-card-title-size: clamp(.8rem, 3.9vw, var(--font-xl));
+  --overview-card-title-size: clamp(calc(var(--font-xl) * .625), 3.9vw, var(--font-xl));
   --overview-card-desc-size: clamp(.625rem, 3.1vw, var(--font-md));
-  --overview-card-arrow-size: clamp(.8rem, 3.9vw, var(--font-xl));
+  --overview-card-arrow-size: clamp(calc(var(--font-xl) * .625), 3.9vw, var(--font-xl));
   --overview-card-title-line-height: 1.2;
   --overview-card-title-white-space: nowrap;
   --overview-card-title-word-break: normal;
@@ -3753,20 +3753,31 @@ body.menu-open .menu-button span:nth-child(3) {
 
   .mobile-drawer {
     --mobile-drawer-font-size: clamp(var(--font-sm), 2.7vw, var(--font-md));
+    --mobile-drawer-surface: color-mix(in srgb, var(--ui-surface) 54%, transparent);
+    --mobile-drawer-surface-hover: color-mix(in srgb, var(--ui-surface) 74%, transparent);
+    --mobile-drawer-surface-pressed: color-mix(in srgb, var(--ui-control-hover) 74%, transparent);
+    --mobile-drawer-surface-selected: color-mix(in srgb, var(--ui-control-hover) 78%, transparent);
+    --mobile-drawer-stroke: color-mix(in srgb, var(--ui-line) 58%, transparent);
+    --mobile-drawer-stroke-strong: color-mix(in srgb, var(--ui-line) 78%, transparent);
+    --mobile-drawer-accent: color-mix(in srgb, var(--ui-accent) 84%, var(--ui-text) 16%);
     position: fixed;
     inset: 0 auto 0 0;
     width: min(calc(100vw - 18px), 420px);
     height: 100vh;
     display: grid !important;
     grid-template-rows: auto minmax(0, 1fr);
-    gap: 14px;
-    padding: 14px 14px max(18px, env(safe-area-inset-bottom));
-    border: 1px solid color-mix(in srgb, var(--ui-line) 82%, transparent);
+    gap: 20px;
+    padding: 22px 18px max(18px, env(safe-area-inset-bottom));
+    border: 1px solid var(--mobile-drawer-stroke-strong);
     border-left: 0;
     border-radius: 0 22px 22px 0;
-    background: color-mix(in srgb, var(--ui-surface) 94%, var(--ui-text) 6%);
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--ui-surface) 48%, transparent), color-mix(in srgb, var(--ui-surface) 12%, transparent)),
+      color-mix(in srgb, var(--ui-bg) 88%, var(--ui-surface) 12%);
     color: var(--ui-text);
-    box-shadow: none;
+    box-shadow: 12px 0 40px color-mix(in srgb, var(--ui-text) 8%, transparent) !important;
+    backdrop-filter: blur(28px) saturate(150%);
+    -webkit-backdrop-filter: blur(28px) saturate(150%);
     overflow-x: hidden;
     overflow-y: hidden;
     opacity: 0;
@@ -3790,124 +3801,219 @@ body.menu-open .menu-button span:nth-child(3) {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 0 0 0 12px;
+    padding: 0 2px 0 8px;
   }
 
   .mobile-drawer-header strong {
     color: var(--ui-text);
-    font-size: var(--font-md);
+    font-size: 1.125rem;
     font-weight: 800;
     line-height: 1;
   }
 
   .mobile-drawer-close {
     appearance: none;
-    font-size: var(--font-xl);
-    font-weight: 600;
+    width: 42px;
+    height: 42px;
+    display: inline-grid;
+    place-items: center;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--ui-muted);
+    box-shadow: none;
+    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    transition: background-color .14s ease, color .14s ease, transform .14s ease;
+  }
+
+  .mobile-drawer-close svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+  }
+
+  .mobile-drawer-close:hover,
+  .mobile-drawer-close:focus-visible {
+    background: var(--mobile-drawer-surface-hover) !important;
+    color: var(--ui-text) !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-drawer-close:active {
+    transform: scale(.96);
+    background: var(--mobile-drawer-surface-pressed) !important;
   }
 
   .mobile-drawer-nav {
     display: grid;
     align-content: start;
-    gap: 10px;
+    gap: 8px;
     min-height: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    padding-right: 8px;
-    margin-right: -4px;
+    padding-right: 4px;
+    margin-right: -2px;
     scrollbar-gutter: stable;
   }
 
   .mobile-drawer-section {
     display: grid;
-    gap: 7px;
-    padding: 8px;
-    border: 0;
-    border-radius: 14px;
-    background: color-mix(in srgb, var(--ui-control) 42%, transparent);
-    outline: 1px solid color-mix(in srgb, var(--ui-line) 54%, transparent);
-    outline-offset: -1px;
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid var(--mobile-drawer-stroke);
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--ui-surface) 28%, transparent);
+    box-shadow: none;
   }
 
-  .mobile-primary {
+  .mobile-drawer .mobile-primary,
+  .mobile-secondary button {
+    position: relative;
     appearance: none;
     width: 100%;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0 12px;
-    border: 0;
-    border-radius: 10px;
-    background: transparent;
-    color: var(--ui-text);
-    box-shadow: none;
-    font-family: inherit;
-    font-size: var(--mobile-drawer-font-size, var(--font-md));
-    font-weight: 600;
-    line-height: 1;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: background-color .16s ease, color .16s ease;
-  }
-
-  .mobile-primary:hover,
-  .mobile-primary:focus-visible,
-  .mobile-primary.active {
-    background: var(--ui-control-hover);
-    color: var(--ui-text);
-  }
-
-  .mobile-primary-pending,
-  .mobile-primary:disabled,
-  .mobile-primary[aria-disabled="true"] {
-    background: transparent !important;
-    color: color-mix(in srgb, var(--ui-muted) 58%, transparent) !important;
-    cursor: default !important;
-    pointer-events: none !important;
-  }
-
-  .mobile-secondary {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
-    margin: 0;
-    padding: 6px;
-    border: 0;
-    border-radius: 12px;
-    background: color-mix(in srgb, var(--ui-surface) 72%, transparent);
-  }
-
-  .mobile-secondary button {
-    appearance: none;
     min-width: 0;
-    min-height: 34px;
-    display: flex;
+    min-height: 48px;
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr) 22px;
     align-items: center;
-    justify-content: flex-start;
+    gap: 11px;
     padding: 0 12px;
     border: 0;
-    border-radius: 8px;
+    border-radius: 14px;
     background: transparent;
     color: var(--ui-muted);
     box-shadow: none;
     font-family: inherit;
     font-size: var(--mobile-drawer-font-size, var(--font-md));
-    font-weight: 400;
+    font-weight: 680;
     line-height: 1;
     text-align: left;
-    word-break: keep-all;
-    overflow-wrap: anywhere;
+    text-decoration: none;
+    user-select: none;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: background-color .16s ease, color .16s ease;
+    transition: background-color .14s ease, color .14s ease, transform .14s ease;
   }
 
+  .mobile-drawer .mobile-primary:hover,
+  .mobile-drawer .mobile-primary:focus-visible,
   .mobile-secondary button:hover,
   .mobile-secondary button:focus-visible {
-    background: var(--ui-control-hover);
-    color: var(--ui-control-text-active);
+    background: var(--mobile-drawer-surface-hover) !important;
+    color: var(--ui-text) !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-drawer .mobile-primary:focus-visible,
+  .mobile-secondary button:focus-visible,
+  .mobile-drawer-close:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--mobile-drawer-accent) 26%, transparent);
+    outline-offset: 2px;
+  }
+
+  .mobile-drawer .mobile-primary:active,
+  .mobile-secondary button:active {
+    transform: scale(.99);
+    background: var(--mobile-drawer-surface-pressed) !important;
+  }
+
+  .mobile-drawer .mobile-primary.active,
+  .mobile-secondary button.active {
+    background: var(--mobile-drawer-surface-selected) !important;
+    color: var(--ui-text) !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-drawer .mobile-primary.active::before,
+  .mobile-secondary button.active::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    width: 3px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--mobile-drawer-accent);
+    transform: translateY(-50%);
+  }
+
+  .mobile-nav-icon {
+    width: 22px;
+    height: 22px;
+    display: inline-grid;
+    place-items: center;
+    color: currentColor;
+    opacity: .92;
+  }
+
+  .mobile-nav-icon svg,
+  .mobile-nav-chevron svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    stroke: currentColor;
+  }
+
+  .mobile-nav-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-nav-chevron {
+    width: 20px;
+    height: 20px;
+    display: inline-grid;
+    place-items: center;
+    color: var(--ui-muted);
+    transition: transform .16s ease, color .14s ease;
+  }
+
+  .mobile-drawer .mobile-primary[data-category-catalog-open] .mobile-nav-chevron {
+    transform: rotate(90deg);
+  }
+
+  .mobile-drawer .mobile-primary.active .mobile-nav-icon,
+  .mobile-secondary button.active .mobile-nav-icon {
+    color: var(--mobile-drawer-accent);
+  }
+
+  .mobile-primary-pending,
+  .mobile-drawer .mobile-primary:disabled,
+  .mobile-drawer .mobile-primary[aria-disabled="true"] {
+    background: transparent !important;
+    color: color-mix(in srgb, var(--ui-muted) 58%, transparent) !important;
+    cursor: default !important;
+    pointer-events: none !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-secondary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3px;
+    margin: 2px 0 0;
+    padding: 5px 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .mobile-secondary button {
+    min-height: 42px;
+    grid-template-columns: 24px minmax(0, 1fr) 20px;
+    padding-left: 12px;
+    border-radius: 11px;
+    font-weight: 560;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  .mobile-secondary button.active::before {
+    height: 18px;
+    left: 4px;
   }
 }
 

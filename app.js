@@ -729,7 +729,374 @@ const partItems = [
   { id: "GACHIBASE-NAKED", series: "burst", type: "gachibase", name: "네이키드", en: "Naked", battleType: "defense", tags: [], desc: "" },
   { id: "GACHILAYER-REGALIA-GENESIS", series: "burst", type: "gachilayer", name: "리겔리아 제네시스", en: "Regalia Genesis", battleType: "defense", tags: [], desc: "" },
   { id: "GACHILAYER-PRIME-APOCALYPSE", series: "burst", type: "gachilayer", name: "프라임 아포칼립스", en: "Prime Apocalypse", battleType: "attack", tags: [], desc: "" },
-  { id: "GACHILAYER-BIGBANG-GENESIS", series: "burst", type: "gachilayer", name: "빅뱅 제네시스", en: "Bigbang Genesis", battleType: "defense", tags: [], desc: "" }
+  { id: "GACHILAYER-BIGBANG-GENESIS", series: "burst", type: "gachilayer", name: "빅뱅 제네시스", en: "Bigbang Genesis", battleType: "defense", tags: [], desc: "" },
+  { id: "GACHIUPGRADE-UNION-SWORD", series: "burst", type: "gachiupgrade", name: "유니온 소드", en: "Union Sword", tags: [], desc: "" },
+  { id: "GACHIUPGRADE-BIGBANG-ARMOR", series: "burst", type: "gachiupgrade", name: "빅뱅 아머", en: "Bigbang Armor", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-HELIOS", series: "burst", type: "sparkingchip", name: "헬리오스", en: "Helios", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-HYPERION", series: "burst", type: "sparkingchip", name: "하이페리온", en: "Hyperion", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-RAGNARUK", series: "burst", type: "sparkingchip", name: "라그나로크", en: "Ragnaruk", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-VALKYRIE", series: "burst", type: "sparkingchip", name: "발키리", en: "Valkyrie", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-SATAN", series: "burst", type: "sparkingchip", name: "사탄", en: "Satan", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-FAFNIR", series: "burst", type: "sparkingchip", name: "파브닐", en: "Fafnir", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-LONGINUS", series: "burst", type: "sparkingchip", name: "롱기누스", en: "Longinus", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-SOLOMON", series: "burst", type: "sparkingchip", name: "솔로몬", en: "Solomon", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-URANUS", series: "burst", type: "sparkingchip", name: "우라노스", en: "Uranus", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-LUCIFER", series: "burst", type: "sparkingchip", name: "루시퍼", en: "Lucifer", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-DIABOLOS", series: "burst", type: "sparkingchip", name: "디아볼로스", en: "Diabolos", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-DRAGON", series: "burst", type: "sparkingchip", name: "드래곤", en: "Dragon", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-SPRIGGAN", series: "burst", type: "sparkingchip", name: "스프리건", en: "Spriggan", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-ACHILLES", series: "burst", type: "sparkingchip", name: "아킬레스", en: "Achilles", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-HELIOS-II", series: "burst", type: "sparkingchip", name: "헬리오스2", en: "Helios II", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-HYPERION-II", series: "burst", type: "sparkingchip", name: "하이페리온2", en: "Hyperion II", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-LUCIFER-II", series: "burst", type: "sparkingchip", name: "루시퍼2", en: "Lucifer II", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-DEATHSCYTHER", series: "burst", type: "sparkingchip", name: "데스사이저", en: "Deathscyther", tags: [], desc: "" },
+  { id: "SPARKINGCHIP-WYVERN", series: "burst", type: "sparkingchip", name: "와이번", en: "Wyvern", tags: [], desc: "" },
+  { id: "SPARKINGRING-KING", series: "burst", type: "sparkingring", name: "킹", en: "King", battleType: "balance", tags: [], desc: "" },
+  { id: "SPARKINGRING-SUPER", series: "burst", type: "sparkingring", name: "슈퍼", en: "Super", battleType: "attack", tags: [], desc: "" },
+  { id: "SPARKINGRING-GLIDE", series: "burst", type: "sparkingring", name: "글라이드", en: "Glide", battleType: "stamina", tags: [], desc: "" },
+  { id: "SPARKINGRING-BRAVE", series: "burst", type: "sparkingring", name: "브레이브", en: "Brave", battleType: "attack", tags: [], desc: "" },
+  { id: "SPARKINGRING-CURSE", series: "burst", type: "sparkingring", name: "커스", en: "Curse", battleType: "defense", tags: [], desc: "" },
+  { id: "SPARKINGRING-MIRAGE", series: "burst", type: "sparkingring", name: "미라지", en: "Mirage", battleType: "stamina", tags: [], desc: "" },
+  { id: "SPARKINGRING-RAGE", series: "burst", type: "sparkingring", name: "레이지", en: "Rage", battleType: "attack", tags: [], desc: "" },
+  { id: "SPARKINGRING-FIRST", series: "burst", type: "sparkingring", name: "퍼스트", en: "First", battleType: "defense", tags: [], desc: "" },
+  { id: "SPARKINGRING-VARIANT", series: "burst", type: "sparkingring", name: "바리언트", en: "Variant", battleType: "defense", tags: [], desc: "" },
+  { id: "SPARKINGRING-DEATH", series: "burst", type: "sparkingring", name: "데스", en: "Death", battleType: "balance", tags: [], desc: "" },
+  { id: "SPARKINGRING-ABYSS", series: "burst", type: "sparkingring", name: "어비스", en: "Abyss", battleType: "balance", tags: [], desc: "" },
+  { id: "SPARKINGRING-TEMPEST", series: "burst", type: "sparkingring", name: "템페스트", en: "Tempest", battleType: "attack", tags: [], desc: "" },
+  { id: "SPARKINGRING-WORLD", series: "burst", type: "sparkingring", name: "월드", en: "World", battleType: "balance", tags: [], desc: "" },
+  { id: "SPARKINGRING-INFINITE", series: "burst", type: "sparkingring", name: "인피니트", en: "Infinite", battleType: "balance", tags: [], desc: "" },
+  { id: "SPARKINGRING-BURN", series: "burst", type: "sparkingring", name: "번", en: "Burn", battleType: "attack", tags: [], desc: "" },
+  { id: "SPARKINGRING-VOLCANO", series: "burst", type: "sparkingring", name: "볼케이노", en: "Volcano", battleType: "balance", tags: [], desc: "" },
+  { id: "SPARKINGRING-THE-END", series: "burst", type: "sparkingring", name: "디 엔드", en: "The End", battleType: "defense", tags: [], desc: "" },
+  { id: "SPARKINGRING-HOLLOW", series: "burst", type: "sparkingring", name: "할로우", en: "Hollow", battleType: "attack", tags: [], desc: "" },
+  { id: "SPARKINGRING-JET", series: "burst", type: "sparkingring", name: "제트", en: "Jet", battleType: "defense", tags: [], desc: "" },
+  { id: "SPARKINGCHASSIS-1A", series: "burst", type: "sparkingchassis", name: "원 어택", en: "1 Attack", battleType: "attack", tags: ["더블 섀시"], desc: "" },
+  { id: "SPARKINGCHASSIS-1B", series: "burst", type: "sparkingchassis", name: "원 밸런스", en: "1 Balance", battleType: "balance", tags: ["더블 섀시"], desc: "" },
+  { id: "SPARKINGCHASSIS-1S", series: "burst", type: "sparkingchassis", name: "원 스테미나", en: "1 Stamina", battleType: "stamina", tags: ["싱글 섀시"], desc: "" },
+  { id: "SPARKINGCHASSIS-1D", series: "burst", type: "sparkingchassis", name: "원 디펜스", en: "1 Defense", battleType: "defense", tags: ["싱글 섀시"], desc: "" },
+  { id: "SPARKINGCHASSIS-2A", series: "burst", type: "sparkingchassis", name: "투 어택", en: "2 Attack", battleType: "attack", tags: ["더블 섀시"], desc: "" },
+  { id: "SPARKINGCHASSIS-2B", series: "burst", type: "sparkingchassis", name: "투 밸런스", en: "2 Balance", battleType: "balance", tags: ["더블 섀시"], desc: "" },
+  { id: "SPARKINGCHASSIS-2S", series: "burst", type: "sparkingchassis", name: "투 스테미나", en: "2 Stamina", battleType: "stamina", tags: ["더블 섀시"], desc: "" },
+  { id: "SPARKINGCHASSIS-2D", series: "burst", type: "sparkingchassis", name: "투 디펜스", en: "2 Defense", battleType: "defense", tags: ["더블 섀시"], desc: "" },
+  { id: "SPARKINGUPGRADE-INFINITE-SWORD", series: "burst", type: "sparkingupgrade", name: "인피니트 소드", en: "Infinite Sword", tags: [], desc: "" },
+  { id: "SPARKINGUPGRADE-INFINITE-SHIELD", series: "burst", type: "sparkingupgrade", name: "인피니트 실드", en: "Infinite Shield", tags: [], desc: "" },
+  { id: "DBLAYER-GREATEST-RAPHAEL", series: "burst", type: "dblayer", name: "그레이티스트 라파엘", en: "Greatest Raphael", battleType: "balance", tags: [], desc: "" },
+  { id: "DBCORE-BELIAL", series: "burst", type: "dbcore", name: "벨리알", en: "Belial", tags: [], desc: "" },
+  { id: "DBCORE-RAGNARUK", series: "burst", type: "dbcore", name: "라그나로크", en: "Ragnaruk", tags: [], desc: "" },
+  { id: "DBCORE-PERSEUS", series: "burst", type: "dbcore", name: "페르세우스", en: "Perseus", tags: [], desc: "" },
+  { id: "DBCORE-VALKYRIE", series: "burst", type: "dbcore", name: "발키리", en: "Valkyrie", tags: [], desc: "" },
+  { id: "DBCORE-FAFNIR", series: "burst", type: "dbcore", name: "파브닐", en: "Fafnir", tags: [], desc: "" },
+  { id: "DBCORE-SPRIGGAN", series: "burst", type: "dbcore", name: "스프리건", en: "Spriggan", tags: [], desc: "" },
+  { id: "DBCORE-BAHAMUT", series: "burst", type: "dbcore", name: "바하무트", en: "Bahamut", tags: [], desc: "" },
+  { id: "DBCORE-LONGINUS", series: "burst", type: "dbcore", name: "롱기누스", en: "Longinus", tags: [], desc: "" },
+  { id: "DBCORE-IFRIT", series: "burst", type: "dbcore", name: "이프리트", en: "Ifrit", tags: [], desc: "" },
+  { id: "DBCORE-PHOENIX", series: "burst", type: "dbcore", name: "피닉스", en: "Phoenix", tags: [], desc: "" },
+  { id: "DBCORE-BELIAL-II", series: "burst", type: "dbcore", name: "벨리알2", en: "Belial II", tags: [], desc: "" },
+  { id: "DBCORE-VALKYRIE-II", series: "burst", type: "dbcore", name: "발키리2", en: "Valkyrie II", tags: [], desc: "" },
+  { id: "DBCORE-KERBEUS", series: "burst", type: "dbcore", name: "케르베우스", en: "Kerbeus", tags: [], desc: "" },
+  { id: "DBCORE-DRAGON", series: "burst", type: "dbcore", name: "드래곤", en: "Dragon", tags: [], desc: "" },
+  { id: "DBCORE-HELLO-KITTY", series: "burst", type: "dbcore", name: "헬로키티", en: "Hello Kitty", tags: [], desc: "" },
+  { id: "DBCORE-XCALIBUR", series: "burst", type: "dbcore", name: "엑스칼리버", en: "Xcalibur", tags: [], desc: "" },
+  { id: "DBCORE-ACHILLES", series: "burst", type: "dbcore", name: "아킬레스", en: "Achilles", tags: [], desc: "" },
+  { id: "DBCORE-KNIGHT", series: "burst", type: "dbcore", name: "나이트", en: "Knight", tags: [], desc: "" },
+  { id: "DBCORE-HELIOS", series: "burst", type: "dbcore", name: "헬리오스", en: "Helios", tags: [], desc: "" },
+  { id: "DBCORE-HYPERION", series: "burst", type: "dbcore", name: "하이페리온", en: "Hyperion", tags: [], desc: "" },
+  { id: "DBCORE-BELIAL-III", series: "burst", type: "dbcore", name: "벨리알3", en: "Belial III", tags: [], desc: "" },
+  { id: "DBCORE-SPRIGGAN-II", series: "burst", type: "dbcore", name: "스프리건2", en: "Spriggan II", tags: [], desc: "" },
+  { id: "DBCORE-LUCIFER", series: "burst", type: "dbcore", name: "루시퍼", en: "Lucifer", tags: [], desc: "" },
+  { id: "DBBLADE-DYNAMITE", series: "burst", type: "dbblade", name: "다이너마이트", en: "Dynamite", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-CYCLONE", series: "burst", type: "dbblade", name: "사이클론", en: "Cyclone", battleType: "stamina", tags: [], desc: "" },
+  { id: "DBBLADE-VANISH", series: "burst", type: "dbblade", name: "배니시", en: "Vanish", battleType: "stamina", tags: [], desc: "" },
+  { id: "DBBLADE-ROAR", series: "burst", type: "dbblade", name: "로어", en: "Roar", battleType: "defense", tags: [], desc: "" },
+  { id: "DBBLADE-SAVIOR", series: "burst", type: "dbblade", name: "세이비어", en: "Savior", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-DEVIL", series: "burst", type: "dbblade", name: "데빌", en: "Devil", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-ASTRAL", series: "burst", type: "dbblade", name: "아스트랄", en: "Astral", battleType: "balance", tags: [], desc: "" },
+  { id: "DBBLADE-GUILTY", series: "burst", type: "dbblade", name: "길티", en: "Guilty", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-MAGMA", series: "burst", type: "dbblade", name: "마그마", en: "Magma", battleType: "balance", tags: [], desc: "" },
+  { id: "DBBLADE-PROMINENCE", series: "burst", type: "dbblade", name: "프로미넌스", en: "Prominence", battleType: "defense", tags: [], desc: "" },
+  { id: "DBBLADE-DANGEROUS", series: "burst", type: "dbblade", name: "데인저러스", en: "Dangerous", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-ULTIMATE", series: "burst", type: "dbblade", name: "얼티메이트", en: "Ultimate", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-DIVINE", series: "burst", type: "dbblade", name: "디바인", en: "Divine", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-CHAIN", series: "burst", type: "dbblade", name: "체인", en: "Chain", battleType: "defense", tags: [], desc: "" },
+  { id: "DBBLADE-GATLING", series: "burst", type: "dbblade", name: "개틀링", en: "Gatling", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-XIPHOID", series: "burst", type: "dbblade", name: "지포이드", en: "Xiphoid", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-ZEST", series: "burst", type: "dbblade", name: "제스트", en: "Zest", battleType: "balance", tags: [], desc: "" },
+  { id: "DBBLADE-WIND", series: "burst", type: "dbblade", name: "윈드", en: "Wind", battleType: "stamina", tags: [], desc: "" },
+  { id: "DBBLADE-KING-MR", series: "burst", type: "dbblade", name: "킹 MR", en: "King MR", battleType: "balance", tags: [], desc: "" },
+  { id: "DBBLADE-SUPER-MR", series: "burst", type: "dbblade", name: "슈퍼 MR", en: "Super MR", battleType: "attack", tags: [], desc: "" },
+  { id: "DBBLADE-BURST", series: "burst", type: "dbblade", name: "버스트", en: "Burst", battleType: "balance", tags: [], desc: "" },
+  { id: "DBBLADE-BARRICADE", series: "burst", type: "dbblade", name: "바리케이드", en: "Barricade", battleType: "defense", tags: [], desc: "" },
+  { id: "DBARMOR-2", series: "burst", type: "dbarmor", name: "투", en: "2", tags: [], desc: "" },
+  { id: "DBARMOR-6", series: "burst", type: "dbarmor", name: "식스", en: "6", tags: [], desc: "" },
+  { id: "DBARMOR-3", series: "burst", type: "dbarmor", name: "쓰리", en: "3", tags: [], desc: "" },
+  { id: "DBARMOR-10", series: "burst", type: "dbarmor", name: "텐", en: "10", tags: [], desc: "" },
+  { id: "DBARMOR-7", series: "burst", type: "dbarmor", name: "세븐", en: "7", tags: [], desc: "" },
+  { id: "DBARMOR-0", series: "burst", type: "dbarmor", name: "제로", en: "0", tags: [], desc: "" },
+  { id: "DBARMOR-9", series: "burst", type: "dbarmor", name: "나인", en: "9", tags: [], desc: "" },
+  { id: "DBARMOR-1", series: "burst", type: "dbarmor", name: "원", en: "1", tags: [], desc: "" },
+  { id: "DBARMOR-4", series: "burst", type: "dbarmor", name: "포", en: "4", tags: [], desc: "" },
+  { id: "DBARMOR-8", series: "burst", type: "dbarmor", name: "에이트", en: "8", tags: [], desc: "" },
+  { id: "EVOLUTIONGEAR-F", series: "burst", type: "evolutiongear", name: "F", en: "F", tags: [], desc: "" },
+  { id: "EVOLUTIONGEAR-S", series: "burst", type: "evolutiongear", name: "S", en: "S", tags: [], desc: "" },
+  { id: "EVOLUTIONGEAR-L", series: "burst", type: "evolutiongear", name: "L", en: "L", tags: [], desc: "" },
+  { id: "EVOLUTIONGEAR-V", series: "burst", type: "evolutiongear", name: "V", en: "V", tags: [], desc: "" },
+  { id: "EVOLUTIONGEAR-A", series: "burst", type: "evolutiongear", name: "A", en: "A", tags: [], desc: "" },
+  { id: "EVOLUTIONGEAR-D", series: "burst", type: "evolutiongear", name: "D", en: "D", tags: [], desc: "" },
+  { id: "EVOLUTIONGEAR-H", series: "burst", type: "evolutiongear", name: "H", en: "H", tags: [], desc: "" },
+  { id: "EVOLUTIONGEAR-VS", series: "burst", type: "evolutiongear", name: "VS", en: "VS", tags: [], desc: "" },
+  { id: "DISK-WING", series: "burst", type: "disk", name: "W", en: "Wing", sub: "윙", tags: [], desc: "" },
+  { id: "DISK-SPREAD", series: "burst", type: "disk", name: "S", en: "Spread", sub: "스프레드", tags: [], desc: "" },
+  { id: "DISK-HEAVY", series: "burst", type: "disk", name: "H", en: "Heavy", sub: "헤비", tags: [], desc: "" },
+  { id: "DISK-CENTRAL", series: "burst", type: "disk", name: "C", en: "Central", sub: "센트럴", tags: [], desc: "" },
+  { id: "DISK-OUTER", series: "burst", type: "disk", name: "Ω", en: "Outer", sub: "아우터", tags: [], desc: "" },
+  { id: "DISK-AERO", series: "burst", type: "disk", name: "α", en: "Aero", sub: "에어로", tags: [], desc: "" },
+  { id: "DISK-AERO-DASH", series: "burst", type: "disk", name: "α'", en: "Aero'", sub: "에어로 대시", tags: [], desc: "" },
+  { id: "DISK-OVAL", series: "burst", type: "disk", name: "O", en: "Oval", sub: "오벌", tags: [], desc: "" },
+  { id: "DISK-ARMED", series: "burst", type: "disk", name: "A", en: "Armed", sub: "아머", tags: [], desc: "" },
+  { id: "DISK-RING", series: "burst", type: "disk", name: "R", en: "Ring", sub: "링", tags: [], desc: "" },
+  { id: "DISK-FORCE", series: "burst", type: "disk", name: "F", en: "Force", sub: "포스", tags: [], desc: "" },
+  { id: "DISK-BOOST", series: "burst", type: "disk", name: "B", en: "Boost", sub: "부스트", tags: [], desc: "" },
+  { id: "DISK-KNUCKLE", series: "burst", type: "disk", name: "K", en: "Knuckle", sub: "너클", tags: [], desc: "" },
+  { id: "DISK-GRAVITY", series: "burst", type: "disk", name: "G", en: "Gravity", sub: "그래비티", tags: [], desc: "" },
+  { id: "DISK-LIMITED", series: "burst", type: "disk", name: "L", en: "Limited", sub: "리미티드", tags: [], desc: "" },
+  { id: "DISK-VERTICAL", series: "burst", type: "disk", name: "V", en: "Vertical", sub: "버티컬", tags: [], desc: "" },
+  { id: "DISK-UPPER", series: "burst", type: "disk", name: "U", en: "Upper", sub: "어퍼", tags: [], desc: "" },
+  { id: "DISK-TRIPLE", series: "burst", type: "disk", name: "T", en: "Triple", sub: "트리플", tags: [], desc: "" },
+  { id: "DISK-MAGNUM", series: "burst", type: "disk", name: "M", en: "Magnum", sub: "매그넘", tags: [], desc: "" },
+  { id: "DISK-BUMPER", series: "burst", type: "disk", name: "β", en: "Bumper", sub: "범퍼", tags: [], desc: "" },
+  { id: "DISK-DOWN", series: "burst", type: "disk", name: "D", en: "Down", sub: "다운", tags: [], desc: "" },
+  { id: "DISK-INFINITY", series: "burst", type: "disk", name: "I", en: "Infinity", sub: "인피니티", tags: [], desc: "" },
+  { id: "DISK-JERK", series: "burst", type: "disk", name: "J", en: "Jerk", sub: "저크", tags: [], desc: "" },
+  { id: "DISK-POLISH", series: "burst", type: "disk", name: "P", en: "Polish", sub: "폴리시", tags: [], desc: "" },
+  { id: "DISK-NINE", series: "burst", type: "disk", name: "N", en: "Nine", sub: "나인", tags: [], desc: "" },
+  { id: "DISK-QUARTER", series: "burst", type: "disk", name: "Q", en: "Quarter", sub: "쿼터", tags: [], desc: "" },
+  { id: "DISK-YELL", series: "burst", type: "disk", name: "Y", en: "Yell", sub: "옐", tags: [], desc: "" },
+  { id: "DISK-ZENITH", series: "burst", type: "disk", name: "Z", en: "Zenith", sub: "제니스", tags: [], desc: "" },
+  { id: "DISK-STING", series: "burst", type: "disk", name: "St", en: "Sting", sub: "스팅", tags: [], desc: "" },
+  { id: "DISK-BLITZ", series: "burst", type: "disk", name: "Bl", en: "Blitz", sub: "블릿츠", tags: [], desc: "" },
+  { id: "DISK-HURRICANE", series: "burst", type: "disk", name: "Hr", en: "Hurricane", sub: "허리케인", tags: [], desc: "" },
+  { id: "DISK-RATCHET", series: "burst", type: "disk", name: "Rt", en: "Ratchet", sub: "래칫", tags: [], desc: "" },
+  { id: "DISK-DRAKE", series: "burst", type: "disk", name: "Dr", en: "Drake", sub: "드레이크", tags: [], desc: "" },
+  { id: "DISK-VANGUARD", series: "burst", type: "disk", name: "Vn", en: "Vanguard", sub: "뱅가드", tags: [], desc: "" },
+  { id: "DISK-AROUND", series: "burst", type: "disk", name: "Ar", en: "Around", sub: "어라운드", tags: [], desc: "" },
+  { id: "DISK-CONVERT", series: "burst", type: "disk", name: "Cn", en: "Convert", sub: "컨버트", tags: [], desc: "" },
+  { id: "DISK-PARADOX", series: "burst", type: "disk", name: "Pr", en: "Paradox", sub: "패러독스", tags: [], desc: "" },
+  { id: "DISK-WHEEL", series: "burst", type: "disk", name: "Wh", en: "Wheel", sub: "휠", tags: [], desc: "" },
+  { id: "DISK-CHO", series: "burst", type: "disk", name: "超", en: "Cho", sub: "초", tags: [], desc: "" },
+  { id: "DISK-OU", series: "burst", type: "disk", name: "王", en: "Ou", sub: "왕", tags: [], desc: "" },
+  { id: "DISK-KOU", series: "burst", type: "disk", name: "皇", en: "Kou", sub: "황", tags: [], desc: "" },
+  { id: "COREDISK-0", series: "burst", type: "coredisk", name: "0", en: "0", sub: "제로", tags: [], desc: "" },
+  { id: "COREDISK-1", series: "burst", type: "coredisk", name: "1", en: "1", sub: "원", tags: [], desc: "" },
+  { id: "COREDISK-1-DASH", series: "burst", type: "coredisk", name: "1'", en: "1'", sub: "원 대시", tags: [], desc: "" },
+  { id: "COREDISK-2", series: "burst", type: "coredisk", name: "2", en: "2", sub: "투", tags: [], desc: "" },
+  { id: "COREDISK-3", series: "burst", type: "coredisk", name: "3", en: "3", sub: "쓰리", tags: [], desc: "" },
+  { id: "COREDISK-4", series: "burst", type: "coredisk", name: "4", en: "4", sub: "포", tags: [], desc: "" },
+  { id: "COREDISK-5", series: "burst", type: "coredisk", name: "5", en: "5", sub: "파이브", tags: [], desc: "" },
+  { id: "COREDISK-6", series: "burst", type: "coredisk", name: "6", en: "6", sub: "식스", tags: [], desc: "" },
+  { id: "COREDISK-7", series: "burst", type: "coredisk", name: "7", en: "7", sub: "세븐", tags: [], desc: "" },
+  { id: "COREDISK-8", series: "burst", type: "coredisk", name: "8", en: "8", sub: "에이트", tags: [], desc: "" },
+  { id: "COREDISK-8-DASH", series: "burst", type: "coredisk", name: "8'", en: "8'", sub: "에이트 대시", tags: [], desc: "" },
+  { id: "COREDISK-10", series: "burst", type: "coredisk", name: "10", en: "10", sub: "텐", tags: [], desc: "" },
+  { id: "COREDISK-11", series: "burst", type: "coredisk", name: "11", en: "11", sub: "일레븐", tags: [], desc: "" },
+  { id: "COREDISK-12", series: "burst", type: "coredisk", name: "12", en: "12", sub: "트웰브", tags: [], desc: "" },
+  { id: "COREDISK-13", series: "burst", type: "coredisk", name: "13", en: "13", sub: "서틴", tags: [], desc: "" },
+  { id: "COREDISK-00", series: "burst", type: "coredisk", name: "00", en: "00", sub: "더블오", tags: [], desc: "" },
+  { id: "FRAME-VORTEX", series: "burst", type: "frame", name: "V", en: "Vortex", sub: "볼텍스", tags: [], desc: "" },
+  { id: "FRAME-GLAIVE", series: "burst", type: "frame", name: "G", en: "Glaive", sub: "글레이브", tags: [], desc: "" },
+  { id: "FRAME-CROSS", series: "burst", type: "frame", name: "C", en: "Cross", sub: "크로스", tags: [], desc: "" },
+  { id: "FRAME-STAR", series: "burst", type: "frame", name: "S", en: "Star", sub: "스타", tags: [], desc: "" },
+  { id: "FRAME-METEOR", series: "burst", type: "frame", name: "M", en: "Meteor", sub: "메테오", tags: [], desc: "" },
+  { id: "FRAME-FLOW", series: "burst", type: "frame", name: "F", en: "Flow", sub: "플로", tags: [], desc: "" },
+  { id: "FRAME-BUMP", series: "burst", type: "frame", name: "B", en: "Bump", sub: "범프", tags: [], desc: "" },
+  { id: "FRAME-UNDER", series: "burst", type: "frame", name: "U", en: "Under", sub: "언더", tags: [], desc: "" },
+  { id: "FRAME-HIT", series: "burst", type: "frame", name: "H", en: "Hit", sub: "히트", tags: [], desc: "" },
+  { id: "FRAME-REACH", series: "burst", type: "frame", name: "R", en: "Reach", sub: "리치", tags: [], desc: "" },
+  { id: "FRAME-LIFT", series: "burst", type: "frame", name: "L", en: "Lift", sub: "리프트", tags: [], desc: "" },
+  { id: "FRAME-DAGGER", series: "burst", type: "frame", name: "D", en: "Dagger", sub: "대거", tags: [], desc: "" },
+  { id: "FRAME-PROOF", series: "burst", type: "frame", name: "P", en: "Proof", sub: "프루프", tags: [], desc: "" },
+  { id: "FRAME-ANGLE", series: "burst", type: "frame", name: "α", en: "Angle", sub: "앵글", tags: [], desc: "" },
+  { id: "FRAME-TURN", series: "burst", type: "frame", name: "T", en: "Turn", sub: "턴", tags: [], desc: "" },
+  { id: "FRAME-WALL", series: "burst", type: "frame", name: "W", en: "Wall", sub: "월", tags: [], desc: "" },
+  { id: "FRAME-EXPAND", series: "burst", type: "frame", name: "E", en: "Expand", sub: "익스팬드", tags: [], desc: "" },
+  { id: "FRAME-X", series: "burst", type: "frame", name: "A", en: "X", sub: "엑스", tags: [], desc: "" },
+  { id: "DBDISK-NEXUS", series: "burst", type: "dbdisk", name: "Nx", en: "Nexus", sub: "넥서스", tags: [], desc: "" },
+  { id: "DBDISK-GIGA", series: "burst", type: "dbdisk", name: "Gg", en: "Giga", sub: "기가", tags: [], desc: "" },
+  { id: "DBDISK-TAPERED", series: "burst", type: "dbdisk", name: "Tp", en: "Tapered", sub: "테이퍼드", tags: [], desc: "" },
+  { id: "DBDISK-OVER", series: "burst", type: "dbdisk", name: "Ov", en: "Over", sub: "오버", tags: [], desc: "" },
+  { id: "DBDISK-KARMA", series: "burst", type: "dbdisk", name: "Kr", en: "Karma", sub: "카르마", tags: [], desc: "" },
+  { id: "DBDISK-LEGACY", series: "burst", type: "dbdisk", name: "Lg", en: "Legacy", sub: "레거시", tags: [], desc: "" },
+  { id: "DBDISK-CIQUEX", series: "burst", type: "dbdisk", name: "Cq", en: "Ciquex", sub: "시퀙스", tags: [], desc: "" },
+  { id: "DBDISK-FORTRESS", series: "burst", type: "dbdisk", name: "Fr", en: "Fortress", sub: "포트리스", tags: [], desc: "" },
+  { id: "DBDISK-XANTHUS", series: "burst", type: "dbdisk", name: "Xn", en: "Xanthus", sub: "잔저스", tags: [], desc: "" },
+  { id: "DBDISK-ILLEGAL", series: "burst", type: "dbdisk", name: "Il", en: "Illegal", sub: "일리걸", tags: [], desc: "" },
+  { id: "DBDISK-MOON", series: "burst", type: "dbdisk", name: "Mn", en: "Moon", sub: "문", tags: [], desc: "" },
+  { id: "DBDISK-SPREAD-DASH", series: "burst", type: "dbdisk", name: "S'", en: "Spread'", sub: "스프레드 대시", tags: [], desc: "" },
+  { id: "DBDISK-WING-DASH", series: "burst", type: "dbdisk", name: "W'", en: "Wing'", sub: "윙 대시", tags: [], desc: "" },
+  { id: "DRIVER-ACCEL", series: "burst", type: "driver", name: "A", en: "Accel", sub: "액셀", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-FUSION", series: "burst", type: "driver", name: "F", en: "Fusion", sub: "퓨전", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-SURVIVE", series: "burst", type: "driver", name: "S", en: "Survive", sub: "서바이브", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-DEFENSE", series: "burst", type: "driver", name: "D", en: "Defense", sub: "디펜스", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-ASSAULT", series: "burst", type: "driver", name: "α", en: "Assault", sub: "어썰트", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-MASSIVE", series: "burst", type: "driver", name: "M", en: "Massive", sub: "매시브", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-CLAW", series: "burst", type: "driver", name: "C", en: "Claw", sub: "클로", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-BLOW", series: "burst", type: "driver", name: "B", en: "Blow", sub: "블로", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-EDGE", series: "burst", type: "driver", name: "E", en: "Edge", sub: "엣지", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-QUAKE", series: "burst", type: "driver", name: "Q", en: "Quake", sub: "퀘이크", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-XTREME", series: "burst", type: "driver", name: "X", en: "Xtreme", sub: "익스트림", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-NEEDLE", series: "burst", type: "driver", name: "N", en: "Needle", sub: "니들", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-ZEPHYR", series: "burst", type: "driver", name: "Z", en: "Zephyr", sub: "제퍼", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-GYRO", series: "burst", type: "driver", name: "G", en: "Gyro", sub: "자이로", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-VARIABLE", series: "burst", type: "driver", name: "V", en: "Variable", sub: "배리어블", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-UNITE", series: "burst", type: "driver", name: "U", en: "Unite", sub: "유나이트", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-REVOLVE", series: "burst", type: "driver", name: "R", en: "Revolve", sub: "리볼브", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-PRESS", series: "burst", type: "driver", name: "P", en: "Press", sub: "프레스", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-ORBIT", series: "burst", type: "driver", name: "O", en: "Orbit", sub: "오르빗", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-JAGGY", series: "burst", type: "driver", name: "J", en: "Jaggy", sub: "재기", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-OCTA", series: "burst", type: "driver", name: "Ω", en: "Octa", sub: "옥타", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-BITE", series: "burst", type: "driver", name: "β", en: "Bite", sub: "바이트", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-IMPACT", series: "burst", type: "driver", name: "I", en: "Impact", sub: "임팩트", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-YIELDING", series: "burst", type: "driver", name: "Y", en: "Yielding", sub: "일딩", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-TRANS", series: "burst", type: "driver", name: "T", en: "Trans", sub: "트랜스", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-WEIGHT", series: "burst", type: "driver", name: "W", en: "Weight", sub: "웨이트", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-HOLD", series: "burst", type: "driver", name: "H", en: "Hold", sub: "홀드", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-LINER", series: "burst", type: "driver", name: "L", en: "Liner", sub: "라이너", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-SPIRAL", series: "burst", type: "driver", name: "Sp", en: "Spiral", sub: "스파이럴", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-CYCLE", series: "burst", type: "driver", name: "Cy", en: "Cycle", sub: "사이클", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-REBOOT", series: "burst", type: "driver", name: "Rb", en: "Reboot", sub: "리부트", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-LOOP", series: "burst", type: "driver", name: "Lp", en: "Loop", sub: "루프", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-FLUGEL", series: "burst", type: "driver", name: "Fl", en: "Flugel", sub: "플뤼겔", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-NOTHING", series: "burst", type: "driver", name: "Nt", en: "Nothing", sub: "너싱", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-ATOMIC", series: "burst", type: "driver", name: "At", en: "Atomic", sub: "아토믹", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-HUNTER", series: "burst", type: "driver", name: "Hn", en: "Hunter", sub: "헌터", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-MERGE", series: "burst", type: "driver", name: "Mr", en: "Merge", sub: "머지", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-GUARD", series: "burst", type: "driver", name: "Gr", en: "Guard", sub: "가드", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-PLANET", series: "burst", type: "driver", name: "Pl", en: "Planet", sub: "플래닛", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-IRON", series: "burst", type: "driver", name: "Ir", en: "Iron", sub: "아이언", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-TOWER", series: "burst", type: "driver", name: "Tw", en: "Tower", sub: "타워", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-DESTROY", series: "burst", type: "driver", name: "Ds", en: "Destroy", sub: "디스트로이", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ZETA", series: "burst", type: "driver", name: "Zt", en: "Zeta", sub: "제타", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-BEARING", series: "burst", type: "driver", name: "Br", en: "Bearing", sub: "베어링", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-ULTIMATE-REBOOT", series: "burst", type: "driver", name: "Ul", en: "Ultimate Reboot", sub: "얼티메이트 리부트", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-MUGEN", series: "burst", type: "driver", name: "∞", en: "Mugen", sub: "무한", tags: [], desc: "" },
+  { id: "DRIVER-MUGEN-L", series: "burst", type: "driver", name: "∞L", en: "Mugen L", sub: "무한 L", tags: [], desc: "" },
+  { id: "DRIVER-WEDGE", series: "burst", type: "driver", name: "Wd", en: "Wedge", sub: "웻지", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-XTEND", series: "burst", type: "driver", name: "Xt", en: "Xtend", sub: "익스텐드", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-VOLCANIC", series: "burst", type: "driver", name: "Vl", en: "Volcanic", sub: "볼카닉", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-YARD", series: "burst", type: "driver", name: "Yr", en: "Yard", sub: "야드", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-JOLT", series: "burst", type: "driver", name: "Jl", en: "Jolt", sub: "졸트", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-OPERATE", series: "burst", type: "driver", name: "Op", en: "Operate", sub: "오퍼레이트", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-ETERNAL", series: "burst", type: "driver", name: "Et", en: "Eternal", sub: "이터널", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-FRICTION", series: "burst", type: "driver", name: "Fr", en: "Friction", sub: "프릭션", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-SWORD", series: "burst", type: "driver", name: "Sw", en: "Sword", sub: "소드", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ABSORB", series: "burst", type: "driver", name: "Ab", en: "Absorb", sub: "업소브", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-ANCHOR", series: "burst", type: "driver", name: "αn", en: "Anchor", sub: "앵커", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-EVOLUTION", series: "burst", type: "driver", name: "Ev", en: "Evolution", sub: "에볼루션", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-QUEST", series: "burst", type: "driver", name: "Qs", en: "Quest", sub: "퀘스트", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-DIMENSION", series: "burst", type: "driver", name: "Dm", en: "Dimension", sub: "디멘션", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-CHARGE", series: "burst", type: "driver", name: "Ch", en: "Charge", sub: "차지", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-KEEP", series: "burst", type: "driver", name: "Kp", en: "Keep", sub: "킵", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-POWER", series: "burst", type: "driver", name: "Pw", en: "Power", sub: "파워", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-RISE", series: "burst", type: "driver", name: "Rs", en: "Rise", sub: "라이즈", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-TRICK", series: "burst", type: "driver", name: "Tr", en: "Trick", sub: "트릭", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-BULLET", series: "burst", type: "driver", name: "Bl", en: "Bullet", sub: "불릿", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-LOW", series: "burst", type: "driver", name: "Lw", en: "Low", sub: "로우", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-ORBIT-METAL", series: "burst", type: "driver", name: "Om", en: "Orbit Metal", sub: "오르빗 메탈", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-XTEND-PLUS", series: "burst", type: "driver", name: "Xt+", en: "Xtend+", sub: "익스텐드 플러스", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-GENERATE", series: "burst", type: "driver", name: "Gn", en: "Generate", sub: "제네레이트", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-YARD-METAL", series: "burst", type: "driver", name: "Ym", en: "Yard Metal", sub: "야드 메탈", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-XCEED", series: "burst", type: "driver", name: "Xc", en: "Xceed", sub: "익시드", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ZONE", series: "burst", type: "driver", name: "Zn", en: "Zone", sub: "존", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-UNIVERSE", series: "burst", type: "driver", name: "Un", en: "Universe", sub: "유니버스", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-MOBIUS", series: "burst", type: "driver", name: "Mb", en: "Mobius", sub: "뫼비우스", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-CHARGE-METAL", series: "burst", type: "driver", name: "Cm", en: "Charge Metal", sub: "차지 메탈", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-WAVE", series: "burst", type: "driver", name: "Wv", en: "Wave", sub: "웨이브", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-DRIFT", series: "burst", type: "driver", name: "Dr", en: "Drift", sub: "드리프트", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-JUST", series: "burst", type: "driver", name: "Js", en: "Just", sub: "저스트", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-QUICK", series: "burst", type: "driver", name: "Q", en: "Quick", sub: "퀵", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-VENTURE", series: "burst", type: "driver", name: "Vn", en: "Venture", sub: "벤처", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-NEVER", series: "burst", type: "driver", name: "Nv", en: "Never", sub: "네버", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-KICK", series: "burst", type: "driver", name: "Kc", en: "Kick", sub: "킥", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-MOMENT", series: "burst", type: "driver", name: "Mm", en: "Moment", sub: "모멘트", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-SHOT", series: "burst", type: "driver", name: "Sh", en: "Shot", sub: "샷", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-QUATTRO", series: "burst", type: "driver", name: "Qt", en: "Quattro", sub: "콰트로", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-ALMIGHT", series: "burst", type: "driver", name: "Al", en: "Almight", sub: "올마이트", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ADVENTURE", series: "burst", type: "driver", name: "Ad", en: "Adventure", sub: "어드벤처", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-BOUNCE", series: "burst", type: "driver", name: "Bn", en: "Bounce", sub: "바운스", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-XPLOSION", series: "burst", type: "driver", name: "Xp", en: "Xplosion", sub: "익스플로전", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ZEAL", series: "burst", type: "driver", name: "Zl", en: "Zeal", sub: "질", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-BEARING-DRIFT", series: "burst", type: "driver", name: "BDr", en: "Bearing Drift", sub: "베어링 드리프트", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-BEARING-MOBIUS", series: "burst", type: "driver", name: "BMb", en: "Bearing Mobius", sub: "베어링 뫼비우스", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-XTREME-DASH", series: "burst", type: "driver", name: "X'", en: "Xtreme'", sub: "익스트림 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ZEPHYR-DASH", series: "burst", type: "driver", name: "Z'", en: "Zephyr'", sub: "제퍼 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-HUNTER-DASH", series: "burst", type: "driver", name: "Hn'", en: "Hunter'", sub: "헌터 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-DESTROY-DASH", series: "burst", type: "driver", name: "Ds'", en: "Destroy'", sub: "디스트로이 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ZETA-DASH", series: "burst", type: "driver", name: "Zt'", en: "Zeta'", sub: "제타 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-HOLD-DASH", series: "burst", type: "driver", name: "H'", en: "Hold'", sub: "홀드 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-QUICK-DASH", series: "burst", type: "driver", name: "Qc'", en: "Quick'", sub: "퀵 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-REBOOT-DASH", series: "burst", type: "driver", name: "Rb'", en: "Reboot'", sub: "리부트 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-VOLCANIC-DASH", series: "burst", type: "driver", name: "Vl'", en: "Volcanic'", sub: "볼카닉 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-FUSION-DASH", series: "burst", type: "driver", name: "F'", en: "Fusion'", sub: "퓨전 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-BLOW-DASH", series: "burst", type: "driver", name: "B'", en: "Blow'", sub: "블로 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ACCEL-DASH", series: "burst", type: "driver", name: "A'", en: "Accel'", sub: "액셀 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-MERGE-DASH", series: "burst", type: "driver", name: "Mr'", en: "Merge'", sub: "머지 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-SPIRAL-DASH", series: "burst", type: "driver", name: "Sp'", en: "Spiral'", sub: "스파이럴 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-DIMENSION-DASH", series: "burst", type: "driver", name: "Dm'", en: "Dimension'", sub: "디멘션 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-JOLT-DASH", series: "burst", type: "driver", name: "Jl'", en: "Jolt'", sub: "졸트 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-QUAKE-DASH", series: "burst", type: "driver", name: "Q'", en: "Quake'", sub: "퀘이크 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-VARIABLE-DASH", series: "burst", type: "driver", name: "V'", en: "Variable'", sub: "배리어블 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-TRANS-DASH", series: "burst", type: "driver", name: "T'", en: "Trans'", sub: "트랜스 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-KEEP-DASH", series: "burst", type: "driver", name: "Kp'", en: "Keep'", sub: "킵 대시", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-UNITE-DASH", series: "burst", type: "driver", name: "U'", en: "Unite'", sub: "유나이트 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-ULTIMATE-REBOOT-DASH", series: "burst", type: "driver", name: "Ul'", en: "Ultimate Reboot'", sub: "얼티메이트 리부트 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ASSAULT-DASH", series: "burst", type: "driver", name: "α'", en: "Assault'", sub: "어썰트 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-LINER-DASH", series: "burst", type: "driver", name: "L'", en: "Liner'", sub: "라이너 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-JAGGY-DASH", series: "burst", type: "driver", name: "J'", en: "Jaggy'", sub: "재기 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-OPERATE-DASH", series: "burst", type: "driver", name: "Op'", en: "Operate'", sub: "오퍼레이트 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-EVOLUTION-DASH", series: "burst", type: "driver", name: "Ev'", en: "Evolution'", sub: "에볼루션 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-CHARGE-DASH", series: "burst", type: "driver", name: "Ch'", en: "Charge'", sub: "차지 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-XCEED-DASH", series: "burst", type: "driver", name: "Xc'", en: "Xceed'", sub: "익시드 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-ZONE-DASH", series: "burst", type: "driver", name: "Zn'", en: "Zone'", sub: "존 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-WAVE-DASH", series: "burst", type: "driver", name: "Wv'", en: "Wave'", sub: "웨이브 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-BEARING-DASH", series: "burst", type: "driver", name: "Br'", en: "Bearing'", sub: "베어링 대시", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-ATOMIC-DASH", series: "burst", type: "driver", name: "At'", en: "Atomic'", sub: "아토믹 대시", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-YARD-DASH", series: "burst", type: "driver", name: "Yr'", en: "Yard'", sub: "야드 대시", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-WEDGE-DASH", series: "burst", type: "driver", name: "Wd'", en: "Wedge'", sub: "웻지 대시", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-CHARGE-METAL-DASH", series: "burst", type: "driver", name: "Cm'", en: "Charge Metal'", sub: "차지 메탈 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-SWORD-DASH", series: "burst", type: "driver", name: "Sw'", en: "Sword'", sub: "소드 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-JUST-DASH", series: "burst", type: "driver", name: "Js'", en: "Just'", sub: "저스트 대시", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-REVOLVE-DASH", series: "burst", type: "driver", name: "R'", en: "Revolve'", sub: "리볼브 대시", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-QUATTRO-DASH", series: "burst", type: "driver", name: "Qt'", en: "Quattro'", sub: "콰트로 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-MOMENT-DASH", series: "burst", type: "driver", name: "Mm'", en: "Moment'", sub: "모멘트 대시", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-PLANET-DASH", series: "burst", type: "driver", name: "Pl'", en: "Planet'", sub: "플래닛 대시", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-XPLOSION-DASH", series: "burst", type: "driver", name: "Xp'", en: "Xplosion'", sub: "익스플로전 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-HYBRID", series: "burst", type: "driver", name: "Hy", en: "Hybrid", sub: "하이브리드", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-IGNITION-DASH", series: "burst", type: "driver", name: "Ig'", en: "Ignition'", sub: "이그니션 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-SURVIVE", series: "burst", type: "driver", name: "HS", en: "High Survive", sub: "하이 서바이브", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-DEFENSE", series: "burst", type: "driver", name: "HD", en: "High Defense", sub: "하이 디펜스", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-ZEPHYR", series: "burst", type: "driver", name: "HZ", en: "High Zephyr", sub: "하이 제퍼", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-MASSIVE", series: "burst", type: "driver", name: "HM", en: "High Massive", sub: "하이 매시브", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-REVOLVE", series: "burst", type: "driver", name: "HR", en: "High Revolve", sub: "하이 리볼브", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-ETERNAL", series: "burst", type: "driver", name: "HEt", en: "High Eternal", sub: "하이 이터널", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-BLOW-DASH", series: "burst", type: "driver", name: "HB'", en: "High Blow'", sub: "하이 블로 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-JAGGY-DASH", series: "burst", type: "driver", name: "HJ'", en: "High Jaggy'", sub: "하이 재기 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-ACCEL-DASH", series: "burst", type: "driver", name: "HA'", en: "High Accel'", sub: "하이 엑셀 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-HOLD-DASH", series: "burst", type: "driver", name: "HH'", en: "High Hold'", sub: "하이 홀드 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-XTEND-PLUS-DASH", series: "burst", type: "driver", name: "HXt+'", en: "High Xtend+'", sub: "하이 익스텐드 플러스 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-CHARGE-DASH", series: "burst", type: "driver", name: "HCh'", en: "High Charge'", sub: "하이 차지 대시", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-HIGH-WAVE-DASH", series: "burst", type: "driver", name: "HWv'", en: "High Wave'", sub: "하이 웨이브 대시", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-METAL-FUSION", series: "burst", type: "driver", name: "MF", en: "Metal Fusion", sub: "메탈 퓨전", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-METAL-ACCEL", series: "burst", type: "driver", name: "MA", en: "Metal Accel", sub: "메탈 액셀", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-METAL-DEFENSE", series: "burst", type: "driver", name: "MD", en: "Metal Defense", sub: "메탈 디펜스", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-METAL-SURVIVE", series: "burst", type: "driver", name: "MS", en: "Metal Survive", sub: "메탈 서바이브", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVER-METAL-XTREME", series: "burst", type: "driver", name: "MX", en: "Metal Xtreme", sub: "메탈 익스트림", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-METAL-DESTROY", series: "burst", type: "driver", name: "MDs", en: "Metal Destroy", sub: "메탈 디스트로이", battleType: "attack", tags: [], desc: "" },
+  { id: "DRIVER-METAL-UNIVERSE", series: "burst", type: "driver", name: "MUn", en: "Metal Universe", sub: "메탈 유니버스", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-METAL-DRIFT", series: "burst", type: "driver", name: "MDr", en: "Metal Drift", sub: "메탈 드리프트", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-METAL-DIMENSION", series: "burst", type: "driver", name: "MDm", en: "Metal Dimension", sub: "메탈 디멘션", battleType: "balance", tags: [], desc: "" },
+  { id: "DRIVER-METAL-BEARING-DRIFT", series: "burst", type: "driver", name: "MBD", en: "Metal Bearing Drift", sub: "메탈 베어링 드리프트", battleType: "defense", tags: [], desc: "" },
+  { id: "DRIVER-METAL-NEVER", series: "burst", type: "driver", name: "MNv", en: "Metal Never", sub: "메탈 네버", battleType: "stamina", tags: [], desc: "" },
+  { id: "DRIVERUPGRADE-XCEED", series: "burst", type: "driverupgrade", name: "익시드", en: "Xceed", tags: [], desc: "" },
+  { id: "DRIVERUPGRADE-ZONE", series: "burst", type: "driverupgrade", name: "존", en: "Zone", tags: [], desc: "" }
 ];
 
 const catalogCoreItems = [...beyItems, ...partItems];
@@ -782,7 +1149,7 @@ const toTop = document.querySelector("#toTop");
 const menuButton = document.querySelector("#menuButton");
 const mobileDrawer = document.querySelector("#mobileDrawer");
 const mobileDrawerClose = document.querySelector(".mobile-drawer-close");
-const typeLabels = { bey: "베이", parts: "부품", tools: "장비", face: "페이스", wheel: "휠", clearwheel: "클리어휠", lightwheel: "라이트휠", metalwheel: "메탈휠", "4dclearwheel": "4D클리어휠", "4dmetalwheel": "4D메탈휠", track: "트랙", bottom: "버텀", "4dbottom": "4D버텀", stoneface: "스톤페이스", chromewheel: "크롬휠", crystalwheel: "크리스탈휠", bitchip: "비트칩", attackring: "어택링", weightdisk: "웨이트디스크", bladebase: "블레이드베이스", gear: "기어", layer: "레이어", duallayer: "듀얼 레이어", godlayer: "갓 레이어", chozlayer: "초제트 레이어", gachichip: "진검칩", gachiweight: "웨이트", gachibase: "베이스", gachilayer: "진검 레이어", disk: "디스크", driver: "드라이버", blade: "블레이드", ratchet: "래칫", bit: "비트" };
+const typeLabels = { bey: "베이", parts: "부품", tools: "장비", face: "페이스", wheel: "휠", clearwheel: "클리어휠", lightwheel: "라이트휠", metalwheel: "메탈휠", "4dclearwheel": "4D클리어휠", "4dmetalwheel": "4D메탈휠", track: "트랙", bottom: "버텀", "4dbottom": "4D버텀", stoneface: "스톤페이스", chromewheel: "크롬휠", crystalwheel: "크리스탈휠", bitchip: "비트칩", attackring: "어택링", weightdisk: "웨이트디스크", bladebase: "블레이드베이스", gear: "기어", layer: "레이어", duallayer: "듀얼레이어", godlayer: "갓레이어", chozlayer: "초제트레이어", gachichip: "진검칩", gachiweight: "웨이트", gachibase: "베이스", gachilayer: "진검레이어", gachiupgrade: "강화파츠", sparkingchip: "슈퍼킹칩", sparkingring: "링", sparkingchassis: "섀시", sparkingupgrade: "강화파츠", dblayer: "DB레이어", dbcore: "DB코어", dbblade: "블레이드", dbarmor: "아머", evolutiongear: "진화기어", disk: "디스크", coredisk: "코어디스크", frame: "프레임", dbdisk: "DB디스크", driver: "드라이버", driverupgrade: "강화파츠", blade: "블레이드", ratchet: "래칫", bit: "비트" };
 const tagLabels = {};
 const structureLabels = { basic: "4단 구조 시스템", hybrid: "하이브리드 시스템", "4d": "4D 시스템", synchrome: "싱크롬 시스템" };
 const structureTagDescriptions = {
@@ -863,13 +1230,6 @@ const seriesPartFilters = {
   ],
   burst: [
     { value: "layer", label: "레이어" },
-    { value: "duallayer", label: "듀얼 레이어" },
-    { value: "godlayer", label: "갓 레이어" },
-    { value: "chozlayer", label: "초제트 레이어" },
-    { value: "gachichip", label: "진검칩" },
-    { value: "gachiweight", label: "웨이트" },
-    { value: "gachibase", label: "베이스" },
-    { value: "gachilayer", label: "진검 레이어" },
     { value: "disk", label: "디스크" },
     { value: "driver", label: "드라이버" }
   ],
@@ -1950,13 +2310,13 @@ const catalogCardTitle = (label, title, className = "") => {
     </h3>`;
 };
 const partKoName = item => {
-  if (!["track", "bottom", "4dbottom"].includes(item.type)) return "";
+  if (!["track", "bottom", "4dbottom", "disk", "coredisk", "frame", "dbdisk", "driver"].includes(item.type)) return "";
   const detail = item.sub || "";
   return detail.includes("높이") ? "" : detail;
 };
 const wheelTypes = ["wheel", "clearwheel", "4dclearwheel", "lightwheel", "metalwheel", "4dmetalwheel", "chromewheel", "crystalwheel"];
 const cardInfo = item => {
-  if (["track", "bottom", "4dbottom"].includes(item.type)) {
+  if (["track", "bottom", "4dbottom", "disk", "coredisk", "frame", "dbdisk", "driver"].includes(item.type)) {
     const fullEn = item.type === "track" && /^\d+$/.test(item.name) ? "&nbsp;" : item.en;
     return `${catalogCardTitle(catalogCardTypeLabel(item), item.name, "code-name")}<p class="card-full-en">${fullEn}</p><p class="card-full-ko">${partKoName(item) || "&nbsp;"}</p>`;
   }
@@ -1988,7 +2348,7 @@ const beySerialNumber = item => {
   return zeroGMatch ? 200 + Number(zeroGMatch[1]) : Number.MAX_SAFE_INTEGER;
 };
 const wheelTypeOrder = { wheel: 0, clearwheel: 1, "4dclearwheel": 2, lightwheel: 3, metalwheel: 4, "4dmetalwheel": 5, chromewheel: 6, crystalwheel: 7 };
-const directItemSearchText = item => item
+const mainSearchItemText = item => item
   ? [item.name, item.jpName, item.en, item.sub, item.no, item.productNo].filter(Boolean).join(" ")
   : "";
 const compactSearchSpacing = value => String(value || "").replace(/\s+/g, "");
@@ -2122,17 +2482,34 @@ const searchMatchRank = (text, query, { initialText = "" } = {}) => {
 const matchesSearchText = (text, query, initialText = "") => {
   return searchMatchRank(text, query, { initialText }) > 0;
 };
-const directSearchIndexCache = new WeakMap();
-const directItemSearchIndex = item => {
-  if (!item || typeof item !== "object") return createSearchTextIndex("");
-  const cached = directSearchIndexCache.get(item);
-  if (cached) return cached;
-  const text = directItemSearchText(item);
-  const index = createSearchTextIndex(text, text);
-  directSearchIndexCache.set(item, index);
-  return index;
+const catalogListSearchText = item => {
+  if (!item) return "";
+  const tags = Array.isArray(item.tags) ? item.tags : [];
+  return [
+    mainSearchItemText(item),
+    item.series,
+    itemSeriesLabel(item),
+    item.type,
+    item.type ? typeLabels[item.type] : "",
+    item.category,
+    item.category ? typeLabels[item.category] : "",
+    item.structure,
+    item.structure ? structureLabels[item.structure] : "",
+    item.battleType,
+    item.battleType ? battleTypeLabel(item.battleType, item) : "",
+    item.spin,
+    item.spin ? spinLabel(item.spin) : "",
+    item.heightClass,
+    item.heightClass ? heightClassLabel(item.heightClass) : "",
+    ...tags,
+    ...tags.map(tag => tagLabels[tag] || "")
+  ].filter(Boolean).join(" ");
 };
-const directItemMatchesSearch = (item, query) => searchMatchRank(directItemSearchIndex(item), query) > 0;
+const catalogListInitialSearchText = item => item
+  ? [item.name, item.sub, item.en].filter(Boolean).join(" ")
+  : "";
+const catalogListMatchesSearch = (item, query) =>
+  matchesSearchText(catalogListSearchText(item), query, catalogListInitialSearchText(item));
 
 const globalSearchQuery = () => globalSearch?.value.trim() || "";
 const catalogSearchQuery = () => catalogSearch?.value.trim() || "";
@@ -2229,7 +2606,7 @@ const visibleToolsItems = () => {
   const query = prepareSearchQuery(catalogSearchQuery());
   if (selectedCatalogKind && selectedCatalogKind !== "tools") return [];
   return toolsItems
-    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!selectedCatalogSubtype || item.category === selectedCatalogSubtype) && (query.isEmpty || directItemMatchesSearch(item, query)))
+    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!selectedCatalogSubtype || item.category === selectedCatalogSubtype) && (query.isEmpty || catalogListMatchesSearch(item, query)))
     .sort(compareToolsItemsByFirstRelease);
 };
 const visibleCatalogCoreItems = () => {
@@ -2238,7 +2615,7 @@ const visibleCatalogCoreItems = () => {
   const useTypeFilter = resolvedCatalogItemType !== "all";
   const useMetalAttributeFilters = isMetalFightSeries(selectedCatalogSeries);
   return catalogCoreItems
-    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!useTypeFilter || (catalogItemTypeGroup ? catalogItemTypeGroup.includes(item.type) : item.type === resolvedCatalogItemType)) && (!useMetalAttributeFilters || !resolvedCatalogStructure || item.structure === resolvedCatalogStructure) && (!useMetalAttributeFilters || matchesCatalogBattleType(item)) && (!useMetalAttributeFilters || matchesCatalogSpin(item)) && (query.isEmpty || directItemMatchesSearch(item, query)))
+    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!useTypeFilter || (catalogItemTypeGroup ? catalogItemTypeGroup.includes(item.type) : item.type === resolvedCatalogItemType)) && (!useMetalAttributeFilters || !resolvedCatalogStructure || item.structure === resolvedCatalogStructure) && (!useMetalAttributeFilters || matchesCatalogBattleType(item)) && (!useMetalAttributeFilters || matchesCatalogSpin(item)) && (query.isEmpty || catalogListMatchesSearch(item, query)))
     .sort((a, b) => {
       if (useMetalAttributeFilters && a.type === "bey" && b.type === "bey") return beySerialNumber(a) - beySerialNumber(b);
       if (useMetalAttributeFilters && resolvedCatalogItemType === "wheel" && catalogItemTypeGroup) return (wheelTypeOrder[a.type] ?? 99) - (wheelTypeOrder[b.type] ?? 99);
@@ -2303,27 +2680,111 @@ const searchHashParams = hash => {
   const value = (hash || window.location.hash || "").replace(/^#search\??/, "");
   return new URLSearchParams(value);
 };
-const isSearchHash = () => window.location.hash.startsWith("#search");
-const productCompositionSearchText = (item, region) => productCompositionItems(item, region)
-  .map(part => [part.name, directItemSearchText(findCatalogItemById(part.target))].filter(Boolean).join(" "))
+const normalizeCatalogRouteScope = scope => scope === "bey" || scope === "tools" ? scope : "all";
+const currentPathWithSearch = () => `${window.location.pathname}${window.location.search}`;
+const routeHashParts = (hash = window.location.hash) => {
+  const raw = (hash || "").replace(/^#/, "");
+  const queryIndex = raw.indexOf("?");
+  return {
+    id: queryIndex >= 0 ? raw.slice(0, queryIndex) : raw,
+    params: new URLSearchParams(queryIndex >= 0 ? raw.slice(queryIndex + 1) : "")
+  };
+};
+function parseRouteFromHash(hash = window.location.hash) {
+  const { id, params } = routeHashParts(hash);
+  if (!id) return { type: "overview" };
+  if (id === "search") return {
+    type: "search",
+    query: params.get("q") || "",
+    scope: normalizeSearchScope(params.get("scope") || "all")
+  };
+  if (id === "CATEGORY-CATALOG") return {
+    type: "catalog",
+    scope: normalizeCatalogRouteScope(params.get("scope"))
+  };
+  if (id === "CATEGORY-RELEASE") return { type: "category-release" };
+  if (id === "CATEGORY-ANIME") return { type: "category-anime" };
+  return { type: "detail", id };
+}
+function serializeRoute(route = {}) {
+  if (!route || route.type === "overview") return "";
+  if (route.type === "search") return searchHash(route.query || "", route.scope || "all");
+  if (route.type === "catalog") {
+    const params = new URLSearchParams();
+    params.set("scope", normalizeCatalogRouteScope(route.scope));
+    return `#CATEGORY-CATALOG?${params.toString()}`;
+  }
+  if (route.type === "category-release") return "#CATEGORY-RELEASE";
+  if (route.type === "category-anime") return "#CATEGORY-ANIME";
+  if (route.id) return `#${route.id}`;
+  return "";
+}
+function routeIsPrimary(route = {}) {
+  return route.type === "overview" || route.type === "catalog" || route.type === "search";
+}
+function routeOpensModal(route = {}) {
+  return route.type === "detail" || route.type === "category-release" || route.type === "category-anime";
+}
+const routeSnapshot = route => route ? { ...route } : null;
+let modalOriginRoute = null;
+let lastPrimaryRoute = { type: "overview" };
+function rememberPrimaryRoute(route = {}) {
+  if (routeIsPrimary(route)) lastPrimaryRoute = routeSnapshot(route) || { type: "overview" };
+}
+function syncModalOriginRoute(route = {}) {
+  if (routeOpensModal(route)) {
+    if (!modalOriginRoute) {
+      const currentRoute = parseRouteFromHash();
+      modalOriginRoute = routeIsPrimary(currentRoute) ? routeSnapshot(currentRoute) : routeSnapshot(lastPrimaryRoute);
+    }
+    return;
+  }
+  if (routeIsPrimary(route)) {
+    rememberPrimaryRoute(route);
+    modalOriginRoute = null;
+  }
+}
+function modalCloseRoute() {
+  return routeSnapshot(modalOriginRoute) || { type: "overview" };
+}
+function clearModalOriginRoute() {
+  modalOriginRoute = null;
+}
+function stabilizePrimaryRouteScroll() {
+  requestAnimationFrame(() => {
+    if (!modal?.open) window.scrollTo(0, 0);
+  });
+}
+let applyingRoute = false;
+function navigateToRoute(route, { replace = false, apply = true } = {}) {
+  syncModalOriginRoute(route);
+  const nextHash = serializeRoute(route);
+  const nextUrl = `${currentPathWithSearch()}${nextHash}`;
+  if (`${currentPathWithSearch()}${window.location.hash}` !== nextUrl) {
+    history[replace ? "replaceState" : "pushState"](null, "", nextUrl);
+  }
+  if (apply) applyRoute(route);
+}
+const mainSearchProductCompositionText = (item, region) => productCompositionItems(item, region)
+  .map(part => [part.name, mainSearchItemText(findCatalogItemById(part.target))].filter(Boolean).join(" "))
   .filter(Boolean)
   .join(" ");
-const releasePrimarySearchText = (item, region) => {
+const mainSearchReleasePrimaryText = (item, region) => {
   const release = productRelease(item, region);
   if (release.status === "unreleased") return "";
   return [
     release.no,
     release.name,
-    productCompositionSearchText(item, region)
+    mainSearchProductCompositionText(item, region)
   ].filter(Boolean).join(" ");
 };
-const productSearchText = item => [
+const mainSearchProductText = item => [
   item.no,
   item.name,
-  releasePrimarySearchText(item, "kr"),
-  releasePrimarySearchText(item, "jp")
+  mainSearchReleasePrimaryText(item, "kr"),
+  mainSearchReleasePrimaryText(item, "jp")
 ].filter(Boolean).join(" ");
-const animeEpisodeDirectSearchText = episode => [
+const mainSearchAnimeEpisodeText = episode => [
   episode.no || "",
   episode.titles?.kr || "",
   episode.titles?.jp || ""
@@ -2350,7 +2811,7 @@ const cacheSearchResultMarkup = (key, result) => {
   searchResultMarkupCache.set(key, result);
   return result;
 };
-const unifiedSearchRecord = (kind, item, searchText, extra = {}) => {
+const mainSearchRecord = (kind, item, searchText, extra = {}) => {
   const searchIndex = createSearchTextIndex(searchText, searchText);
   const record = {
     kind,
@@ -2361,19 +2822,19 @@ const unifiedSearchRecord = (kind, item, searchText, extra = {}) => {
   record.entry = kind === "anime" ? { kind, item, index: record.index } : { kind, item };
   return record;
 };
-const createUnifiedSearchRecords = ({ items, kind, searchText = directItemSearchText, extra = () => ({}) }) =>
-  items.map((item, index) => unifiedSearchRecord(kind, item, searchText(item, index), extra(item, index)));
-const searchResultRecordSources = () => [
+const createMainSearchRecords = ({ items, kind, searchText = mainSearchItemText, extra = () => ({}) }) =>
+  items.map((item, index) => mainSearchRecord(kind, item, searchText(item, index), extra(item, index)));
+const mainSearchRecordSources = () => [
   { key: "catalog", kind: "catalog-item", items: catalogCoreItems },
   { key: "tools", kind: "tools", items: toolsItems },
-  { key: "product", kind: "product", items: productItems.filter(item => !item.lineupOnly), searchText: productSearchText },
+  { key: "product", kind: "product", items: productItems.filter(item => !item.lineupOnly), searchText: mainSearchProductText },
   { key: "manga", kind: "book", items: bookItems },
   { key: "game", kind: "game", items: gameItems },
-  { key: "anime", kind: "anime", items: animeInfo.episodes, searchText: animeEpisodeDirectSearchText, extra: (episode, index) => ({ index }) }
+  { key: "anime", kind: "anime", items: animeInfo.episodes, searchText: mainSearchAnimeEpisodeText, extra: (episode, index) => ({ index }) }
 ];
 const searchResultRecords = () => {
   if (searchResultRecordCache) return searchResultRecordCache;
-  searchResultRecordCache = Object.fromEntries(searchResultRecordSources().map(source => [source.key, createUnifiedSearchRecords(source)]));
+  searchResultRecordCache = Object.fromEntries(mainSearchRecordSources().map(source => [source.key, createMainSearchRecords(source)]));
   return searchResultRecordCache;
 };
 const searchResultCacheKey = (scope, query) => `${scope}\u0000${searchQueryFrom(query).raw}`;
@@ -3045,7 +3506,7 @@ function renderCatalogItems() {
 
 const catalogTypeGroups = {
   bey: ["bey"],
-  parts: ["face", "stoneface", "wheel", "clearwheel", "4dclearwheel", "lightwheel", "metalwheel", "4dmetalwheel", "chromewheel", "crystalwheel", "track", "bottom", "4dbottom", "layer", "duallayer", "godlayer", "chozlayer", "gachichip", "gachiweight", "gachibase", "gachilayer", "disk", "driver", "blade", "ratchet", "bit"],
+  parts: ["face", "stoneface", "wheel", "clearwheel", "4dclearwheel", "lightwheel", "metalwheel", "4dmetalwheel", "chromewheel", "crystalwheel", "track", "bottom", "4dbottom", "layer", "duallayer", "godlayer", "chozlayer", "gachichip", "gachiweight", "gachibase", "gachilayer", "gachiupgrade", "sparkingchip", "sparkingring", "sparkingchassis", "sparkingupgrade", "dblayer", "dbcore", "dbblade", "dbarmor", "evolutiongear", "disk", "coredisk", "frame", "dbdisk", "driver", "driverupgrade", "blade", "ratchet", "bit"],
   face: ["face", "stoneface"],
   wheel: ["wheel", "clearwheel", "4dclearwheel", "lightwheel", "metalwheel", "4dmetalwheel", "chromewheel", "crystalwheel"],
   bottom: ["bottom", "4dbottom"],
@@ -3055,7 +3516,7 @@ const catalogTypeGroups = {
   weightdisk: ["weightdisk"],
   bladebase: ["bladebase"],
   gear: ["gear"],
-  layer: ["layer"],
+  layer: ["layer", "duallayer", "godlayer", "chozlayer", "gachichip", "gachiweight", "gachibase", "gachilayer", "gachiupgrade", "sparkingchip", "sparkingring", "sparkingchassis", "sparkingupgrade", "dblayer", "dbcore", "dbblade", "dbarmor", "evolutiongear"],
   duallayer: ["duallayer"],
   godlayer: ["godlayer"],
   chozlayer: ["chozlayer"],
@@ -3063,8 +3524,22 @@ const catalogTypeGroups = {
   gachiweight: ["gachiweight"],
   gachibase: ["gachibase"],
   gachilayer: ["gachilayer"],
-  disk: ["disk"],
-  driver: ["driver"],
+  gachiupgrade: ["gachiupgrade"],
+  sparkingchip: ["sparkingchip"],
+  sparkingring: ["sparkingring"],
+  sparkingchassis: ["sparkingchassis"],
+  sparkingupgrade: ["sparkingupgrade"],
+  dblayer: ["dblayer"],
+  dbcore: ["dbcore"],
+  dbblade: ["dbblade"],
+  dbarmor: ["dbarmor"],
+  evolutiongear: ["evolutiongear"],
+  disk: ["disk", "coredisk", "frame", "dbdisk"],
+  coredisk: ["coredisk"],
+  frame: ["frame"],
+  dbdisk: ["dbdisk"],
+  driver: ["driver", "driverupgrade"],
+  driverupgrade: ["driverupgrade"],
   blade: ["blade"],
   ratchet: ["ratchet"],
   bit: ["bit"]
@@ -3280,6 +3755,10 @@ function bindProductReleaseTable(modalContentRoot = document) {
 }
 
 function openCategoryReleaseDetail(options = {}) {
+  if (options.updateHash !== false && !applyingRoute) {
+    navigateToRoute({ type: "category-release", options });
+    return;
+  }
   if (options.region && releaseRegionLabels[options.region]) activeReleaseRegion = options.region;
   if (options.series && releaseSeriesLabels[options.series]) activeReleaseSeries = options.series;
   if (options.releaseSort?.key && releaseSortableColumns[options.releaseSort.key]) {
@@ -3303,7 +3782,6 @@ function openCategoryReleaseDetail(options = {}) {
   </div>`;
   bindProductReleaseTable(content);
   rememberReleaseModalContext();
-  window.location.hash = "CATEGORY-RELEASE";
   openModal();
 }
 
@@ -4100,14 +4578,18 @@ function openAnimeEpisodeDetail(indexOrId, options = {}) {
   const index = typeof indexOrId === "number" ? indexOrId : episodeIndexFromHash(indexOrId);
   const episode = animeInfo.episodes[index];
   if (!episode) return;
-  cleanupModelViewer();
   const id = episodeHashId(index);
+  if (!id) return;
+  if (options.updateHash !== false && !applyingRoute) {
+    navigateToRoute({ type: "detail", id, options });
+    return;
+  }
+  cleanupModelViewer();
   const backAnimeRegion = animeDisplayRegion;
   const backAnimeSeason = normalizeAnimeSeason(options.animeSeason || episode.season || activeAnimeSeason);
   const backAnimeQuery = typeof options.animeQuery === "string" ? options.animeQuery : activeAnimeEpisodeQuery;
   const content = document.querySelector("#modalContent");
   if (!content || !modal) return;
-  if (!id) return;
   const backButton = options.fromAnimeList
     ? modalBackButtonMarkup({ label: "방영목록으로 돌아가기", animeEpisodes: true })
     : "";
@@ -4134,11 +4616,14 @@ function openAnimeEpisodeDetail(indexOrId, options = {}) {
     animeSeason: backAnimeSeason,
     animeQuery: backAnimeQuery
   });
-  window.location.hash = id;
   openModal();
 }
 
 function openCategoryAnimeDetail(options = {}) {
+  if (options.updateHash !== false && !applyingRoute) {
+    navigateToRoute({ type: "category-anime", options });
+    return;
+  }
   activeCategoryAnimeTab = normalizeCategoryAnimeTab(options.animeTab || "episodes");
   activeAnimeRegion = animeDisplayRegion;
   activeAnimeSeason = normalizeAnimeSeason(options.animeSeason);
@@ -4160,7 +4645,6 @@ function openCategoryAnimeDetail(options = {}) {
   </div>`;
   renderCategoryAnime(content);
   rememberAnimeModalContext();
-  window.location.hash = "CATEGORY-ANIME";
   openModal();
 }
 
@@ -4168,9 +4652,13 @@ const openCategoryReleaseFromMenu = () => {
   openCategoryReleaseDetail();
   setMenuOpen(false);
 };
-const openCategoryCatalog = ({ updateHash = true } = {}) => {
-  activatePrimarySection("catalog");
-  if (updateHash && window.location.hash !== "#CATEGORY-CATALOG") window.location.hash = "CATEGORY-CATALOG";
+const openCategoryCatalog = ({ scope = "all", updateHash = true, replace = false } = {}) => {
+  const normalizedScope = normalizeCatalogRouteScope(scope);
+  if (updateHash && !applyingRoute) {
+    navigateToRoute({ type: "catalog", scope: normalizedScope }, { replace });
+    return;
+  }
+  activatePrimarySection(normalizedScope === "all" ? "catalog" : normalizedScope);
 };
 const openCategoryCatalogFromMenu = () => {
   openCategoryCatalog();
@@ -4219,10 +4707,7 @@ const updateActiveSearchHash = () => {
   if (searchHashUpdateTimer) clearTimeout(searchHashUpdateTimer);
   searchHashUpdateTimer = 0;
   if (activeToyPanelName() !== "all") return;
-  const nextHash = searchHash();
-  if (window.location.hash !== nextHash) {
-    history.replaceState(null, "", `${window.location.pathname}${window.location.search}${nextHash}`);
-  }
+  navigateToRoute({ type: "search", query: globalSearchQuery(), scope: globalSearchScopeValue() }, { replace: true, apply: false });
 };
 const scheduleActiveSearchHashUpdate = () => {
   if (searchHashUpdateTimer) clearTimeout(searchHashUpdateTimer);
@@ -4258,17 +4743,17 @@ const scheduleCatalogSearchResultsRefresh = () => {
     syncCatalogScopeState();
   });
 };
-const openSearchResults = ({ replace = false } = {}) => {
+const openSearchResults = ({ replace = false, updateHash = true } = {}) => {
+  if (updateHash && !applyingRoute) {
+    navigateToRoute({ type: "search", query: globalSearchQuery(), scope: globalSearchScopeValue() }, { replace });
+    return;
+  }
   cancelScheduledSearchRenders();
   closeAllSearchPreviews();
   document.querySelectorAll(".nav-link").forEach(link => link.classList.remove("active"));
   activateToyPanel("all");
   renderGlobalCards();
   setMenuOpen(false);
-  const nextHash = searchHash();
-  if (window.location.hash !== nextHash) {
-    history[replace ? "replaceState" : "pushState"](null, "", `${window.location.pathname}${window.location.search}${nextHash}`);
-  }
 };
 const bindSearchInput = (input, containerSelector, { onInput, onSubmit = onInput } = {}) => {
   if (!input) return;
@@ -4675,7 +5160,7 @@ document.querySelector("#catalogNavFilters")?.addEventListener("click", event =>
   if (!button) return;
   event.preventDefault();
   event.stopPropagation();
-  activatePrimarySection(button.dataset.catalogNavScope || "catalog");
+  openCategoryCatalog({ scope: button.dataset.catalogNavScope || "all" });
 }, true);
 const updateToTop = () => {
   if (!toTop) return;
@@ -4916,7 +5401,7 @@ function modalTitle(text) {
   return `<h3 class="modal-name">${text}</h3>`;
 }
 function detailHeading(item, options = {}) {
-  if (["track", "bottom", "4dbottom"].includes(item.type)) {
+  if (["track", "bottom", "4dbottom", "disk", "coredisk", "frame", "dbdisk", "driver"].includes(item.type)) {
     const numericTrack = item.type === "track" && /^\d+$/.test(item.name);
     const koName = partKoName(item);
     const displayName = itemDisplayName(item, options.region);
@@ -4934,6 +5419,10 @@ function detailHeading(item, options = {}) {
 function openDetail(id, options = {}) {
   const item = catalogCoreItemsById.get(id);
   if (!item) return;
+  if (options.updateHash !== false && !applyingRoute) {
+    navigateToRoute({ type: "detail", id, options });
+    return;
+  }
   closeModalTagPopover();
   cleanupModelViewer();
   const slot = item.type === "bey"
@@ -4960,7 +5449,6 @@ function openDetail(id, options = {}) {
   }));
   bindModalTagPopovers(modalContentRoot);
   rememberModalContext("item", item.id, options);
-  window.location.hash = item.id;
   openModal();
   if (item.model) requestAnimationFrame(initModelViewer);
 }
@@ -5063,6 +5551,10 @@ function bindProductCompositionLinks(product, root = document, options = {}) {
 function openProductLineupDetail(id, options = {}) {
   const item = productItemsById.get(id);
   if (!item) return;
+  if (options.updateHash !== false && !applyingRoute) {
+    navigateToRoute({ type: "detail", id, options });
+    return;
+  }
   const requestedRegion = releaseRegionLabels[options.region] ? options.region : (releaseRegionLabels[activeReleaseRegion] ? activeReleaseRegion : "kr");
   const region = productDisplayRegion(item, requestedRegion);
   activeReleaseRegion = region;
@@ -5083,7 +5575,6 @@ function openProductLineupDetail(id, options = {}) {
   bindCatalogModalBack(modalContentRoot, { fallbackRegion: region });
   bindProductCompositionLinks(item, modalContentRoot, { ...options, region });
   rememberModalContext("product-lineup", item.id, { ...options, region });
-  window.location.hash = item.id;
   openModal();
 }
 function openProductEntry(id, options = {}) {
@@ -5095,6 +5586,10 @@ function openProductEntry(id, options = {}) {
 function openProductDetail(id, options = {}) {
   const item = productItemsById.get(id);
   if (!item) return;
+  if (options.updateHash !== false && !applyingRoute) {
+    navigateToRoute({ type: "detail", id, options });
+    return;
+  }
   const requestedRegion = releaseRegionLabels[options.region] ? options.region : (releaseRegionLabels[activeReleaseRegion] ? activeReleaseRegion : "kr");
   const region = productDisplayRegion(item, requestedRegion);
   const stepRegion = requestedRegion === "kr" ? "kr" : region;
@@ -5118,10 +5613,13 @@ function openProductDetail(id, options = {}) {
   bindCatalogModalBack(modalContentRoot, { fallbackRegion: region });
   bindProductCompositionLinks(item, modalContentRoot, { ...options, region });
   rememberModalContext("product", item.id, { ...options, region });
-  window.location.hash = item.id;
   openModal();
 }
 function openSimpleCatalogDetail({ item, options = {}, kind, stepItems, tags = "" }) {
+  if (options.updateHash !== false && !applyingRoute) {
+    navigateToRoute({ type: "detail", id: item.id, options });
+    return;
+  }
   cleanupModelViewer();
   const backButton = productBackButton({ backProductId: options.backProductId, backRelease: options.backRelease, region: options.region });
   const modalContentRoot = document.querySelector("#modalContent");
@@ -5132,7 +5630,6 @@ function openSimpleCatalogDetail({ item, options = {}, kind, stepItems, tags = "
   bindModalStepButtons({ [kind]: options });
   bindCatalogModalBack(modalContentRoot);
   rememberModalContext(kind, item.id, options);
-  window.location.hash = item.id;
   openModal();
 }
 function openToolsDetail(id, options = {}) {
@@ -5157,9 +5654,11 @@ function openGameDetail(id, options = {}) {
 function closeDetail() {
   closeModalTagPopover();
   cleanupModelViewer();
-  closeModal();
   clearModalContext();
-  history.replaceState(null, "", window.location.pathname + window.location.search);
+  const targetRoute = modalCloseRoute();
+  clearModalOriginRoute();
+  closeModal();
+  navigateToRoute(targetRoute, { replace: true, apply: false });
 }
 document.querySelector("#modalClose").addEventListener("click", closeDetail);
 document.querySelector("[data-modal-overlay]")?.addEventListener("click", closeDetail);
@@ -5215,7 +5714,6 @@ const activatePrimarySection = section => {
   const isCatalogSection = ["catalog", "bey", "tools"].includes(section);
   const catalogScope = section === "catalog" ? "all" : section;
   clearSearchInputs();
-  if (isSearchHash()) history.replaceState(null, "", window.location.pathname + window.location.search);
   document.querySelectorAll(".nav-link").forEach(link => {
     const linkSection = link.hasAttribute("data-category-catalog-open") ? "catalog" : link.dataset.toySection;
     link.classList.toggle("active", linkSection === (isCatalogSection ? "catalog" : section));
@@ -5239,6 +5737,57 @@ const activatePrimarySection = section => {
 
   setMenuOpen(false);
 };
+function closeModalForPrimaryRoute() {
+  closeModalTagPopover();
+  cleanupModelViewer();
+  clearModalContext();
+  clearModalOriginRoute();
+  if (modal?.open) closeModal();
+}
+function routeOptions(route = {}) {
+  return { ...(route.options || {}), updateHash: false };
+}
+function applyRoute(route = parseRouteFromHash()) {
+  const normalizedRoute = route || { type: "overview" };
+  applyingRoute = true;
+  try {
+    if (routeIsPrimary(normalizedRoute)) {
+      rememberPrimaryRoute(normalizedRoute);
+      closeModalForPrimaryRoute();
+    }
+    if (normalizedRoute.type === "overview") {
+      activatePrimarySection("overview");
+    } else if (normalizedRoute.type === "search") {
+      setSearchInputValue(globalSearch, normalizedRoute.query || "");
+      setSearchInputValue(overviewSearch, normalizedRoute.query || "");
+      setGlobalSearchScope(normalizedRoute.scope || "all");
+      setOverviewSearchScope(normalizedRoute.scope || "all");
+      openSearchResults({ replace: true, updateHash: false });
+    } else if (normalizedRoute.type === "catalog") {
+      openCategoryCatalog({ scope: normalizedRoute.scope || "all", updateHash: false });
+    } else if (normalizedRoute.type === "category-release") {
+      const restoredOptions = restoredModalContext("CATEGORY-RELEASE")?.options || {};
+      openCategoryReleaseDetail({ ...restoredOptions, ...routeOptions(normalizedRoute) });
+    } else if (normalizedRoute.type === "category-anime") {
+      const restoredOptions = restoredModalContext("CATEGORY-ANIME")?.options || {};
+      openCategoryAnimeDetail({ ...restoredOptions, ...routeOptions(normalizedRoute) });
+    } else if (normalizedRoute.type === "detail" && normalizedRoute.id) {
+      const hashId = normalizedRoute.id;
+      const restoredContext = restoredModalContext(hashId);
+      const restoredOptions = { ...(restoredContext?.options || {}), ...routeOptions(normalizedRoute) };
+      if (isAnimeEpisodeHash(hashId)) openAnimeEpisodeDetail(hashId, restoredOptions);
+      else if (restoredContext?.kind === "product-lineup") openProductLineupDetail(hashId, restoredOptions);
+      else if (hashId.startsWith("PRODUCT-")) openProductEntry(hashId, restoredOptions);
+      else if (hashId.startsWith("TOOLS-")) openToolsDetail(hashId, restoredOptions);
+      else if (hashId.startsWith("BOOK-")) openBookDetail(hashId, restoredOptions);
+      else if (hashId.startsWith("GAME-")) openGameDetail(hashId, restoredOptions);
+      else openDetail(hashId, restoredOptions);
+    }
+  } finally {
+    applyingRoute = false;
+  }
+  if (routeIsPrimary(normalizedRoute)) stabilizePrimaryRouteScroll();
+}
 document.querySelectorAll(".nav-link").forEach(button => button.addEventListener("click", event => {
   event.preventDefault();
   const categoryReleaseButton = event.currentTarget.closest("[data-category-release-open]");
@@ -5259,8 +5808,7 @@ document.querySelectorAll(".nav-link").forEach(button => button.addEventListener
 }));
 document.querySelector(".topbar > .brand")?.addEventListener("click", event => {
   event.preventDefault();
-  activatePrimarySection("overview");
-  history.replaceState(null, "", window.location.pathname + window.location.search);
+  navigateToRoute({ type: "overview" }, { replace: true });
 });
 menuButton?.addEventListener("click", event => {
   event.stopPropagation();
@@ -5297,7 +5845,7 @@ mobileDrawer?.addEventListener("click", event => {
 
   if (catalogScopeButton) {
     event.preventDefault();
-    activatePrimarySection(catalogScopeButton.dataset.mobileCatalogScope || "catalog");
+    openCategoryCatalog({ scope: catalogScopeButton.dataset.mobileCatalogScope || "all" });
   }
 });
 window.addEventListener("resize", () => {
@@ -5341,25 +5889,13 @@ if (catalogFilterResizeObserver) {
 renderCatalogStaticFilterOptions();
 refreshCatalogControls();
 const routeCurrentHash = () => {
-  if (!window.location.hash) return false;
-  const hashId = window.location.hash.slice(1);
-  const restoredContext = restoredModalContext(hashId);
-  const restoredOptions = restoredContext?.options || {};
-  if (hashId.startsWith("search")) {
-    syncSearchHashToControls();
-    openSearchResults({ replace: true });
-  }
-  else if (hashId === "CATEGORY-CATALOG") openCategoryCatalog({ updateHash: false });
-  else if (hashId === "CATEGORY-RELEASE") openCategoryReleaseDetail(restoredOptions);
-  else if (hashId === "CATEGORY-ANIME") openCategoryAnimeDetail(restoredOptions);
-  else if (isAnimeEpisodeHash(hashId)) openAnimeEpisodeDetail(hashId, restoredOptions);
-  else if (restoredContext?.kind === "product-lineup") openProductLineupDetail(hashId, restoredOptions);
-  else if (hashId.startsWith("PRODUCT-")) openProductEntry(hashId, restoredOptions);
-  else if (hashId.startsWith("TOOLS-")) openToolsDetail(hashId, restoredOptions);
-  else if (hashId.startsWith("BOOK-")) openBookDetail(hashId, restoredOptions);
-  else if (hashId.startsWith("GAME-")) openGameDetail(hashId, restoredOptions);
-  else openDetail(hashId, restoredOptions);
-  return true;
+  applyRoute(parseRouteFromHash());
 };
-if (!routeCurrentHash()) activateToyPanel("overview");
+try {
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+} catch {
+  // Some embedded browsers can deny history mutations; routing still works.
+}
+routeCurrentHash();
 window.addEventListener("hashchange", routeCurrentHash);
+window.addEventListener("popstate", routeCurrentHash);
