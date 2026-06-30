@@ -2282,9 +2282,6 @@ const collectSearchPreviewItems = (scope = globalSearchScopeValue(), query = glo
   }
   return exact.concat(fallback).slice(0, limit);
 };
-const visibleSearchResultItems = (scope = globalSearchScopeValue(), query = globalSearchQuery()) => {
-  return collectSearchResultItems(scope, query).items;
-};
 const searchResultType = entry => {
   if (entry.kind === "tools") return "장비";
   if (entry.kind === "product") return "제품";
@@ -4049,14 +4046,6 @@ document.querySelector(".overview-panel")?.addEventListener("click", event => {
   }
 
 });
-const renderSearchResults = () => {
-  const panel = activeToyPanelName();
-  if (panel === "all") renderGlobalCards();
-  if (panel === "catalog") {
-    renderCatalogItems();
-    syncCatalogScopeState();
-  }
-};
 const activeToyPanelName = () => activeToyPanel()?.dataset.toyPanel || "";
 const syncSearchHashToControls = () => {
   const params = searchHashParams();
