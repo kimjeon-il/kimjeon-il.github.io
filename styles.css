@@ -2744,16 +2744,16 @@ body.is-overview .catalog-section {
     "title arrow"
     "desc arrow";
   --overview-card-justify-items: stretch;
-  --overview-card-padding: clamp(10px, 3vw, 22px) clamp(7px, 2.8vw, 24px);
-  --overview-card-row-gap: 8px;
-  --overview-card-column-gap: clamp(4px, calc(-5px + 3.6vw), 18px);
+  --overview-card-padding: clamp(12px, 3.4vw, 22px) clamp(10px, 3.4vw, 24px);
+  --overview-card-row-gap: clamp(8px, 2.2vw, 10px);
+  --overview-card-column-gap: clamp(6px, calc(-4px + 3.6vw), 18px);
   --overview-card-radius: 24px;
   --overview-card-text-align: left;
   --overview-card-detail-display: inline;
-  --overview-card-label-size: clamp(.64rem, 3.2vw, var(--font-md));
-  --overview-card-title-size: clamp(.8125rem, 4vw, var(--font-xl));
-  --overview-card-desc-size: clamp(.64rem, 3.2vw, var(--font-md));
-  --overview-card-arrow-size: clamp(.8125rem, 4vw, var(--font-xl));
+  --overview-card-label-size: clamp(.625rem, 3.1vw, var(--font-md));
+  --overview-card-title-size: clamp(.8rem, 3.9vw, var(--font-xl));
+  --overview-card-desc-size: clamp(.625rem, 3.1vw, var(--font-md));
+  --overview-card-arrow-size: clamp(.8rem, 3.9vw, var(--font-xl));
   --overview-card-title-line-height: 1.2;
   --overview-card-title-white-space: nowrap;
   --overview-card-title-word-break: normal;
