@@ -2482,6 +2482,11 @@ const searchMatchRank = (text, query, { initialText = "" } = {}) => {
 const matchesSearchText = (text, query, initialText = "") => {
   return searchMatchRank(text, query, { initialText }) > 0;
 };
+const catalogListSpinSearchTerms = item => {
+  if (!item?.spin) return [];
+  if (item.spin === "dual") return ["dual", spinLabel("dual"), "left", spinLabel("left"), "right", spinLabel("right")];
+  return [item.spin, spinLabel(item.spin)];
+};
 const catalogListSearchText = item => {
   if (!item) return "";
   const tags = Array.isArray(item.tags) ? item.tags : [];
@@ -2497,8 +2502,7 @@ const catalogListSearchText = item => {
     item.structure ? structureLabels[item.structure] : "",
     item.battleType,
     item.battleType ? battleTypeLabel(item.battleType, item) : "",
-    item.spin,
-    item.spin ? spinLabel(item.spin) : "",
+    ...catalogListSpinSearchTerms(item),
     item.heightClass,
     item.heightClass ? heightClassLabel(item.heightClass) : "",
     ...tags,
@@ -2508,8 +2512,23 @@ const catalogListSearchText = item => {
 const catalogListInitialSearchText = item => item
   ? [item.name, item.sub, item.en].filter(Boolean).join(" ")
   : "";
+const catalogListSearchEntryCache = new WeakMap();
+const catalogListSearchEntry = item => {
+  if (!item || typeof item !== "object") {
+    const text = "";
+    const initialText = "";
+    return { text, initialText, index: createSearchTextIndex(text, initialText) };
+  }
+  const cached = catalogListSearchEntryCache.get(item);
+  if (cached) return cached;
+  const text = catalogListSearchText(item);
+  const initialText = catalogListInitialSearchText(item);
+  const entry = { text, initialText, index: createSearchTextIndex(text, initialText) };
+  catalogListSearchEntryCache.set(item, entry);
+  return entry;
+};
 const catalogListMatchesSearch = (item, query) =>
-  matchesSearchText(catalogListSearchText(item), query, catalogListInitialSearchText(item));
+  searchMatchRank(catalogListSearchEntry(item).index, query) > 0;
 
 const globalSearchQuery = () => globalSearch?.value.trim() || "";
 const catalogSearchQuery = () => catalogSearch?.value.trim() || "";
@@ -2586,6 +2605,18 @@ const matchesCatalogSpin = item => {
   if (selectedCatalogSpin === "dual") return item.spin === "dual";
   return item.spin === selectedCatalogSpin || item.spin === "dual";
 };
+const catalogHasSearchQuery = () => Boolean(catalogSearchQuery());
+const catalogHasExplicitPartScope = () => selectedCatalogKind === "parts";
+const catalogUsesDefaultBrowseSet = query => !selectedCatalogKind && !catalogHasExplicitPartScope() && (query ? query.isEmpty : !catalogHasSearchQuery());
+const shouldShowCatalogCount = () => Boolean(
+  catalogHasSearchQuery() ||
+  selectedCatalogSeries ||
+  selectedCatalogKind ||
+  selectedCatalogSubtype ||
+  selectedCatalogStructure ||
+  selectedCatalogBattleType ||
+  selectedCatalogSpin
+);
 const deriveCatalogItemFilters = () => {
   if (!selectedCatalogKind) {
     resolvedCatalogItemType = "all";
@@ -2612,13 +2643,16 @@ const visibleToolsItems = () => {
 const visibleCatalogCoreItems = () => {
   const query = prepareSearchQuery(catalogSearchQuery());
   if (selectedCatalogKind === "tools") return [];
-  const useTypeFilter = resolvedCatalogItemType !== "all";
+  const useDefaultBrowseSet = catalogUsesDefaultBrowseSet(query);
+  const effectiveCatalogItemType = useDefaultBrowseSet ? "bey" : resolvedCatalogItemType;
+  const effectiveCatalogItemTypeGroup = useDefaultBrowseSet ? null : catalogItemTypeGroup;
+  const useTypeFilter = effectiveCatalogItemType !== "all";
   const useMetalAttributeFilters = isMetalFightSeries(selectedCatalogSeries);
   return catalogCoreItems
-    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!useTypeFilter || (catalogItemTypeGroup ? catalogItemTypeGroup.includes(item.type) : item.type === resolvedCatalogItemType)) && (!useMetalAttributeFilters || !resolvedCatalogStructure || item.structure === resolvedCatalogStructure) && (!useMetalAttributeFilters || matchesCatalogBattleType(item)) && (!useMetalAttributeFilters || matchesCatalogSpin(item)) && (query.isEmpty || catalogListMatchesSearch(item, query)))
+    .filter(item => (!selectedCatalogSeries || item.series === selectedCatalogSeries) && (!useTypeFilter || (effectiveCatalogItemTypeGroup ? effectiveCatalogItemTypeGroup.includes(item.type) : item.type === effectiveCatalogItemType)) && (!useMetalAttributeFilters || !resolvedCatalogStructure || item.structure === resolvedCatalogStructure) && (!useMetalAttributeFilters || matchesCatalogBattleType(item)) && (!useMetalAttributeFilters || matchesCatalogSpin(item)) && (query.isEmpty || catalogListMatchesSearch(item, query)))
     .sort((a, b) => {
       if (useMetalAttributeFilters && a.type === "bey" && b.type === "bey") return beySerialNumber(a) - beySerialNumber(b);
-      if (useMetalAttributeFilters && resolvedCatalogItemType === "wheel" && catalogItemTypeGroup) return (wheelTypeOrder[a.type] ?? 99) - (wheelTypeOrder[b.type] ?? 99);
+      if (useMetalAttributeFilters && effectiveCatalogItemType === "wheel" && effectiveCatalogItemTypeGroup) return (wheelTypeOrder[a.type] ?? 99) - (wheelTypeOrder[b.type] ?? 99);
       return 0;
     });
 };
@@ -2641,14 +2675,68 @@ const bindCatalogCardClicks = gridRoot => {
     openCatalogCard(card);
   });
 };
+let catalogRenderedItemsKey = null;
 const renderCatalogCards = ({ gridSelector, countSelector, getItems, cardTemplate }) => {
   const grid = document.querySelector(gridSelector);
   const count = countSelector ? document.querySelector(countSelector) : null;
   if (!grid) return;
   const visible = getItems();
   if (count) count.textContent = visible.length;
-  grid.innerHTML = visible.map(cardTemplate).join("");
+  const nextKey = visible.map(item => item.id).join("|");
+  if (catalogRenderedItemsKey !== nextKey) {
+    grid.innerHTML = visible.map(cardTemplate).join("");
+    catalogRenderedItemsKey = nextKey;
+  }
   bindCatalogCardClicks(grid);
+  return visible;
+};
+const CATALOG_PAGE_SIZE = 60;
+let currentCatalogPage = 1;
+let currentCatalogRenderKey = "";
+const catalogRenderKey = () => [
+  selectedCatalogSeries || "",
+  selectedCatalogKind || "",
+  selectedCatalogSubtype || "",
+  selectedCatalogStructure || "",
+  selectedCatalogBattleType || "",
+  selectedCatalogSpin || "",
+  catalogSearchQuery()
+].join("|");
+const syncCatalogRenderPage = renderKey => {
+  if (renderKey !== currentCatalogRenderKey) {
+    currentCatalogRenderKey = renderKey;
+    currentCatalogPage = 1;
+  }
+};
+const catalogPageButtons = (currentPage, totalPages) => {
+  if (totalPages <= 1) return "";
+  const pages = [];
+  const start = Math.max(1, currentPage - 2);
+  const end = Math.min(totalPages, currentPage + 2);
+  for (let page = start; page <= end; page += 1) pages.push(page);
+  const pageButtons = pages.map(page => `
+    <button class="ui-button catalog-page-button${page === currentPage ? " active" : ""}" type="button" data-catalog-page="${page}"${page === currentPage ? " aria-current=\"page\"" : ""}>${page}</button>`).join("");
+  return `<nav class="catalog-pagination-nav" aria-label="도감 페이지">
+    <button class="ui-button catalog-page-step" type="button" data-catalog-page="${currentPage - 1}" ${currentPage <= 1 ? "disabled aria-disabled=\"true\"" : ""}>이전</button>
+    ${start > 1 ? `<button class="ui-button catalog-page-button" type="button" data-catalog-page="1">1</button>${start > 2 ? `<span class="catalog-page-gap">…</span>` : ""}` : ""}
+    ${pageButtons}
+    ${end < totalPages ? `${end < totalPages - 1 ? `<span class="catalog-page-gap">…</span>` : ""}<button class="ui-button catalog-page-button" type="button" data-catalog-page="${totalPages}">${totalPages}</button>` : ""}
+    <button class="ui-button catalog-page-step" type="button" data-catalog-page="${currentPage + 1}" ${currentPage >= totalPages ? "disabled aria-disabled=\"true\"" : ""}>다음</button>
+  </nav>`;
+};
+const renderCatalogPagination = totalPages => {
+  const root = document.querySelector("#catalogPagination");
+  if (!root) return;
+  root.innerHTML = catalogPageButtons(currentCatalogPage, totalPages);
+  root.hidden = totalPages <= 1;
+};
+const scrollCatalogGridIntoView = () => {
+  const grid = document.querySelector("#catalogGrid");
+  if (!grid) return;
+  const topbarHeight = document.querySelector(".topbar")?.getBoundingClientRect().height || 0;
+  const controlHeight = document.querySelector(".catalog-control-bar")?.getBoundingClientRect().height || 0;
+  const targetTop = grid.getBoundingClientRect().top + window.scrollY - topbarHeight - controlHeight - 18;
+  window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
 };
 const searchScopeLabel = scope => ({
   all: "전체",
@@ -2660,15 +2748,19 @@ const searchScopeLabel = scope => ({
 })[scope] || "전체";
 const searchScopeValues = ["all", "bey", "tools", "product", "manga", "anime"];
 const normalizeSearchScope = scope => searchScopeValues.includes(scope) ? scope : "all";
-const updateCatalogCount = () => {
+const updateCatalogCount = visibleItems => {
   const count = document.querySelector("#catalogCount");
   if (!count) return;
-  count.textContent = visibleCatalogItems().length;
+  const countRoot = count.closest(".result-count");
+  const showCount = shouldShowCatalogCount();
+  countRoot?.classList.toggle("is-hidden", !showCount);
+  countRoot?.setAttribute("aria-hidden", String(!showCount));
+  count.textContent = Array.isArray(visibleItems) ? visibleItems.length : visibleCatalogItems().length;
 };
-const syncCatalogScopeState = () => {
+const syncCatalogScopeState = ({ updateCount = true } = {}) => {
   const panel = document.querySelector('.toy-panel[data-toy-panel="catalog"]');
   if (panel) panel.dataset.catalogScope = selectedCatalogKind || "all";
-  updateCatalogCount();
+  if (updateCount) updateCatalogCount();
 };
 const searchHash = (query = globalSearchQuery(), scope = globalSearchScopeValue()) => {
   const params = new URLSearchParams();
@@ -2690,6 +2782,35 @@ const routeHashParts = (hash = window.location.hash) => {
     params: new URLSearchParams(queryIndex >= 0 ? raw.slice(queryIndex + 1) : "")
   };
 };
+function normalizeRoute(route = {}) {
+  if (!route || !route.type && !route.id) return { type: "overview" };
+  if (route.type === "search") return {
+    type: "search",
+    query: route.query || "",
+    scope: normalizeSearchScope(route.scope || "all")
+  };
+  if (route.type === "catalog") return {
+    type: "catalog",
+    scope: normalizeCatalogRouteScope(route.scope)
+  };
+  if (route.type === "category-release") return {
+    type: "category-release",
+    options: { ...(route.options || {}) }
+  };
+  if (route.type === "category-anime") return {
+    type: "category-anime",
+    options: { ...(route.options || {}) }
+  };
+  if (route.type === "detail" || route.id) {
+    const id = String(route.id || "");
+    return id ? {
+      type: "detail",
+      id,
+      options: { ...(route.options || {}) }
+    } : { type: "overview" };
+  }
+  return { type: "overview" };
+}
 function parseRouteFromHash(hash = window.location.hash) {
   const { id, params } = routeHashParts(hash);
   if (!id) return { type: "overview" };
@@ -2704,19 +2825,20 @@ function parseRouteFromHash(hash = window.location.hash) {
   };
   if (id === "CATEGORY-RELEASE") return { type: "category-release" };
   if (id === "CATEGORY-ANIME") return { type: "category-anime" };
-  return { type: "detail", id };
+  return normalizeRoute({ type: "detail", id });
 }
 function serializeRoute(route = {}) {
-  if (!route || route.type === "overview") return "";
-  if (route.type === "search") return searchHash(route.query || "", route.scope || "all");
-  if (route.type === "catalog") {
+  const normalizedRoute = normalizeRoute(route);
+  if (normalizedRoute.type === "overview") return "";
+  if (normalizedRoute.type === "search") return searchHash(normalizedRoute.query || "", normalizedRoute.scope || "all");
+  if (normalizedRoute.type === "catalog") {
     const params = new URLSearchParams();
-    params.set("scope", normalizeCatalogRouteScope(route.scope));
+    params.set("scope", normalizeCatalogRouteScope(normalizedRoute.scope));
     return `#CATEGORY-CATALOG?${params.toString()}`;
   }
-  if (route.type === "category-release") return "#CATEGORY-RELEASE";
-  if (route.type === "category-anime") return "#CATEGORY-ANIME";
-  if (route.id) return `#${route.id}`;
+  if (normalizedRoute.type === "category-release") return "#CATEGORY-RELEASE";
+  if (normalizedRoute.type === "category-anime") return "#CATEGORY-ANIME";
+  if (normalizedRoute.id) return `#${normalizedRoute.id}`;
   return "";
 }
 function routeIsPrimary(route = {}) {
@@ -2725,7 +2847,7 @@ function routeIsPrimary(route = {}) {
 function routeOpensModal(route = {}) {
   return route.type === "detail" || route.type === "category-release" || route.type === "category-anime";
 }
-const routeSnapshot = route => route ? { ...route } : null;
+const routeSnapshot = route => route ? normalizeRoute(route) : null;
 let modalOriginRoute = null;
 let lastPrimaryRoute = { type: "overview" };
 function rememberPrimaryRoute(route = {}) {
@@ -2757,13 +2879,18 @@ function stabilizePrimaryRouteScroll() {
 }
 let applyingRoute = false;
 function navigateToRoute(route, { replace = false, apply = true } = {}) {
-  syncModalOriginRoute(route);
-  const nextHash = serializeRoute(route);
+  const normalizedRoute = normalizeRoute(route);
+  syncModalOriginRoute(normalizedRoute);
+  const nextHash = serializeRoute(normalizedRoute);
   const nextUrl = `${currentPathWithSearch()}${nextHash}`;
   if (`${currentPathWithSearch()}${window.location.hash}` !== nextUrl) {
-    history[replace ? "replaceState" : "pushState"](null, "", nextUrl);
+    try {
+      history[replace ? "replaceState" : "pushState"](null, "", nextUrl);
+    } catch {
+      // URL writes can be denied in embedded browsers; still apply the route state.
+    }
   }
-  if (apply) applyRoute(route);
+  if (apply) applyRoute(normalizedRoute);
 }
 const mainSearchProductCompositionText = (item, region) => productCompositionItems(item, region)
   .map(part => [part.name, mainSearchItemText(findCatalogItemById(part.target))].filter(Boolean).join(" "))
@@ -3496,12 +3623,20 @@ const catalogItemCard = item => `
 const catalogCard = item => item.category ? toolsCard(item) : catalogItemCard(item);
 
 function renderCatalogItems() {
+  const visible = visibleCatalogItems();
+  syncCatalogRenderPage(catalogRenderKey());
+  const totalPages = Math.max(1, Math.ceil(visible.length / CATALOG_PAGE_SIZE));
+  currentCatalogPage = Math.min(Math.max(1, currentCatalogPage), totalPages);
+  const pageStart = (currentCatalogPage - 1) * CATALOG_PAGE_SIZE;
+  const pageEnd = pageStart + CATALOG_PAGE_SIZE;
+  const pageItems = visible.slice(pageStart, pageEnd);
   renderCatalogCards({
     gridSelector: "#catalogGrid",
-    getItems: visibleCatalogItems,
+    getItems: () => pageItems,
     cardTemplate: catalogCard
   });
-  updateCatalogCount();
+  updateCatalogCount(visible);
+  renderCatalogPagination(totalPages);
 }
 
 const catalogTypeGroups = {
@@ -4649,7 +4784,7 @@ function openCategoryAnimeDetail(options = {}) {
 }
 
 const openCategoryReleaseFromMenu = () => {
-  openCategoryReleaseDetail();
+  navigateToRoute({ type: "category-release" });
   setMenuOpen(false);
 };
 const openCategoryCatalog = ({ scope = "all", updateHash = true, replace = false } = {}) => {
@@ -4661,11 +4796,11 @@ const openCategoryCatalog = ({ scope = "all", updateHash = true, replace = false
   activatePrimarySection(normalizedScope === "all" ? "catalog" : normalizedScope);
 };
 const openCategoryCatalogFromMenu = () => {
-  openCategoryCatalog();
+  navigateToRoute({ type: "catalog", scope: "all" });
   setMenuOpen(false);
 };
 const openCategoryAnimeFromMenu = () => {
-  openCategoryAnimeDetail();
+  navigateToRoute({ type: "category-anime" });
   setMenuOpen(false);
 };
 
@@ -4740,7 +4875,7 @@ const scheduleCatalogSearchResultsRefresh = () => {
   catalogSearchResultsFrame = requestAnimationFrame(() => {
     catalogSearchResultsFrame = 0;
     renderCatalogItems();
-    syncCatalogScopeState();
+    syncCatalogScopeState({ updateCount: false });
   });
 };
 const openSearchResults = ({ replace = false, updateHash = true } = {}) => {
@@ -4945,7 +5080,7 @@ const refreshCatalogControls = () => {
 const refreshCatalogResults = () => {
   deriveCatalogItemFilters();
   renderCatalogItems();
-  syncCatalogScopeState();
+  syncCatalogScopeState({ updateCount: false });
 };
 const refreshCatalogState = () => {
   syncCatalogDependentFilters();
@@ -4983,6 +5118,7 @@ const setCatalogScope = scope => {
   selectedCatalogBattleType = null;
   selectedCatalogSpin = null;
   selectedCatalogStructure = null;
+  deriveCatalogItemFilters();
   refreshCatalogControls();
 };
 const catalogPanelElement = () => document.querySelector('.catalog-panel[data-toy-panel="catalog"]');
@@ -5140,6 +5276,14 @@ document.querySelectorAll(".catalog-filter-chips").forEach(root => root.addEvent
     refreshCatalogState();
   }
 }));
+document.querySelector("#catalogPagination")?.addEventListener("click", event => {
+  const pageButton = event.target.closest("[data-catalog-page]");
+  if (!pageButton || pageButton.disabled) return;
+  event.preventDefault();
+  currentCatalogPage = Number(pageButton.dataset.catalogPage) || 1;
+  renderCatalogItems();
+  scrollCatalogGridIntoView();
+});
 document.addEventListener("toggle", event => {
   const dropdown = event.target.closest?.(".catalog-dropdown");
   if (!dropdown?.open) return;
@@ -5160,7 +5304,7 @@ document.querySelector("#catalogNavFilters")?.addEventListener("click", event =>
   if (!button) return;
   event.preventDefault();
   event.stopPropagation();
-  openCategoryCatalog({ scope: button.dataset.catalogNavScope || "all" });
+  navigateToRoute({ type: "catalog", scope: button.dataset.catalogNavScope || "all" });
 }, true);
 const updateToTop = () => {
   if (!toTop) return;
@@ -5658,7 +5802,7 @@ function closeDetail() {
   const targetRoute = modalCloseRoute();
   clearModalOriginRoute();
   closeModal();
-  navigateToRoute(targetRoute, { replace: true, apply: false });
+  navigateToRoute(targetRoute, { replace: true });
 }
 document.querySelector("#modalClose").addEventListener("click", closeDetail);
 document.querySelector("[data-modal-overlay]")?.addEventListener("click", closeDetail);
@@ -5732,7 +5876,7 @@ const activatePrimarySection = section => {
   }
   if (panelSection === "catalog") {
     renderCatalogItems();
-    syncCatalogScopeState();
+    syncCatalogScopeState({ updateCount: false });
   }
 
   setMenuOpen(false);
@@ -5748,12 +5892,14 @@ function routeOptions(route = {}) {
   return { ...(route.options || {}), updateHash: false };
 }
 function applyRoute(route = parseRouteFromHash()) {
-  const normalizedRoute = route || { type: "overview" };
+  const normalizedRoute = normalizeRoute(route || { type: "overview" });
   applyingRoute = true;
   try {
     if (routeIsPrimary(normalizedRoute)) {
       rememberPrimaryRoute(normalizedRoute);
       closeModalForPrimaryRoute();
+    } else if (routeOpensModal(normalizedRoute)) {
+      syncModalOriginRoute(normalizedRoute);
     }
     if (normalizedRoute.type === "overview") {
       activatePrimarySection("overview");
@@ -5845,7 +5991,7 @@ mobileDrawer?.addEventListener("click", event => {
 
   if (catalogScopeButton) {
     event.preventDefault();
-    openCategoryCatalog({ scope: catalogScopeButton.dataset.mobileCatalogScope || "all" });
+    navigateToRoute({ type: "catalog", scope: catalogScopeButton.dataset.mobileCatalogScope || "all" });
   }
 });
 window.addEventListener("resize", () => {
@@ -5889,7 +6035,16 @@ if (catalogFilterResizeObserver) {
 renderCatalogStaticFilterOptions();
 refreshCatalogControls();
 const routeCurrentHash = () => {
-  applyRoute(parseRouteFromHash());
+  const route = parseRouteFromHash();
+  const canonicalHash = serializeRoute(route);
+  if (window.location.hash !== canonicalHash) {
+    try {
+      history.replaceState(null, "", `${currentPathWithSearch()}${canonicalHash}`);
+    } catch {
+      // URL canonicalization is best-effort; route application is the source of truth here.
+    }
+  }
+  applyRoute(route);
 };
 try {
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
