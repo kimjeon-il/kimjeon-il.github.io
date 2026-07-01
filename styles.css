@@ -1311,13 +1311,13 @@ dialog[open] .modal-close {
 dialog[open] .modal-name {
   --modal-title-line-height: 1.15em;
   --modal-title-row-height: max(34px, var(--modal-title-line-height));
-  --modal-title-lines: 2;
+  --modal-title-lines: 1;
   --modal-title-size: var(--modal-title-size-default, var(--font-title));
   width: var(--modal-body-width) !important;
   display: flex !important;
   align-items: baseline !important;
   align-content: flex-start !important;
-  flex-wrap: wrap !important;
+  flex-wrap: nowrap !important;
   column-gap: 10px !important;
   row-gap: 2px !important;
   height: calc(var(--modal-title-row-height) * var(--modal-title-lines)) !important;
@@ -1328,7 +1328,16 @@ dialog[open] .modal-name {
   line-height: 1.15 !important;
   color: var(--ui-text) !important;
   word-break: keep-all !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  text-overflow: ellipsis !important;
   overflow: hidden !important;
+}
+
+dialog[open] .product-modal-name {
+  --modal-title-lines: 2;
+  flex-wrap: wrap !important;
+  white-space: normal !important;
 }
 
 .modal-info-slot {
@@ -2233,7 +2242,7 @@ dialog[open] .modal-art {
   justify-content: center;
 }
 
-.product-modal-info .modal-name {
+.product-modal-info .product-modal-name {
   grid-row: 1 / 4;
   align-self: start;
 }
@@ -4064,7 +4073,7 @@ body.menu-open .menu-button span:nth-child(3) {
     --composition-list-max-height-default: min(calc(var(--composition-row-height) * var(--composition-visible-rows)), 30dvh);
   }
 
-  dialog[open] .modal-info:not(.category-release-info):not(.category-anime-info) .modal-name {
+  dialog[open] .modal-info:not(.product-modal-info):not(.category-release-info):not(.category-anime-info) .modal-name {
     --modal-title-lines: 1;
     min-width: 0 !important;
     flex-wrap: nowrap !important;
