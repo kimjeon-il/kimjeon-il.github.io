@@ -10653,7 +10653,7 @@ const catalogTypeGroups = {
 const modalContextStorageKey = "beyArchiveModalContext";
 const modalContextOptions = options => {
   const context = {};
-  ["backId", "backProductId", "region", "series", "releaseQuery", "animeTab", "animeRegion", "animeSeason", "animeQuery"].forEach(key => {
+  ["backId", "backProductId", "region", "series", "releaseQuery", "animeSeason", "animeQuery"].forEach(key => {
     if (options?.[key]) context[key] = options[key];
   });
   if (options?.backRelease) context.backRelease = true;
@@ -10793,15 +10793,12 @@ const productReleaseTableRows = (region = activeReleaseRegion, series = activeRe
   }).join("");
   return rows || `<tr class="release-empty-row"><td colspan="5">검색 결과가 없습니다.</td></tr>`;
 };
-const releaseTableMarkup = (region = activeReleaseRegion, series = activeReleaseSeries, { page = false } = {}) => {
-  const scrollClass = page ? "page-table-scroll release-table-scroll" : "ui-table-scroll modal-section-scroll release-table-scroll";
-  return `<div class="${scrollClass}">
+const releaseTableMarkup = (region = activeReleaseRegion, series = activeReleaseSeries) => `<div class="page-table-scroll release-table-scroll">
   <table class="ui-data-table release-table">
     ${releaseTableHead()}
     <tbody>${productReleaseTableRows(region, series)}</tbody>
   </table>
 </div>`;
-};
 const rememberReleaseModalContext = () => rememberModalContext("category-release", "CATEGORY-RELEASE", {
   region: activeReleaseRegion,
   series: activeReleaseSeries,
@@ -10809,14 +10806,11 @@ const rememberReleaseModalContext = () => rememberModalContext("category-release
   releaseQuery: activeReleaseQuery
 });
 const releasePageRoot = () => document.querySelector("[data-release-page-content]");
-const releaseRenderRoot = element => element?.closest?.("[data-release-page-content], #modalContent") || releasePageRoot() || document.querySelector("#modalContent") || document;
-const isReleasePageContext = root => !!root?.closest?.("[data-release-page-content], .release-page-shell")
-  || !!root?.querySelector?.("[data-release-page-content], .release-page-shell");
 
 function renderProductReleaseTable(contentRoot = document) {
   const releaseTableSection = contentRoot.querySelector(".release-table-section");
   if (!releaseTableSection) return;
-  releaseTableSection.innerHTML = releaseTableMarkup(activeReleaseRegion, activeReleaseSeries, { page: isReleasePageContext(releaseTableSection) });
+  releaseTableSection.innerHTML = releaseTableMarkup(activeReleaseRegion, activeReleaseSeries);
   bindProductReleaseTableRows(releaseTableSection);
 }
 
@@ -10844,7 +10838,7 @@ function bindProductReleaseTableRows(tableRoot = document) {
       ? { key, direction: activeReleaseSort.direction === "asc" ? "desc" : "asc" }
       : { key, direction: "asc" };
     rememberReleaseModalContext();
-    renderProductReleaseTable(releaseRenderRoot(event.currentTarget));
+    renderProductReleaseTable(tableRoot.closest?.("[data-release-page-content]") || releasePageRoot() || document);
   }));
 }
 
@@ -10853,8 +10847,8 @@ function renderReleasePage() {
   if (!root) return;
   root.innerHTML = `
     ${releaseControls()}
-    <section class="release-table-section release-page-table-section">
-      ${releaseTableMarkup(activeReleaseRegion, activeReleaseSeries, { page: true })}
+    <section class="release-table-section">
+      ${releaseTableMarkup(activeReleaseRegion, activeReleaseSeries)}
     </section>`;
   bindProductReleaseTable(root);
 }
@@ -11470,7 +11464,6 @@ const defaultAnimeSeason = () => [...animeSeasonOrder].reverse().find(season =>
 ) || latestAnimeSeason();
 const normalizeAnimeSeason = season => animeSeasonLabels[season] ? season : defaultAnimeSeason();
 const animeDisplayRegion = "kr";
-let activeAnimeRegion = "kr";
 let activeAnimeSeason = defaultAnimeSeason();
 let activeAnimeEpisodeQuery = "";
 const animeEpisodeControls = () => `<div class="release-dropdowns anime-episode-controls" data-anime-controls aria-label="방영목록 필터">
@@ -11576,7 +11569,7 @@ const episodeIndexFromHash = id => {
     .filter(({ episode }) => episode.season === season);
   return matchingEpisodes[seasonIndex - 1]?.index ?? -1;
 };
-const animeEpisodeTitle = (episode, region = activeAnimeRegion) => {
+const animeEpisodeTitle = (episode, region = animeDisplayRegion) => {
   const title = episode?.titles?.[region] || episode?.titles?.kr || "";
   return [episode?.no || "", title].filter(Boolean).join(" ");
 };
@@ -11609,11 +11602,10 @@ const animeEpisodeRowsMarkup = visibleRows => {
   return rows || `<tr class="release-empty-row"><td colspan="3">등록된 방영목록이 없습니다.</td></tr>`;
 };
 
-const animeEpisodesMarkup = ({ page = false } = {}) => {
+const animeEpisodesMarkup = () => {
   const visibleRows = visibleAnimeEpisodes();
   const tableMode = visibleRows.length > 8 ? "scroll" : "fit";
-  const scrollClass = page ? "page-table-scroll anime-episode-table-scroll" : "ui-table-scroll modal-section-scroll anime-episode-table-scroll";
-  const tableMarkup = `<div class="${scrollClass}">
+  const tableMarkup = `<div class="page-table-scroll anime-episode-table-scroll">
       <table class="ui-data-table anime-episode-table">
         <thead>
           <tr>
@@ -11627,15 +11619,13 @@ const animeEpisodesMarkup = ({ page = false } = {}) => {
     </div>`;
   return `<section class="category-anime-episodes" data-anime-table-mode="${tableMode}">
     ${animeEpisodeControls()}
-    ${page ? `<section class="release-table-section release-page-table-section">${tableMarkup}</section>` : tableMarkup}
+    <section class="release-table-section">${tableMarkup}</section>
   </section>`;
 };
 const animeEpisodesPageRoot = () => document.querySelector("[data-anime-episodes-page-content]");
 
 function rememberAnimeModalContext() {
   rememberModalContext("category-anime-episodes", "CATEGORY-ANIME-EPISODES", {
-    animeTab: "episodes",
-    animeRegion: activeAnimeRegion,
     animeSeason: activeAnimeSeason,
     animeQuery: activeAnimeEpisodeQuery
   });
@@ -11644,7 +11634,6 @@ function rememberAnimeModalContext() {
 function bindAnimeEpisodesContent(root = document) {
   const animePanel = root.querySelector(".category-anime-episodes");
   if (!animePanel) return;
-  animePanel.dataset.categoryAnimePanel = "episodes";
   animePanel.querySelectorAll("[data-anime-season]").forEach(button => button.addEventListener("click", event => {
     activeAnimeSeason = normalizeAnimeSeason(event.currentTarget.dataset.animeSeason);
     event.currentTarget.closest(".catalog-dropdown")?.removeAttribute("open");
@@ -11665,7 +11654,6 @@ function bindAnimeEpisodesContent(root = document) {
       const index = Number(animeRow.dataset.animeEpisodeIndex);
       openAnimeEpisodeDetail(index, {
         fromAnimeList: true,
-        animeRegion: animeDisplayRegion,
         animeSeason: activeAnimeSeason,
         animeQuery: activeAnimeEpisodeQuery
       });
@@ -11682,20 +11670,8 @@ function bindAnimeEpisodesContent(root = document) {
 function renderAnimeEpisodesPage() {
   const root = animeEpisodesPageRoot();
   if (!root) return;
-  root.innerHTML = animeEpisodesMarkup({ page: true });
+  root.innerHTML = animeEpisodesMarkup();
   bindAnimeEpisodesContent(root);
-}
-
-function renderCategoryAnime(modalContentRoot = document) {
-  const animeTabs = modalContentRoot.querySelector("[data-category-anime-tabs-slot]");
-  const animePanel = modalContentRoot.querySelector("[data-category-anime-panel]");
-  const animeTitleActions = modalContentRoot.querySelector("[data-category-anime-title-actions]");
-  if (!animeTabs || !animePanel) return;
-  if (animeTitleActions) animeTitleActions.innerHTML = "";
-  animeTabs.innerHTML = "";
-  animePanel.dataset.categoryAnimePanel = "episodes";
-  animePanel.innerHTML = animeEpisodesMarkup();
-  bindAnimeEpisodesContent(animePanel);
 }
 
 function openAnimeEpisodeDetail(indexOrId, options = {}) {
@@ -11709,7 +11685,6 @@ function openAnimeEpisodeDetail(indexOrId, options = {}) {
     return;
   }
   cleanupModelViewer();
-  const backAnimeRegion = animeDisplayRegion;
   const backAnimeSeason = normalizeAnimeSeason(options.animeSeason || episode.season || activeAnimeSeason);
   const backAnimeQuery = typeof options.animeQuery === "string" ? options.animeQuery : activeAnimeEpisodeQuery;
   const content = document.querySelector("#modalContent");
@@ -11721,22 +11696,18 @@ function openAnimeEpisodeDetail(indexOrId, options = {}) {
     <div class="modal-info category-anime-info">
       ${backButton}
       <div class="overview-title-row anime-episode-title-row">
-        <h3 class="category-title">${escapeHtml(animeEpisodeTitle(episode, backAnimeRegion))}</h3>
+        <h3 class="category-title">${escapeHtml(animeEpisodeTitle(episode))}</h3>
       </div>
     </div>
   </div>`;
   content.querySelector("[data-back-anime-episodes]")?.addEventListener("click", () => {
     openCategoryAnimeEpisodesDetail({
-      animeTab: "episodes",
-      animeRegion: backAnimeRegion,
       animeSeason: backAnimeSeason,
       animeQuery: backAnimeQuery
     });
   });
   rememberModalContext("metal-fight-episode", id, {
     fromAnimeList: options.fromAnimeList,
-    animeTab: "episodes",
-    animeRegion: backAnimeRegion,
     animeSeason: backAnimeSeason,
     animeQuery: backAnimeQuery
   });
@@ -11748,7 +11719,6 @@ function openCategoryAnimeEpisodesDetail(options = {}) {
     navigateToRoute({ type: "category-anime-episodes", options });
     return;
   }
-  activeAnimeRegion = animeDisplayRegion;
   activeAnimeSeason = normalizeAnimeSeason(options.animeSeason);
   activeAnimeEpisodeQuery = typeof options.animeQuery === "string" ? options.animeQuery : "";
   cleanupModelViewer();
@@ -12943,6 +12913,7 @@ modal.addEventListener("close", () => {
 
 const activateToyPanel = section => {
   document.querySelectorAll(".toy-panel").forEach(panel => panel.classList.toggle("active", panel.dataset.toyPanel === section));
+  document.body.dataset.activePanel = section;
   document.body.classList.toggle("is-overview", section === "overview");
   document.body.classList.toggle("has-topbar", section !== "overview");
   if (section !== "search") closeAllSearchPreviews();
