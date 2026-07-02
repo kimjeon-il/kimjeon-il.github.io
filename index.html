@@ -11,7 +11,7 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="./styles.css?v=20260702-page-subnav" />
+    <link rel="stylesheet" href="./styles.css?v=20260702-base-cleanup" />
   </head>
   <body class="is-overview" data-active-panel="overview">
     <header class="topbar">
@@ -20,7 +20,7 @@
         <span><b>베이</b> 아카이브</span>
       </a>
       <nav class="nav">
-        <button class="nav-link" type="button" data-category-catalog-open>도감</button>
+        <button class="nav-link" type="button" data-category-catalog-open>완구</button>
         <button class="nav-link nav-link-pending" type="button" disabled aria-disabled="true">만화</button>
         <button class="nav-link" type="button" data-category-anime-open>애니메이션</button>
       </nav>
@@ -47,14 +47,14 @@
                 <path d="M9 8h6M9 12h6M9 16h3.2" />
               </svg>
             </span>
-            <span class="mobile-nav-label">도감</span>
+            <span class="mobile-nav-label">완구</span>
             <span class="mobile-nav-chevron" aria-hidden="true">
               <svg viewBox="0 0 24 24">
                 <path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </span>
           </button>
-          <div class="mobile-secondary" aria-label="도감 분류">
+          <div class="mobile-secondary" aria-label="완구 분류">
             <button class="ui-tab-button" type="button" data-mobile-catalog-scope="bey">
               <span class="mobile-nav-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -200,7 +200,7 @@
               </div>
             </div>
 
-            <div class="overview-card-grid" aria-label="도감 탐색">
+            <div class="overview-card-grid" aria-label="완구 탐색">
               <button class="ui-card-button overview-open-card" type="button" data-category-catalog-open>
                 <i class="overview-card-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -208,7 +208,7 @@
                     <path d="M9 8h6M9 12h6M9 16h3.2" />
                   </svg>
                 </i>
-                <strong data-mobile-label="도감">도감</strong>
+                <strong data-mobile-label="완구">완구</strong>
               </button>
               <button class="ui-card-button overview-open-card is-pending" type="button" disabled aria-disabled="true">
                 <i class="overview-card-icon" aria-hidden="true">
@@ -247,10 +247,10 @@
         <div class="toy-panel catalog-panel" data-toy-panel="catalog" data-catalog-scope="all">
           <div class="section-heading">
             <div class="section-title-group">
-              <h2>도감</h2>
+              <h2>완구</h2>
             </div>
           </div>
-          <nav class="section-subnav catalog-section-subnav" aria-label="도감 하위 카테고리">
+          <nav class="section-subnav catalog-section-subnav" aria-label="완구 하위 카테고리">
             <button class="section-subnav-button" type="button" data-catalog-nav-scope="all">전체</button>
             <button class="section-subnav-button" type="button" data-catalog-nav-scope="bey">베이</button>
             <button class="section-subnav-button" type="button" data-catalog-nav-scope="tools">장비</button>
@@ -259,7 +259,7 @@
 
           <div class="catalog-control-bar">
             <div class="toolbar catalog-toolbar">
-              <button type="button" class="catalog-search-help-button" id="catalogSearchHelpButton" aria-label="도감 검색 도움말" aria-expanded="false" aria-controls="catalogSearchHelpPopover">i</button>
+              <button type="button" class="catalog-search-help-button" id="catalogSearchHelpButton" aria-label="완구 검색 도움말" aria-expanded="false" aria-controls="catalogSearchHelpPopover">i</button>
               <div class="unified-search catalog-local-search">
                 <div class="search-box global-search-box catalog-search-box">
                   <span class="search-icon" aria-hidden="true"></span>
@@ -268,7 +268,7 @@
               </div>
             </div>
             <div class="catalog-search-help-popover" id="catalogSearchHelpPopover" role="tooltip" hidden>
-              <strong>도감 검색</strong>
+              <strong>완구 검색</strong>
               <p>띄어쓰기로 여러 조건을 함께 검색할 수 있습니다.</p>
               <dl>
                 <dt>종류</dt>
@@ -307,7 +307,7 @@
               <h2>발매목록</h2>
             </div>
           </div>
-          <nav class="section-subnav catalog-section-subnav" aria-label="도감 하위 카테고리">
+          <nav class="section-subnav catalog-section-subnav" aria-label="완구 하위 카테고리">
             <button class="section-subnav-button" type="button" data-catalog-nav-scope="all">전체</button>
             <button class="section-subnav-button" type="button" data-catalog-nav-scope="bey">베이</button>
             <button class="section-subnav-button" type="button" data-catalog-nav-scope="tools">장비</button>
@@ -380,6 +380,6 @@
     </dialog>
 
     <button class="to-top" id="toTop" type="button" aria-label="맨 위로 이동">↑</button>
-    <script src="./app.js?v=20260702-page-subnav"></script>
+    <script src="./app.js?v=20260702-catalog-label-to-toy"></script>
   </body>
 </html>

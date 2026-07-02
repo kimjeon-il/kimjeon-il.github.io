@@ -1126,8 +1126,6 @@ const catalogSearchHelpPopover = document.querySelector("#catalogSearchHelpPopov
 const animeSearch = document.querySelector("#animeSearchInput");
 const animeSearchHelpButton = document.querySelector("#animeSearchHelpButton");
 const animeSearchHelpPopover = document.querySelector("#animeSearchHelpPopover");
-const catalogFilterToggle = document.querySelector("#catalogFilterToggle");
-let catalogFiltersExpanded = false;
 const globalSearchScopeValue = () => globalSearchScope?.dataset.scope || "all";
 const overviewSearchScopeValue = () => overviewSearchScope?.dataset.scope || "all";
 const dropdownSummaryText = button => button?.dataset.summaryLabel || button?.textContent.trim() || "";
@@ -1232,123 +1230,23 @@ const battleTypeDescription = (value, item) => {
 const spinLabel = value => spinLabels[value] || value || "";
 const spinDescription = value => spinDescriptions[value] || "";
 const heightClassLabel = value => heightClassLabels[value] || value || "";
-let resolvedCatalogItemType = "all";
-let catalogItemTypeGroup = null;
-let resolvedCatalogStructure = null;
 let activeReleaseRegion = "kr";
 let activeReleaseSeries = "";
 let activeReleaseSort = { key: "release", direction: "asc" };
 let activeReleaseQuery = "";
-let selectedCatalogSeries = null;
 let selectedCatalogKind = "";
-let selectedCatalogSubtype = null;
-let selectedCatalogBattleType = null;
-let selectedCatalogSpin = null;
-let selectedCatalogStructure = null;
-const METAL_FIGHT_SERIES = "metal fight";
-const isMetalFightSeries = series => series === METAL_FIGHT_SERIES;
-const seriesPartFilters = {
-  topblade: [
-    { value: "bitchip", label: "비트칩" },
-    { value: "attackring", label: "어택링" },
-    { value: "weightdisk", label: "웨이트디스크" },
-    { value: "bladebase", label: "블레이드베이스" },
-    { value: "gear", label: "기어" }
-  ],
-  "metal fight": [
-    { value: "face", label: "페이스" },
-    { value: "wheel", label: "휠" },
-    { value: "track", label: "트랙" },
-    { value: "bottom", label: "버텀" }
-  ],
-  burst: [
-    { value: "layer", label: "레이어" },
-    { value: "disk", label: "디스크" },
-    { value: "driver", label: "드라이버" }
-  ],
-  x: [
-    { value: "blade", label: "블레이드" },
-    { value: "ratchet", label: "래칫" },
-    { value: "bit", label: "비트" }
-  ]
-};
 const toolsSubtypeOptions = [
   { value: "런처", label: "런처" },
   { value: "그립", label: "그립" },
   { value: "스타디움", label: "스타디움" },
   { value: "기타", label: "기타" }
 ];
-const catalogFilterOptions = {
-  series: [
-    { value: "", label: "전체", summaryLabel: "전체" },
-    { value: "topblade", label: "탑블레이드" },
-    { value: "metal fight", label: "메탈베이블레이드" },
-    { value: "burst", label: "베이블레이드 버스트" },
-    { value: "x", label: "베이블레이드 X" }
-  ],
-  kind: [
-    { value: "", label: "전체", summaryLabel: "전체" },
-    { value: "bey", label: "베이" },
-    { value: "parts", label: "부품" },
-    { value: "tools", label: "장비" }
-  ],
-  system: [
-    { value: "", label: "전체", summaryLabel: "전체" },
-    { value: "basic", label: "4단 구조" },
-    { value: "hybrid", label: "하이브리드" },
-    { value: "4d", label: "4D" },
-    { value: "synchrome", label: "싱크롬" }
-  ],
-  type: [
-    { value: "", label: "전체", summaryLabel: "전체" },
-    { value: "attack", label: "공격형" },
-    { value: "defense", label: "방어형" },
-    { value: "stamina", label: "지구형" },
-    { value: "balance", label: "균형형" }
-  ],
-  spin: [
-    { value: "", label: "전체", summaryLabel: "전체" },
-    { value: "right", label: "우회전" },
-    { value: "left", label: "좌회전" },
-    { value: "dual", label: "양회전" }
-  ]
-};
-const catalogFilterDataAttrs = {
-  series: "data-catalog-series",
-  kind: "data-catalog-kind",
-  subtype: "data-catalog-subtype",
-  system: "data-catalog-system",
-  type: "data-catalog-type",
-  spin: "data-catalog-spin"
-};
 const dropdownButtonMarkup = ({ value = "", label = "", active = false, dataAttr, summaryLabel = "" }) => {
   const summary = summaryLabel ? ` data-summary-label="${escapeAttributeValue(summaryLabel)}"` : "";
   return `<button type="button" class="ui-dropdown-item ${active ? "active" : ""}" ${dataAttr}="${escapeAttributeValue(value)}"${summary}>${escapeHtml(label)}</button>`;
 };
 const tabButtonMarkup = ({ value = "", label = "", active = false, dataAttr }) =>
   `<button type="button" role="tab" class="ui-tab-button ${active ? "active" : ""}" ${dataAttr}="${escapeAttributeValue(value)}" aria-selected="${active ? "true" : "false"}">${escapeHtml(label)}</button>`;
-const catalogFilterOptionMarkup = (options, activeValue = "", dataAttr) => options.map(option => {
-  const value = option.value || "";
-  return dropdownButtonMarkup({ value, label: option.label, active: activeValue === value, dataAttr, summaryLabel: option.summaryLabel });
-}).join("");
-const catalogFilterOptionsFor = key => {
-  if (key === "type") {
-    return catalogFilterOptions.type.map(option => option.value ? { ...option, label: battleTypeLabel(option.value, selectedCatalogSeries || METAL_FIGHT_SERIES) } : option);
-  }
-  if (key === "spin") {
-    return catalogFilterOptions.spin.map(option => option.value ? { ...option, label: spinLabel(option.value) } : option);
-  }
-  return catalogFilterOptions[key] || [];
-};
-const renderCatalogStaticFilterOptions = () => {
-  Object.keys(catalogFilterOptions).forEach(key => {
-    const options = catalogFilterOptionsFor(key);
-    const dataAttr = catalogFilterDataAttrs[key];
-    document.querySelectorAll(`#catalogDropdownFilters [data-filter-group="${key}"] .catalog-filter-options, #catalogDropdownFilters [data-filter-group="${key}"] .catalog-dropdown-menu, #catalogDropdownFilters [data-catalog-dependent="${key}"] .catalog-filter-options, #catalogDropdownFilters [data-catalog-dependent="${key}"] .catalog-dropdown-menu`).forEach(root => {
-      root.innerHTML = catalogFilterOptionMarkup(options, "", dataAttr);
-    });
-  });
-};
 
 const productItems = [
 { id: "PRODUCT-BB-01", series: "metal fight", releases: {
@@ -9441,40 +9339,12 @@ const compareToolsItemsByFirstRelease = (a, b) => {
   }
   return a.name.localeCompare(b.name, "ko");
 };
-const matchesCatalogBattleType = item => !selectedCatalogBattleType || item.battleType === selectedCatalogBattleType;
-const matchesCatalogSpin = item => {
-  if (!selectedCatalogSpin) return true;
-  if (selectedCatalogSpin === "dual") return item.spin === "dual";
-  return item.spin === selectedCatalogSpin || item.spin === "dual";
-};
 const catalogHasSearchQuery = () => Boolean(catalogSearchQuery());
-const catalogHasExplicitPartScope = () => selectedCatalogKind === "parts";
-const catalogUsesDefaultBrowseSet = query => !selectedCatalogKind && !catalogHasExplicitPartScope() && (query ? query.isEmpty : !catalogHasSearchQuery());
+const catalogUsesDefaultBrowseSet = query => !selectedCatalogKind && (query ? query.isEmpty : !catalogHasSearchQuery());
 const shouldShowCatalogCount = () => Boolean(
   catalogHasSearchQuery() ||
-  selectedCatalogSeries ||
-  selectedCatalogKind ||
-  selectedCatalogSubtype ||
-  selectedCatalogStructure ||
-  selectedCatalogBattleType ||
-  selectedCatalogSpin
+  selectedCatalogKind
 );
-const deriveCatalogItemFilters = () => {
-  if (!selectedCatalogKind) {
-    resolvedCatalogItemType = "all";
-    catalogItemTypeGroup = null;
-  } else if (selectedCatalogKind === "tools") {
-    resolvedCatalogItemType = "tools";
-    catalogItemTypeGroup = null;
-  } else if (selectedCatalogKind === "parts") {
-    resolvedCatalogItemType = selectedCatalogSubtype || "parts";
-    catalogItemTypeGroup = selectedCatalogSubtype ? catalogTypeGroups[selectedCatalogSubtype] || null : catalogTypeGroups.parts;
-  } else {
-    resolvedCatalogItemType = selectedCatalogKind;
-    catalogItemTypeGroup = null;
-  }
-  resolvedCatalogStructure = selectedCatalogKind === "bey" ? selectedCatalogStructure : null;
-};
 const CATALOG_VISIBLE_ITEMS_CACHE_LIMIT = 48;
 const catalogVisibleItemsCache = new Map();
 const cacheCatalogVisibleItems = (key, factory) => {
@@ -9488,11 +9358,6 @@ const cacheCatalogVisibleItems = (key, factory) => {
   return items;
 };
 const catalogVisibleCacheKey = bucket => `${bucket}|${catalogRenderKey()}`;
-const compareCatalogCoreBrowseItems = (a, b, { useMetalAttributeFilters, effectiveCatalogItemType, effectiveCatalogItemTypeGroup }) => {
-  if (useMetalAttributeFilters && a.type === "bey" && b.type === "bey") return beySerialNumber(a) - beySerialNumber(b);
-  if (useMetalAttributeFilters && effectiveCatalogItemType === "wheel" && effectiveCatalogItemTypeGroup) return (wheelTypeOrder[a.type] ?? 99) - (wheelTypeOrder[b.type] ?? 99);
-  return 0;
-};
 const visibleToolsItems = () => {
   const cacheKey = catalogVisibleCacheKey("tools");
   return cacheCatalogVisibleItems(cacheKey, () => {
@@ -9500,8 +9365,6 @@ const visibleToolsItems = () => {
   if (selectedCatalogKind && selectedCatalogKind !== "tools") return [];
   return toolsItems
     .map(item => {
-      if (selectedCatalogSeries && item.series !== selectedCatalogSeries) return null;
-      if (selectedCatalogSubtype && item.category !== selectedCatalogSubtype) return null;
       const score = query.isEmpty ? 0 : catalogListSearchScore(item, query);
       return query.isEmpty || score > 0 ? { item, score } : null;
     })
@@ -9518,25 +9381,16 @@ const visibleCatalogCoreItems = () => {
   const query = prepareCatalogSearchQuery(catalogSearchQuery());
   if (selectedCatalogKind === "tools") return [];
   const useDefaultBrowseSet = catalogUsesDefaultBrowseSet(query);
-  const effectiveCatalogItemType = useDefaultBrowseSet ? "bey" : resolvedCatalogItemType;
-  const effectiveCatalogItemTypeGroup = useDefaultBrowseSet ? null : catalogItemTypeGroup;
+  const effectiveCatalogItemType = useDefaultBrowseSet ? "bey" : selectedCatalogKind || "all";
   const useTypeFilter = effectiveCatalogItemType !== "all";
-  const useMetalAttributeFilters = isMetalFightSeries(selectedCatalogSeries);
-  const browseSortOptions = { useMetalAttributeFilters, effectiveCatalogItemType, effectiveCatalogItemTypeGroup };
   return catalogCoreItems
     .map(item => {
-      if (selectedCatalogSeries && item.series !== selectedCatalogSeries) return null;
-      if (useTypeFilter && !(effectiveCatalogItemTypeGroup ? effectiveCatalogItemTypeGroup.includes(item.type) : item.type === effectiveCatalogItemType)) return null;
-      if (useMetalAttributeFilters && resolvedCatalogStructure && item.structure !== resolvedCatalogStructure) return null;
-      if (useMetalAttributeFilters && !matchesCatalogBattleType(item)) return null;
-      if (useMetalAttributeFilters && !matchesCatalogSpin(item)) return null;
+      if (useTypeFilter && item.type !== effectiveCatalogItemType) return null;
       const score = query.isEmpty ? 0 : catalogListSearchScore(item, query);
       return query.isEmpty || score > 0 ? { item, score } : null;
     })
     .filter(Boolean)
-    .sort((a, b) => query.isEmpty
-      ? compareCatalogCoreBrowseItems(a.item, b.item, browseSortOptions)
-      : b.score - a.score || compareCatalogCoreBrowseItems(a.item, b.item, browseSortOptions))
+    .sort((a, b) => query.isEmpty ? 0 : b.score - a.score)
     .map(entry => entry.item);
   });
 };
@@ -9584,12 +9438,7 @@ let currentCatalogRenderKey = "";
 let currentAnimePage = 1;
 let currentAnimeRenderKey = "";
 const catalogRenderKey = () => [
-  selectedCatalogSeries || "",
   selectedCatalogKind || "",
-  selectedCatalogSubtype || "",
-  selectedCatalogStructure || "",
-  selectedCatalogBattleType || "",
-  selectedCatalogSpin || "",
   catalogSearchQuery()
 ].join("|");
 const syncCatalogRenderPage = renderKey => {
@@ -9613,7 +9462,7 @@ const catalogPageButtons = (currentPage, totalPages) => {
   for (let page = start; page <= end; page += 1) pages.push(page);
   const pageButtons = pages.map(page => `
     <button class="ui-button catalog-page-button${page === currentPage ? " active" : ""}" type="button" data-catalog-page="${page}"${page === currentPage ? " aria-current=\"page\"" : ""}>${page}</button>`).join("");
-  return `<nav class="catalog-pagination-nav" aria-label="도감 페이지">
+  return `<nav class="catalog-pagination-nav" aria-label="완구 페이지">
     <button class="ui-button catalog-page-step" type="button" data-catalog-page="${currentPage - 1}" ${currentPage <= 1 ? "disabled aria-disabled=\"true\"" : ""}>이전</button>
     ${start > 1 ? `<button class="ui-button catalog-page-button" type="button" data-catalog-page="1">1</button>${start > 2 ? `<span class="catalog-page-gap">…</span>` : ""}` : ""}
     ${pageButtons}
@@ -10610,46 +10459,6 @@ function renderCatalogItems() {
   renderCatalogPagination(totalPages);
 }
 
-const catalogTypeGroups = {
-  bey: ["bey"],
-  parts: ["face", "stoneface", "wheel", "clearwheel", "4dclearwheel", "lightwheel", "metalwheel", "4dmetalwheel", "chromewheel", "crystalwheel", "track", "bottom", "4dbottom", "layer", "duallayer", "godlayer", "chozlayer", "gachichip", "gachiweight", "gachibase", "gachilayer", "gachiupgrade", "sparkingchip", "sparkingring", "sparkingchassis", "sparkingupgrade", "dblayer", "dbcore", "dbblade", "dbarmor", "evolutiongear", "disk", "coredisk", "frame", "dbdisk", "driver", "driverupgrade", "blade", "ratchet", "bit"],
-  face: ["face", "stoneface"],
-  wheel: ["wheel", "clearwheel", "4dclearwheel", "lightwheel", "metalwheel", "4dmetalwheel", "chromewheel", "crystalwheel"],
-  bottom: ["bottom", "4dbottom"],
-  track: ["track"],
-  bitchip: ["bitchip"],
-  attackring: ["attackring"],
-  weightdisk: ["weightdisk"],
-  bladebase: ["bladebase"],
-  gear: ["gear"],
-  layer: ["layer", "duallayer", "godlayer", "chozlayer", "gachichip", "gachiweight", "gachibase", "gachilayer", "gachiupgrade", "sparkingchip", "sparkingring", "sparkingchassis", "sparkingupgrade", "dblayer", "dbcore", "dbblade", "dbarmor", "evolutiongear"],
-  duallayer: ["duallayer"],
-  godlayer: ["godlayer"],
-  chozlayer: ["chozlayer"],
-  gachichip: ["gachichip"],
-  gachiweight: ["gachiweight"],
-  gachibase: ["gachibase"],
-  gachilayer: ["gachilayer"],
-  gachiupgrade: ["gachiupgrade"],
-  sparkingchip: ["sparkingchip"],
-  sparkingring: ["sparkingring"],
-  sparkingchassis: ["sparkingchassis"],
-  sparkingupgrade: ["sparkingupgrade"],
-  dblayer: ["dblayer"],
-  dbcore: ["dbcore"],
-  dbblade: ["dbblade"],
-  dbarmor: ["dbarmor"],
-  evolutiongear: ["evolutiongear"],
-  disk: ["disk", "coredisk", "frame", "dbdisk"],
-  coredisk: ["coredisk"],
-  frame: ["frame"],
-  dbdisk: ["dbdisk"],
-  driver: ["driver", "driverupgrade"],
-  driverupgrade: ["driverupgrade"],
-  blade: ["blade"],
-  ratchet: ["ratchet"],
-  bit: ["bit"]
-};
 const modalContextStorageKey = "beyArchiveModalContext";
 const modalContextOptions = options => {
   const context = {};
@@ -11987,109 +11796,23 @@ globalSearchScope?.addEventListener("click", event => {
 const setDropdownOption = button => {
   const attr = filterButtonAttr(button);
   if (!attr) return;
-  const root = button.closest("#catalogDropdownFilters");
-  syncFilterButtonsByValue(root, attr, button.getAttribute(attr) || "");
-  button.closest(".catalog-filter-compact .catalog-dropdown")?.removeAttribute("open");
+  const dropdown = button.closest(".catalog-dropdown");
+  if (!dropdown) return;
+  dropdown.querySelectorAll(`button[${attr}]`).forEach(option => {
+    option.classList.toggle("active", option === button);
+  });
+  const label = dropdown.querySelector(".catalog-dropdown-value");
+  if (label) label.textContent = dropdownSummaryText(button);
+  dropdown.removeAttribute("open");
 };
-const resetDropdown = dropdown => {
-  const firstOption = dropdown?.querySelector(".catalog-dropdown-menu button");
-  if (firstOption) setDropdownOption(firstOption);
-};
-const resetDropdowns = root => {
-  root?.querySelectorAll(".catalog-dropdown").forEach(resetDropdown);
-};
-const filterButtonAttrs = ["data-catalog-series", "data-catalog-kind", "data-catalog-subtype", "data-catalog-system", "data-catalog-type", "data-catalog-spin"];
+const filterButtonAttrs = ["data-release-series", "data-anime-season"];
 const filterButtonAttr = button => filterButtonAttrs.find(attr => button.hasAttribute(attr));
-const updateCompactDropdownLabel = (dropdown, activeButton) => {
-  const label = dropdown?.querySelector(".catalog-dropdown-value");
-  if (label && activeButton) label.textContent = dropdownSummaryText(activeButton);
-};
-const syncFilterButtonsByValue = (root, attr, value) => {
-  if (!root) return;
-  root.querySelectorAll(`button[${attr}]`).forEach(button => {
-    const active = (button.getAttribute(attr) || "") === (value || "");
-    button.classList.toggle("active", active);
-    if (active) updateCompactDropdownLabel(button.closest(".catalog-filter-compact .catalog-dropdown"), button);
-  });
-};
-const syncDropdownByValue = (rootSelector, attr, value) => {
-  syncFilterButtonsByValue(document.querySelector(rootSelector), attr, value || "");
-};
-const syncCatalogDropdownSelectionsFromState = () => {
-  syncDropdownByValue("#catalogDropdownFilters", "data-catalog-series", selectedCatalogSeries || "");
-  syncDropdownByValue("#catalogDropdownFilters", "data-catalog-kind", selectedCatalogKind || "");
-  syncDropdownByValue("#catalogDropdownFilters", "data-catalog-subtype", selectedCatalogSubtype || "");
-  syncDropdownByValue("#catalogDropdownFilters", "data-catalog-system", selectedCatalogStructure || "");
-  syncDropdownByValue("#catalogDropdownFilters", "data-catalog-type", selectedCatalogBattleType || "");
-  syncDropdownByValue("#catalogDropdownFilters", "data-catalog-spin", selectedCatalogSpin || "");
-};
-const resetCatalogDependentDropdowns = () => {
-  document.querySelectorAll("#catalogDropdownFilters [data-catalog-dependent]").forEach(control => {
-    control.querySelectorAll(".catalog-dropdown").forEach(resetDropdown);
-  });
-};
-const setDropdownHidden = (dropdown, hidden) => {
-  dropdown.hidden = hidden;
-  if (hidden) dropdown.removeAttribute("open");
-};
-const selectedSeriesPartOptions = () => seriesPartFilters[selectedCatalogSeries] || [];
-const selectedSubtypeOptions = () => selectedCatalogKind === "tools" ? toolsSubtypeOptions : selectedSeriesPartOptions();
-const renderCatalogSubtypeOptions = () => {
-  const options = selectedSubtypeOptions();
-  if (selectedCatalogSubtype && !options.some(option => option.value === selectedCatalogSubtype)) selectedCatalogSubtype = null;
-  const optionMarkup = catalogFilterOptionMarkup(
-    [{ value: "", label: "전체", summaryLabel: "전체" }, ...options],
-    selectedCatalogSubtype || "",
-    "data-catalog-subtype"
-  );
-  document.querySelectorAll('#catalogDropdownFilters [data-catalog-dependent="subtype"] .catalog-filter-options, #catalogDropdownFilters [data-catalog-dependent="subtype"] .catalog-dropdown-menu').forEach(optionsRoot => {
-    optionsRoot.innerHTML = optionMarkup;
-  });
-  syncDropdownByValue("#catalogDropdownFilters", "data-catalog-subtype", selectedCatalogSubtype || "");
-};
-const catalogDependentFilterVisibility = () => {
-  const metalSelected = isMetalFightSeries(selectedCatalogSeries);
-  const partsSelected = selectedCatalogKind === "parts";
-  const toolsSelected = selectedCatalogKind === "tools";
-  const selectedPart = partsSelected ? selectedCatalogSubtype : null;
-  return {
-    subtype: (partsSelected && !!selectedCatalogSeries && selectedSeriesPartOptions().length > 0) || toolsSelected,
-    system: metalSelected && selectedCatalogKind === "bey",
-    type: metalSelected && (selectedCatalogKind === "bey" || selectedPart === "wheel" || selectedPart === "bottom"),
-    spin: metalSelected && (selectedCatalogKind === "bey" || selectedPart === "wheel")
-  };
-};
-const sanitizeHiddenCatalogFilters = visibility => {
-  if (!visibility.subtype) selectedCatalogSubtype = null;
-  if (!visibility.system) selectedCatalogStructure = null;
-  if (!visibility.type) selectedCatalogBattleType = null;
-  if (!visibility.spin) selectedCatalogSpin = null;
-};
-const syncCatalogDependentFilters = () => {
-  renderCatalogStaticFilterOptions();
-  renderCatalogSubtypeOptions();
-  const visibility = catalogDependentFilterVisibility();
-  sanitizeHiddenCatalogFilters(visibility);
-  syncCatalogDropdownSelectionsFromState();
-  document.querySelectorAll("#catalogDropdownFilters [data-catalog-dependent]").forEach(control => {
-    setDropdownHidden(control, !visibility[control.dataset.catalogDependent]);
-  });
-};
-const refreshCatalogControls = () => {
-  syncCatalogDependentFilters();
-  syncCatalogScopeState();
-  syncCatalogFilterPanels();
-  renderCatalogFilterChips();
-};
 const refreshCatalogResults = () => {
-  deriveCatalogItemFilters();
   renderCatalogItems();
   syncCatalogScopeState({ updateCount: false });
 };
 const refreshCatalogState = () => {
-  syncCatalogDependentFilters();
   refreshCatalogResults();
-  syncCatalogFilterPanels();
   renderCatalogFilterChips();
 };
 const syncCatalogMenuScope = scope => {
@@ -12117,15 +11840,7 @@ const syncCatalogMenuScope = scope => {
   });
 };
 const resetCatalogFilters = () => {
-  resolvedCatalogItemType = "all";
-  catalogItemTypeGroup = null;
-  resolvedCatalogStructure = null;
-  selectedCatalogSeries = null;
   selectedCatalogKind = "";
-  selectedCatalogSubtype = null;
-  selectedCatalogBattleType = null;
-  selectedCatalogSpin = null;
-  selectedCatalogStructure = null;
 };
 const setCatalogScope = scope => {
   if (scope === "bey" || scope === "tools") {
@@ -12133,78 +11848,7 @@ const setCatalogScope = scope => {
   } else {
     selectedCatalogKind = "";
   }
-  selectedCatalogSubtype = null;
-  selectedCatalogBattleType = null;
-  selectedCatalogSpin = null;
-  selectedCatalogStructure = null;
-  deriveCatalogItemFilters();
-  refreshCatalogControls();
-};
-const catalogPanelElement = () => document.querySelector('.catalog-panel[data-toy-panel="catalog"]');
-const hasActiveCatalogFilterState = () => Boolean(
-  selectedCatalogSeries ||
-  selectedCatalogKind ||
-  selectedCatalogSubtype ||
-  selectedCatalogStructure ||
-  selectedCatalogBattleType ||
-  selectedCatalogSpin
-);
-const syncCatalogFilterDisclosureState = () => {
-  const panel = catalogPanelElement();
-  const hasFilters = hasActiveCatalogFilterState();
-  panel?.classList.toggle("catalog-filters-expanded", catalogFiltersExpanded);
-  panel?.classList.toggle("catalog-filters-active", hasFilters);
-  catalogFilterToggle?.classList.toggle("active", catalogFiltersExpanded || hasFilters);
-  catalogFilterToggle?.setAttribute("aria-expanded", String(catalogFiltersExpanded));
-  catalogFilterToggle?.setAttribute("aria-pressed", String(catalogFiltersExpanded));
-};
-const setCatalogFiltersExpanded = expanded => {
-  catalogFiltersExpanded = Boolean(expanded);
-  syncCatalogFilterDisclosureState();
-  scheduleCatalogFilterModeCheck();
-};
-const syncCatalogFilterPanels = () => {
-  const visibility = catalogDependentFilterVisibility();
-  const hasAdvancedFilters = Object.values(visibility).some(Boolean);
-  document.querySelectorAll("[data-catalog-filter-advanced]").forEach(panel => {
-    panel.hidden = !(panel.dataset.catalogFilterAdvanced === "bey" && hasAdvancedFilters);
-  });
-  syncCatalogFilterDisclosureState();
-  scheduleCatalogFilterModeCheck();
-};
-let catalogFilterModeFrame = 0;
-const activeCatalogPrimaryFilters = panel => panel?.querySelector('[data-catalog-section="catalog"] .catalog-filter-primary');
-const primaryFilterRowsBroken = (panel, primary) => {
-  if (!panel || !primary) return false;
-  const wasCompact = panel.classList.contains("catalog-filters-compact");
-  panel.classList.remove("catalog-filters-compact");
-  const expanded = primary.querySelector(".catalog-filter-expanded");
-  if (!expanded || getComputedStyle(expanded).display === "none") {
-    panel.classList.toggle("catalog-filters-compact", wasCompact);
-    return true;
-  }
-  const panelStyle = getComputedStyle(panel);
-  const rowHeight = parseFloat(panelStyle.getPropertyValue("--catalog-pill-height")) || 36;
-  const targetHeight = parseFloat(panelStyle.getPropertyValue("--catalog-primary-filter-height")) || ((rowHeight * 2) + 10);
-  const rowTolerance = 4;
-  const brokenRow = Array.from(expanded.querySelectorAll(".catalog-filter-group:not([hidden])")).some(group => {
-    const options = group.querySelector(".catalog-filter-options");
-    return (options?.scrollHeight || 0) > rowHeight + rowTolerance || group.scrollHeight > rowHeight + rowTolerance;
-  });
-  const brokenHeight = expanded.scrollHeight > targetHeight + rowTolerance;
-  panel.classList.toggle("catalog-filters-compact", wasCompact);
-  return brokenRow || brokenHeight;
-};
-const updateCatalogFilterMode = () => {
-  catalogFilterModeFrame = 0;
-  const panel = catalogPanelElement();
-  if (!panel || activeToyPanelName() !== "catalog") return;
-  const primary = activeCatalogPrimaryFilters(panel);
-  panel.classList.toggle("catalog-filters-compact", primaryFilterRowsBroken(panel, primary));
-};
-const scheduleCatalogFilterModeCheck = () => {
-  if (catalogFilterModeFrame) return;
-  catalogFilterModeFrame = requestAnimationFrame(updateCatalogFilterMode);
+  refreshCatalogState();
 };
 const resetCatalogFilter = (scope, key) => {
   if (scope !== "catalog" || !catalogSearch) return;
@@ -12248,7 +11892,6 @@ const renderCatalogFilterChips = () => {
       ${catalogFilterResetMarkup(scope)}
     ` : "";
   });
-  syncCatalogFilterDisclosureState();
 };
 const catalogSearchHelpIsOpen = () => Boolean(catalogSearchHelpPopover && !catalogSearchHelpPopover.hidden);
 const positionCatalogSearchHelpPopover = () => {
@@ -12936,8 +12579,7 @@ const activateToyPanel = section => {
   document.querySelectorAll(".toy-panel").forEach(panel => panel.classList.toggle("active", panel.dataset.toyPanel === section));
   document.body.dataset.activePanel = section;
   document.body.classList.toggle("is-overview", section === "overview");
-  document.body.classList.toggle("has-topbar", section !== "overview");
-  if (section !== "search") closeAllSearchPreviews();
+  closeAllSearchPreviews();
 };
 const syncMobileDrawer = section => {
   mobileDrawer?.querySelectorAll("[data-category-catalog-open], [data-category-release-open], [data-category-anime-open], [data-category-anime-episodes-open]").forEach(button => {
@@ -13002,14 +12644,9 @@ const activatePrimarySection = section => {
   activateToyPanel(panelSection);
   if (section === "overview") setGlobalSearchScope("all");
   if (isCatalogSection) {
-    catalogFiltersExpanded = false;
     resetCatalogFilters();
     setCatalogScope(catalogScope);
     setGlobalSearchScope(catalogScope === "all" ? "all" : catalogScope);
-  }
-  if (panelSection === "catalog") {
-    renderCatalogItems();
-    syncCatalogScopeState({ updateCount: false });
   }
   if (panelSection === "anime") renderAnimePage();
 
@@ -13132,7 +12769,6 @@ mobileDrawer?.addEventListener("click", event => {
 });
 window.addEventListener("resize", () => {
   if (window.matchMedia("(min-width: 64rem)").matches) setMenuOpen(false);
-  scheduleCatalogFilterModeCheck();
   positionSearchHelpPopovers();
   if (modal?.open) scheduleModalViewportSync();
   if (!activeModalTagButton) return;
@@ -13171,14 +12807,8 @@ document.addEventListener("click", event => {
   if (!event.target.closest(".topbar") && !event.target.closest(".mobile-drawer")) setMenuOpen(false);
 });
 
-const catalogFilterResizeObserver = "ResizeObserver" in window ? new ResizeObserver(scheduleCatalogFilterModeCheck) : null;
-if (catalogFilterResizeObserver) {
-  const catalogPanel = catalogPanelElement();
-  if (catalogPanel) catalogFilterResizeObserver.observe(catalogPanel);
-}
-
-renderCatalogStaticFilterOptions();
-refreshCatalogControls();
+syncCatalogScopeState();
+renderCatalogFilterChips();
 const routeCurrentHash = () => {
   const route = parseRouteFromHash();
   const canonicalHash = serializeRoute(route);
